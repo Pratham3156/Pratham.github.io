@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — ChillBox</title>
+<link rel="icon" type="image/png" href="logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+/* ------------------ GLOBAL STYLING ------------------ */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+header {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 6%;
+      z-index: 99;
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(4px);
+    }
+    .navbar{
+        margin-right: 470px;
+        font-size: 19px;
+    }
+
+    .logo{
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    }
+
+    .logo i {
+      color: limegreen;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px
+    }
+
+    .navbar a:hover {
+      background: limegreen;
+      color: black;
+    }
+
+a { text-decoration: none; color: white; }
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    padding-top: 40px;
+}
+
+/* ------------------ HEADER ------------------ */
+
+.header {
+    text-align: center;
+    padding: 60px 20px;
+}
+.active{
+    color: black;
+    background: limegreen;
+}
+
+.header h1 {
+    font-size: 48px;
+    color: limegreen;
+    margin-bottom: 15px;
+}
+
+.header p {
+    color: #bbb;
+    font-size: 18px;
+    max-width: 700px;
+    margin: 15px auto;
+}
+
+/* ------------------ SECTION ------------------ */
+
+.section-title {
+    font-size: 28px;
+    margin: 40px 0 20px;
+    color: limegreen;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background: limegreen;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    border-radius: 2px;
+}
+
+/* Text Block */
+.text-block {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    color: #e6e6e6;
+}
+
+/* ------------------ FEATURES GRID ------------------ */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: limegreen;
+}
+
+.card p {
+    color: #ccc;
+}
+
+/* ------------------ TEAM SECTION ------------------ */
+
+.team-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.06);
+    padding: 20px;
+    border-radius: 14px;
+    margin-top: 20px;
+}
+
+.team-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: url('https://cdn-icons-png.flaticon.com/512/149/149071.png') center/cover;
+    margin-right: 20px;
+}
+
+.team-info h3 {
+    margin: 0;
+    color: limegreen;
+}
+
+.team-info p {
+    color: #bbb;
+    font-size: 14px;
+}
+
+/* ------------------ CONTACT BOX ------------------ */
+
+.contact {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 14px;
+    margin-top: 30px;
+}
+
+.contact p { margin: 5px 0; }
+
+/* ------------------ ANIMATIONS ------------------ */
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.7s ease;
+}
+
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* ---------- FEEDBACK FORM ---------- */
+
+.feedback-box {
+    background: rgba(255,255,255,0.06);
+    padding: 25px;
+    border-radius: 14px;
+    margin-top: 25px;
+    color: #eee;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,255,136,0.1);
+}
+
+.fb-label {
+    display: block;
+    margin: 12px 0 5px;
+    color: limegreen;
+}
+
+.fb-input, .fb-textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.fb-input::placeholder,
+.fb-textarea::placeholder {
+    color: #bbb;
+}
+
+.fb-textarea {
+    height: 120px;
+    resize: none;
+}
+
+.fb-btn {
+    width: 100%;
+    background: limegreen;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #000;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.fb-btn:hover {
+    background: #00cc66;
+}
+
+.fb-success {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0,255,136,0.2);
+    color: limegreen;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: 600;
+    display: none;
+}
+
+/* Rating Stars */
+.rating span {
+    font-size: 28px;
+    cursor: pointer;
+    color: #444;
+    transition: 0.3s;
+    margin-right: 5px;
+}
+
+.rating span.active,
+.rating span:hover,
+.rating span:hover ~ span {
+    color: limegreen !important;
+}
+
+</style>
+</head>
+<body>
+<header>
+    <a class="logo" href="#"><i class="fas fa-infinity"></i> ChillBox</a>
+    <nav class="navbar" aria-label="main">
+      <a href="movie.html">Movies</a>
+      <a href="Music.html">Music</a>
+      <a href="Games.html">Games</a>
+      <a href="AboutUs.html" class="active">About US</a>
+    </nav>
+    </div>
+  </header>
+<div class="header fade-in">
+    <h1>About ChillBox</h1>
+    <p>Your all-in-one destination for Movies, Music, and Games.  
+       Chill, Play, and Enjoy — all in one place.</p>
+</div>
+
+<div class="container">
+
+    <!-- OUR VISION -->
+    <h2 class="section-title fade-in">Our Vision</h2>
+    <p class="text-block fade-in">
+        At ChillBox, our goal is to create the smoothest entertainment experience on the internet.
+        Whether you want to watch movies, listen to music, or play games — everything is available
+        instantly, beautifully, and without complications.
+    </p>
+
+    <!-- WHAT WE OFFER -->
+    <h2 class="section-title fade-in">What We Offer</h2>
+
+    <div class="grid fade-in">
+        <div class="card">
+            <h3>🎬 Movies</h3>
+            <p>Stream movies with a clean interface, fast speed, and genre-based organization.</p>
+        </div>
+
+        <div class="card">
+            <h3>🎵 Music</h3>
+            <p>Listen to curated playlists based on your mood — chill, focus, workout, and more.</p>
+        </div>
+
+        <div class="card">
+            <h3>🎮 Games</h3>
+            <p>Play thousands of HTML5 games instantly. No downloads. No setup.</p>
+        </div>
+    </div>
+
+    <!-- OUR VALUES -->
+    <h2 class="section-title fade-in">Why Choose ChillBox?</h2>
+
+    <div class="grid fade-in">
+        <div class="card">
+            <h3>⚡ Lightning Fast</h3>
+            <p>Everything loads instantly — movies, music, and games.</p>
+        </div>
+
+        <div class="card">
+            <h3>🎯 Simple & Clean</h3>
+            <p>A smooth, beautiful interface designed for all ages.</p>
+        </div>
+
+        <div class="card">
+            <h3>🔐 Privacy Friendly</h3>
+            <p>No tracking, no personal data collection. Your choices stay yours.</p>
+        </div>
+
+        <div class="card">
+            <h3>🌍 Works Everywhere</h3>
+            <p>Works on phones, desktops, tablets, and even smart TVs.</p>
+        </div>
+    </div>
+
+    <!-- OUR STORY -->
+    <h2 class="section-title fade-in">Our Story</h2>
+    <p class="text-block fade-in">
+        ChillBox started as a simple thought — why should we use different apps for everything?
+        So we created one platform that unites Movies, Music, and Games in a fast, clean interface.
+        Today, ChillBox continues to grow with new features and a growing collection of content.
+    </p>
+
+    <!-- TEAM -->
+    <h2 class="section-title fade-in">The Creator</h2>
+    <div class="team-card fade-in">
+        <div class="team-image"></div>
+        <div class="team-info">
+            <h3>Pratham</h3>
+            <p>Founder & Developer of ChillBox. Passionate about coding, design, and entertainment.</p>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <h2 class="section-title fade-in">Contact Us</h2>
+    <div class="contact fade-in">
+        <p>📧 Email: chillbox.support@gmail.com</p>
+        <p>📸 Instagram: @ChillBox</p>
+        <p>🐦 Twitter/X: @ChillBox</p>
+        <p>🌐 Website: www.chillbox.com</p>
+    </div>
+
+</div>
+    <!-- FEEDBACK SECTION -->
+<h2 class="section-title fade-in">Give Us Your Feedback</h2>
+
+<div class="feedback-box fade-in">
+    <p>Help us improve ChillBox by sharing your thoughts.</p>
+
+    <!-- Name -->
+    <label class="fb-label">Your Name</label>
+    <input type="text" id="fb-name" class="fb-input" placeholder="Enter your name">
+
+    <!-- Email -->
+    <label class="fb-label">Your Email (Optional)</label>
+    <input type="email" id="fb-email" class="fb-input" placeholder="Enter your email">
+
+    <!-- Category Dropdown -->
+    <label class="fb-label">Which part of ChillBox are you reviewing?</label>
+    <select id="fb-page" class="fb-input">
+        <option value="" disabled selected>Select a page</option>
+        <option>Movies Page</option>
+        <option>Music Page</option>
+        <option>Games Page</option>
+        <option>About Page</option>
+        <option>Home Page</option>
+        <option>Navigation / UI</option>
+        <option>Overall Website</option>
+    </select>
+
+    <!-- Feature Request -->
+    <label class="fb-label">Which new feature do you want?</label>
+    <input type="text" id="fb-feature" class="fb-input" placeholder="Example: Dark Mode, Game Download, Watch Later...">
+
+    <!-- Rating -->
+    <label class="fb-label">Rate your experience</label>
+    <div class="rating" id="starRating">
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+    </div>
+
+    <!-- Feedback Box -->
+    <label class="fb-label">Your Feedback</label>
+    <textarea id="fb-message" class="fb-textarea" placeholder="Write your experience..."></textarea>
+
+    <!-- Submit Button -->
+    <button class="fb-btn" onclick="submitFeedback()">Submit Feedback</button>
+
+    <!-- Thank you message -->
+    <div id="fb-success" class="fb-success">Thank you! Your feedback has been submitted ❤️</div>
+</div>
+
+<script>
+// Fade-in animation for all elements with class="fade-in"
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("show");
+    });
+});
+
+document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
+// Rating system
+const stars = document.querySelectorAll("#starRating span");
+let selectedRating = 0;
+
+stars.forEach((star) => {
+    star.addEventListener("click", () => {
+        selectedRating = star.getAttribute("data-value");
+
+        stars.forEach(s => s.classList.remove("active"));
+        for (let i = 0; i < selectedRating; i++) {
+            stars[i].classList.add("active");
+        }
+    });
+});
+
+// Submit Feedback
+function submitFeedback() {
+    const name = document.getElementById("fb-name").value;
+    const email = document.getElementById("fb-email").value;
+    const page = document.getElementById("fb-page").value;
+    const feature = document.getElementById("fb-feature").value;
+    const message = document.getElementById("fb-message").value;
+
+    if (!page || !message) {
+        alert("Please fill out required fields: Page & Feedback message.");
+        return;
+    }
+
+    // Simulated API storage (localStorage)
+    const fbData = {
+        name,
+        email,
+        page,
+        feature,
+        rating: selectedRating,
+        message,
+        time: new Date().toLocaleString()
+    };
+
+    // Save in localStorage
+    let allFeedback = JSON.parse(localStorage.getItem("chillboxFeedback")) || [];
+    allFeedback.push(fbData);
+    localStorage.setItem("chillboxFeedback", JSON.stringify(allFeedback));
+
+    // Show success message
+    document.getElementById("fb-success").style.display = "block";
+
+    // Reset form
+    setTimeout(() => {
+        document.getElementById("fb-success").style.display = "none";
+    }, 3000);
+
+    document.querySelectorAll(".fb-input, .fb-textarea").forEach(el => el.value = "");
+    stars.forEach(s => s.classList.remove("active"));
+    selectedRating = 0;
+}
+
+</script>
+
+</body>
+</html>
