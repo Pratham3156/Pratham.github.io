@@ -452,91 +452,45 @@
     .game-rating {
       color: #ffd700;
     }
-
-    .game-actions {
+    
+    /* NEW CSS: Play Button Overlay on Game Card */
+    .play-overlay {
+      position: absolute;
+      /* Cover the top image part */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 140px; /* Same height as .game-card img */
       display: flex;
-      gap: 5px;
-      margin-top: 8px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.75);
+      opacity: 0;
+      transition: opacity .2s;
+      z-index: 10;
     }
 
-    .game-action-btn {
-      flex: 1;
-      padding: 4px 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      border-radius: 4px;
-      color: #fff;
-      font-size: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
+    .game-card:hover .play-overlay {
+      opacity: 1;
     }
 
-    .game-action-btn:hover {
+    .play-btn-card {
       background: var(--accent);
       color: #000;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transform: scale(0.9);
+      transition: transform .2s, box-shadow .2s;
     }
 
-    .game-action-btn.liked {
-      background: #ef476f;
-      color: #fff;
+    .play-btn-card:hover {
+      transform: scale(1.0);
+      box-shadow: var(--glow);
     }
-
-    .game-action-btn.disliked {
-      background: #4a4a4a;
-      color: #fff;
-    }
-
-    /* NEW: Featured Games Section */
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 10px;
-    }
-
-    .featured-card {
-      background: var(--card);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s;
-    }
-
-    .featured-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .featured-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .featured-content {
-      padding: 15px;
-    }
-
-    /* NEW: Recently Played */
-    .recent-games {
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-      padding: 10px 0;
-    }
-
-    .recent-game {
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .recent-game img {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
-      object-fit: cover;
-      margin-bottom: 8px;
-    }
+    /* END NEW CSS */
 
     /* arrows overlay for each row */
     .row-arrow {
@@ -845,7 +799,6 @@
       <input id="searchInput" placeholder="Search games...">
     </div>
 
-    <!-- NEW: User Profile -->
     <div class="user-profile">
       <div class="user-avatar" onclick="toggleUserMenu()">
         <i class="fas fa-user"></i>
@@ -853,7 +806,6 @@
     </div>
   </header>
 
-  <!-- NEW: Quick Stats Bar -->
   <div class="stats-bar" id="statsBar">
     <div class="stat-item">
       <div class="stat-number" id="totalGames">0</div>
@@ -863,13 +815,8 @@
       <div class="stat-number" id="playedToday">0</div>
       <div class="stat-label">Played Today</div>
     </div>
-    <div class="stat-item">
-      <div class="stat-number" id="favorites">0</div>
-      <div class="stat-label">Favorites</div>
     </div>
-  </div>
 
-  <!-- CATEGORY FILTER BAR -->
   <div class="categories" id="categoryBar">
     <button class="active" data-cat="all">All</button>
     <button data-cat="action">Action</button>
@@ -882,20 +829,17 @@
     <button data-cat="multiplayer">Multiplayer</button>
   </div>
 
-  <!-- HERO -->
   <section class="hero" id="hero">
     <div class="hero-nav left" onclick="prevSlide()">&#10094;</div>
     <div class="hero-nav right" onclick="nextSlide()">&#10095;</div>
   </section>
 
-  <!-- vertical list of category sections -->
   <div class="section-wrap" id="sectionWrap">
     <div style="text-align:center;padding:60px">
       <div class="loading-spinner"></div>
     </div>
   </div>
 
-  <!-- NEW: Featured Games Section -->
   <div class="section-wrap">
     <section class="section">
       <div class="section-header">
@@ -903,12 +847,10 @@
         <a href="#" class="view-all" onclick="openViewAll('featured')">View All</a>
       </div>
       <div class="featured-grid" id="featuredGames">
-        <!-- Featured games will be populated by JavaScript -->
-      </div>
+        </div>
     </section>
   </div>
 
-  <!-- NEW: Recently Played Section -->
   <div class="section-wrap">
     <section class="section">
       <div class="section-header">
@@ -916,12 +858,10 @@
         <a href="#" class="view-all" onclick="clearRecentHistory()">Clear History</a>
       </div>
       <div class="recent-games" id="recentGames">
-        <!-- Recently played games will be populated by JavaScript -->
-      </div>
+        </div>
     </section>
   </div>
 
-  <!-- Modal -->
   <div id="movieModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -937,7 +877,6 @@
     </div>
   </div>
 
-  <!-- NEW: Game Details Page -->
   <div id="gameDetailsPage">
     <div class="game-details-header" id="detailsHeader">
       <button class="game-details-back" onclick="closeGameDetails()">
@@ -963,7 +902,6 @@
     </div>
   </div>
 
-  <!-- NEW: View All Page -->
   <div id="viewAllPage" style="display:none">
     <div class="section-wrap">
       <div style="display:flex;align-items:center;gap:15px;margin-bottom:20px">
@@ -977,10 +915,8 @@
     </div>
   </div>
 
-  <!-- NEW: Toast Notification -->
   <div class="toast" id="toast"></div>
 
-  <!-- NEW: Loading Overlay -->
   <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-spinner"></div>
   </div>
@@ -1023,11 +959,9 @@
     const GAMES_PER_PAGE = 12;
 
     let userData = {
-      favorites: JSON.parse(localStorage.getItem('gameFavorites')) || [],
+      // Removed 'favorites' from userData
       recentlyPlayed: JSON.parse(localStorage.getItem('recentlyPlayed')) || [],
-      playCount: JSON.parse(localStorage.getItem('playCount')) || {},
-      likes: JSON.parse(localStorage.getItem('gameLikes')) || {},
-      dislikes: JSON.parse(localStorage.getItem('gameDislikes')) || {}
+      playCount: JSON.parse(localStorage.getItem('playCount')) || {}
     };
 
     const fallbackImg = 'https://via.placeholder.com/600x400/222/fff?text=Game+Preview';
@@ -1055,9 +989,7 @@
         controls: controls,
         multiplayer: hasMultiplayer,
         gamepad: supportsGamepad,
-        ageRating: AGE_RATINGS[Math.floor(Math.random() * AGE_RATINGS.length)],
-        likes: userData.likes[game.url] || 0,
-        dislikes: userData.dislikes[game.url] || 0
+        ageRating: AGE_RATINGS[Math.floor(Math.random() * AGE_RATINGS.length)]
       };
     }
 
@@ -1085,34 +1017,6 @@
         isFullscreen = false;
         document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
       }
-    }
-
-    // NEW: Like/Dislike system
-    function likeGame(game) {
-      if (!userData.likes[game.url]) {
-        userData.likes[game.url] = 1;
-        userData.dislikes[game.url] = 0;
-        localStorage.setItem('gameLikes', JSON.stringify(userData.likes));
-        localStorage.setItem('gameDislikes', JSON.stringify(userData.dislikes));
-        showToast('👍 Game liked!');
-        updateGameCardLikes(game);
-      }
-    }
-
-    function dislikeGame(game) {
-      if (!userData.dislikes[game.url]) {
-        userData.dislikes[game.url] = 1;
-        userData.likes[game.url] = 0;
-        localStorage.setItem('gameLikes', JSON.stringify(userData.likes));
-        localStorage.setItem('gameDislikes', JSON.stringify(userData.dislikes));
-        showToast('👎 Game disliked');
-        updateGameCardLikes(game);
-      }
-    }
-
-    function updateGameCardLikes(game) {
-      // This would update the like/dislike buttons on game cards
-      // Implementation depends on your specific card structure
     }
 
     // NEW: Game details page
@@ -1185,8 +1089,8 @@
         category === 'featured' ? 'All Featured Games' : `All ${displayNames[category] || category} Games`;
 
       loadViewAllPage();
-      viewAllPage.style.display = 'block';
       document.querySelector('.section-wrap').style.display = 'none';
+      viewAllPage.style.display = 'block';
     }
 
     function closeViewAll() {
@@ -1236,7 +1140,7 @@
       viewAllPageIndex++;
     }
 
-    // NEW: Enhanced game card creation with tags
+    // MODIFIED: Enhanced game card creation WITH a 'Play Now' button overlay
     function createGameCard(game, simple = false) {
       const card = document.createElement('div');
       card.className = 'game-card';
@@ -1244,65 +1148,51 @@
       const metadata = game.metadata || generateGameMetadata(game);
       game.metadata = metadata; // Store metadata for later use
 
-      const isFav = isFavorite(game);
-      const hasLiked = userData.likes[game.url];
-      const hasDisliked = userData.dislikes[game.url];
+      // Check if game.url exists before allowing play
+      const playButtonHtml = game.url ? `
+        <div class="play-overlay">
+          <button class="play-btn-card" 
+                  data-url="${escapeQuote(game.url)}" 
+                  data-game='${escapeQuote(JSON.stringify(game))}' 
+                  onclick="event.stopPropagation(); window.openModal(this.dataset.url, JSON.parse(this.dataset.game))">
+            <i class="fas fa-play"></i> Play Now
+          </button>
+        </div>
+      ` : `<div class="play-overlay" style="opacity:0.9;cursor:default;">
+             <span class="game-tag hard" style="font-size:12px">URL N/A</span>
+           </div>`;
 
       card.innerHTML = `
         <img loading="lazy" src="${game.background_image || game.thumb_1 || game.thumb || fallbackImg}" 
              alt="${escapeHtml(game.title || game.name || '')}" 
              onerror="this.src='${fallbackImg}'">
+        ${playButtonHtml}
         <div class="game-tags">
           ${metadata.gamepad ? '<span class="game-tag gamepad">🎮</span>' : ''}
           ${metadata.multiplayer ? '<span class="game-tag multiplayer">👥</span>' : ''}
           <span class="game-tag ${metadata.difficulty}">${metadata.difficulty.toUpperCase()}</span>
         </div>
-        ${isFav ? '<div class="game-badge">❤️</div>' : ''}
         <div class="game-info">
           <div class="game-title">${escapeHtml(game.title || game.name || 'Untitled')}</div>
           <div class="game-meta">
             <span class="game-rating">⭐ ${game.rating || 'N/A'}</span>
             <span>👥 ${game.plays || 'N/A'}</span>
           </div>
-          ${!simple ? `
-            <div class="game-actions">
-              <button class="game-action-btn ${hasLiked ? 'liked' : ''}" 
-                      onclick="event.stopPropagation(); likeGame(${escapeQuote(JSON.stringify(game))})">
-                👍 ${metadata.likes || 0}
-              </button>
-              <button class="game-action-btn ${hasDisliked ? 'disliked' : ''}" 
-                      onclick="event.stopPropagation(); dislikeGame(${escapeQuote(JSON.stringify(game))})">
-                👎 ${metadata.dislikes || 0}
-              </button>
-            </div>
-          ` : ''}
         </div>
       `;
 
       if (!simple) {
+        // Main card click (outside the Play Now button) opens the details page
         card.addEventListener('click', () => openGameDetails(game));
-        card.addEventListener('contextmenu', (e) => {
-          e.preventDefault();
-          toggleFavorite(game);
-          updateCardBadge(card, game);
-        });
       } else {
+        // Simple cards (e.g., Similar Games) still open the modal directly on card click
         card.addEventListener('click', () => openModal(game.url, game));
       }
 
       return card;
     }
 
-    function updateCardBadge(card, game) {
-      const badge = card.querySelector('.game-badge');
-      if (isFavorite(game)) {
-        if (!badge) {
-          card.querySelector('.game-info').insertAdjacentHTML('beforebegin', '<div class="game-badge">❤️</div>');
-        }
-      } else {
-        if (badge) badge.remove();
-      }
-    }
+    // Removed updateCardBadge function
 
     // NEW: Preload hero images
     function preloadHeroImages(games) {
@@ -1574,7 +1464,8 @@
           slug: `game-${i}`,
           category: category,
           rating: (Math.random() * 2 + 3).toFixed(1),
-          playtime: Math.floor(Math.random() * 10000)
+          playtime: Math.floor(Math.random() * 10000),
+          url: `https://cdn.htmlgames.com/Game${i}/`
         });
       }
       return sampleGames;
@@ -1652,7 +1543,7 @@
       section.innerHTML = `
         <div class="section-header">
           <div class="title">${escapeHtml(title)}</div>
-          <a href="#" class="view-all" onclick="viewAll('${key}')">View All</a>
+          <a href="#" class="view-all" onclick="openViewAll('${key}')">View All</a>
         </div>
         <div class="row-outer">
           <div class="row" data-key="${key}"></div>
@@ -1727,7 +1618,7 @@
 
     function updateStats() {
       document.getElementById('totalGames').textContent = allGames.length;
-      document.getElementById('favorites').textContent = userData.favorites.length;
+      // document.getElementById('favorites').textContent = userData.favorites.length; // Removed
       const today = new Date().toDateString();
       const playedToday = Object.values(userData.playCount).filter(date =>
         new Date(date).toDateString() === today
@@ -1751,22 +1642,9 @@
       loadingOverlay.classList.remove('active');
     }
 
-    function isFavorite(game) {
-      return userData.favorites.some(fav => fav.url === game.url);
-    }
+    // Removed isFavorite function
 
-    function toggleFavorite(game) {
-      const index = userData.favorites.findIndex(fav => fav.url === game.url);
-      if (index === -1) {
-        userData.favorites.push(game);
-        showToast('❤️ Added to favorites!');
-      } else {
-        userData.favorites.splice(index, 1);
-        showToast('💔 Removed from favorites');
-      }
-      localStorage.setItem('gameFavorites', JSON.stringify(userData.favorites));
-      updateStats();
-    }
+    // Removed toggleFavorite function
 
     function addToRecentlyPlayed(game) {
       const existingIndex = userData.recentlyPlayed.findIndex(g => g.url === game.url);
@@ -1884,8 +1762,8 @@
     window.closeModal = closeModal;
     window.nextSlide = nextSlide;
     window.prevSlide = prevSlide;
-    window.viewAll = viewAll;
-    window.toggleFavorite = toggleFavorite;
+    window.viewAll = openViewAll; // Changed from viewAll to openViewAll for clarity
+    // window.toggleFavorite = toggleFavorite; // Removed
     window.openGameDetails = openGameDetails;
     window.closeGameDetails = closeGameDetails;
     window.openViewAll = openViewAll;
@@ -1895,4 +1773,3 @@
   </script>
 </body>
 </html>
-
