@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ChillBox — iTunes Mood Mix (Dark Only)</title>
+  <title>ChillBox — iTunes Mood Mix (Dark Only) — Fixed</title>
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
@@ -283,7 +283,7 @@
       opacity: 0.5;
     }
 
-    /* ---------------- MINI PLAYER (UPGRADED LAYOUT) ---------------- */
+    /* ---------------- MINI PLAYER (UPGRADED LAYOUT) — UPDATED TO USE GREEN BAR ---------------- */
     .mini-wrap {
       position: fixed;
       left: 0;
@@ -369,21 +369,9 @@
       gap: 8px;
     }
 
+    /* hide old input styles if any still present */
     .mini-timeline input[type=range] {
-      -webkit-appearance: none;
-      height: 6px;
-      border-radius: 6px;
-      background: #2a2a2a;
-      width: 100%;
-    }
-
-    .mini-timeline input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--accent);
-      cursor: pointer;
+      display: none;
     }
 
     .mini-time {
@@ -729,6 +717,61 @@
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding-top: 20px;
     }
+
+
+    /* Search recommendation dropdown styles */
+    #searchRecommendations {
+      position: absolute;
+      top: 42px;
+      left: 0;
+      width: 100%;
+      max-width: 380px;
+      background: #0f0f0f;
+      border: 1px solid #222;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 6000;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .search-rec-item {
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #e6eef3;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-rec-item small {
+      color: #9aa0a6;
+      display: block;
+      font-size: 12px;
+    }
+
+    .search-rec-item:hover,
+    .search-rec-item.active {
+      background: rgba(29, 185, 84, 0.06);
+    }
+
+    .search-rec-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      flex: 0 0 40px;
+    }
+
+    .rec-empty {
+      padding: 12px;
+      color: #9aa0a6;
+      font-size: 13px;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -737,14 +780,19 @@
     <a class="logo" href="#"><i class="fa fa-infinity"></i> ChillBox</a>
     <nav class="navbar" aria-label="main">
       <a href="index.html"><b>Movies</b></a>
-      <a href="Music.Html" style="background:var(--accent);color:#000;padding:8px 10px;border-radius:8px"><b>Music</b></a>
+      <a href="Music.Html"
+        style="background:var(--accent);color:#000;padding:8px 10px;border-radius:8px"><b>Music</b></a>
       <a href="Games.html"><b>Games</b></a>
       <a href="AboutUs.html"><b>About US</b></a>
     </nav>
     <div class="header-right">
-      <div class="search-box">
-        <input id="searchInput" placeholder="Search artist or track...">
-        <button id="searchBtn" class="btn accent">Search</button>
+      <div style="position:relative;width:100%;max-width:380px">
+        <div class="search-box" style="margin:0">
+          <input id="searchInput" placeholder="Search artist or track..." autocomplete="off" aria-autocomplete="list"
+            aria-controls="searchRecommendations">
+          <button id="searchBtn" class="btn accent">Search</button>
+        </div>
+        <div id="searchRecommendations" role="listbox" aria-label="Search recommendations"></div>
       </div>
     </div>
   </header>
@@ -861,9 +909,17 @@
           <div class="mini-btn" id="miniNext"><i class="fa fa-forward"></i></div>
         </div>
 
-        <div class="mini-timeline">
+        <!-- REPLACED old range with Spotify-style green progress bar -->
+        <div class="mini-timeline" style="align-items:center;">
           <div class="mini-time" id="miniCur">0:00</div>
-          <input type="range" id="miniSeek" min="0" max="100" value="0">
+          <div style="flex:1;padding:0 8px;">
+            <div id="miniProgressContainer"
+              style="background:#2a2a2a;height:6px;border-radius:6px;position:relative;cursor:pointer;">
+              <div id="miniProgressBar"
+                style="width:0%;height:100%;background:var(--accent);border-radius:6px;transition:width .12s linear;">
+              </div>
+            </div>
+          </div>
           <div class="mini-time" id="miniDur">0:00</div>
         </div>
       </div>
@@ -965,6 +1021,7 @@
 
     <p class="footer-copy">© 2025 ChillBox Entertainment. All rights reserved.</p>
   </footer>
+
   <script>
     // Performance optimization helpers
     function debounce(func, wait) {
@@ -1035,8 +1092,10 @@
     const miniWrap = document.getElementById('miniWrap'), mini = document.getElementById('mini');
     const miniTitle = document.getElementById('miniTitle'), miniArtist = document.getElementById('miniArtist');
     const miniPlay = document.getElementById('miniPlay'), miniPrev = document.getElementById('miniPrev'), miniNext = document.getElementById('miniNext');
-    const miniSeek = document.getElementById('miniSeek'), miniCur = document.getElementById('miniCur'), miniDur = document.getElementById('miniDur'), miniVolume = document.getElementById('miniVolume');
+    const miniVolume = document.getElementById('miniVolume');
     const miniFullscreen = document.getElementById('miniFullscreen');
+    const miniProgressBar = document.getElementById('miniProgressBar');
+    const miniProgressContainer = document.getElementById('miniProgressContainer');
     const toastEl = document.getElementById('toast');
 
     const loadMoreBtn = document.getElementById('loadMore'), refreshAllBtn = document.getElementById('refreshAll');
@@ -1075,9 +1134,7 @@
 
     /* loading indicator helper */
     function showLoader(el) {
-      el.innerHTML = `<div style="padding:18px;display:flex;align-items:center;gap:12px">
-    <div class="loader"><i class="fa fa-music"></i></div><div style="color:var(--muted)">Loading...</div>
-  </div>`;
+      el.innerHTML = `<div style="padding:18px;display:flex;align-items:center;gap:12px">\n    <div class=\"loader\"><i class=\"fa fa-music\"></i></div><div style=\"color:var(--muted)\">Loading...</div>\n  </div>`;
     }
     function hideLoader(el) { el.innerHTML = ''; }
 
@@ -1109,15 +1166,7 @@
       const preview = (item.previewUrl || item.audio) || '';
       const div = document.createElement('div');
       div.className = 'card';
-      div.innerHTML = `
-    <img src="${art}" alt="" loading="lazy">
-    <h4>${title}</h4>
-    <div class="meta-muted">${artist}</div>
-    <div class="row">
-      <button class="btn add small" data-audio="${preview}" data-title="${title}" data-artist="${artist}" data-art="${art}"><i class="fa fa-plus"></i></button>
-      <button class="btn play small" data-audio="${preview}" data-title="${title}" data-artist="${artist}" data-art="${art}"><i class="fa fa-play"></i></button>
-    </div>
-  `;
+      div.innerHTML = `\n    <img src="${art}" alt="" loading="lazy">\n    <h4>${title}</h4>\n    <div class="meta-muted">${artist}</div>\n    <div class="row">\n      <button class="btn add small" data-audio="${preview}" data-title="${title}" data-artist="${artist}" data-art="${art}"><i class="fa fa-plus"></i></button>\n      <button class="btn play small" data-audio="${preview}" data-title="${title}" data-artist="${artist}" data-art="${art}"><i class="fa fa-play"></i></button>\n    </div>\n  `;
 
       const trackObj = {
         trackName: title,
@@ -1199,16 +1248,7 @@
         const el = document.createElement('div'); el.className = 'card playlist-card';
         el.style.display = 'flex'; el.style.alignItems = 'center'; el.style.gap = '8px';
         el.setAttribute('draggable', 'true'); // Make draggable
-        el.innerHTML = `<img src="${safe(p.artwork)}" style="width:56px;height:56px;border-radius:6px;object-fit:cover" loading="lazy">
-      <div style="flex:1">
-        <div style="font-weight:700">${safe(p.trackName)}</div>
-        <div style="color:var(--muted)">${safe(p.artistName)}</div>
-      </div>
-       <div style="display:flex;flex-direction:column;gap:6px">
-        <button class="btn small play-item" data-idx="${idx}"><i class="fa fa-play"></i></button>
-        <button class="btn small" data-remove="${idx}" style="background:#ff6b6b;color:#000"><i class="fa fa-trash"></i></button>
-      </div>
-    `;
+        el.innerHTML = `<img src="${safe(p.artwork)}" style="width:56px;height:56px;border-radius:6px;object-fit:cover" loading="lazy">\n      <div style="flex:1">\n        <div style="font-weight:700">${safe(p.trackName)}</div>\n        <div style="color:var(--muted)">${safe(p.artistName)}</div>\n      </div>\n       <div style="display:flex;flex-direction:column;gap:6px">\n        <button class="btn small play-item" data-idx="${idx}"><i class="fa fa-play"></i></button>\n        <button class="btn small" data-remove="${idx}" style="background:#ff6b6b;color:#000"><i class="fa fa-trash"></i></button>\n      </div>\n    `;
 
         // Drag and Drop Listeners
         el.addEventListener('dragstart', handleDragStart);
@@ -1340,14 +1380,7 @@
         const item = document.createElement('div');
         item.className = 'queue-item' + (i === currentIndex ? ' active' : '');
         item.dataset.idx = i;
-        item.innerHTML = `
-      <img src="${safe(q.artwork)}" alt="" loading="lazy">
-      <div class="queue-meta">
-        <div class="t">${safe(q.trackName)}</div>
-        <div class="a">${safe(q.artistName)}</div>
-      </div>
-      <div><button class="btn small play-quick" data-idx="${i}"><i class="fa fa-play"></i></button></div>
-    `;
+        item.innerHTML = `\n      <img src="${safe(q.artwork)}" alt="" loading="lazy">\n      <div class="queue-meta">\n        <div class="t">${safe(q.trackName)}</div>\n        <div class="a">${safe(q.artistName)}</div>\n      </div>\n      <div><button class="btn small play-quick" data-idx="${i}"><i class="fa fa-play"></i></button></div>\n    `;
         item.addEventListener('click', () => {
           playIndex(Number(item.dataset.idx));
         });
@@ -1729,7 +1762,7 @@
       audio.currentTime = time;
     }
     ovSeek.addEventListener('input', handleSeek);
-    miniSeek.addEventListener('input', handleSeek);
+    // NOTE: mini progress is a clickable container instead of a range input — handled below
 
     // Volume Controls
     function handleVolumeChange(e) {
@@ -1770,11 +1803,22 @@
       if (!audio.duration) return;
       const pct = (audio.currentTime / audio.duration) * 100;
       if (document.activeElement !== ovSeek) ovSeek.value = pct;
-      if (document.activeElement !== miniSeek) miniSeek.value = pct;
+      // update mini progress bar (green) visually
+      miniProgressBar.style.width = pct + '%';
       ovCur.textContent = formatTime(audio.currentTime); ovDur.textContent = formatTime(audio.duration);
       miniCur.textContent = formatTime(audio.currentTime); miniDur.textContent = formatTime(audio.duration);
     });
-    
+
+    // clicking/tapping the mini progress container seeks
+    miniProgressContainer.addEventListener('click', (e) => {
+      if (!audio.duration) return;
+      const rect = miniProgressContainer.getBoundingClientRect();
+      const x = (e.clientX - rect.left);
+      const pct = Math.max(0, Math.min(1, x / rect.width)) * 100;
+      audio.currentTime = audio.duration * (pct / 100);
+      // immediately reflect UI
+      miniProgressBar.style.width = pct + '%';
+    });
 
     // --- ended handler using settings.shuffle + settings.repeat correctly ---
     audio.addEventListener('ended', () => {
@@ -1955,17 +1999,235 @@
     }, 100), { passive: true });
 
     // Expose a simple play-from-card connector: when user clicks poster (handled in createCard),
-    // openOverlayAndPlay -> playIndex will call showMini() so mini appears and overlay shows.
-    // Additionally, ensure initial showMini when playback starts from other places:
-    function ensureMiniShown() {
-      if (audio.src && !audio.paused) showMini();
-    }
+    // openOverlayAndPlay -> playIndex will
 
-    // ensure mini updates on play/pause
-    audio.addEventListener('play', ensureMiniShown);
-    audio.addEventListener('pause', () => { /* keep mini visible even paused */ });
+    // --- Search recommendations, keyboard navigation, highlight, recent/trending ---
+    (function () {
+      const searchInput = document.getElementById('searchInput');
+      const searchBtn = document.getElementById('searchBtn');
+      const recBox = document.getElementById('searchRecommendations');
+      const searchResults = document.getElementById('searchResults');
 
-    // End of script
+      // keep recent searches in localStorage
+      const REC_KEY = 'chillbox-recent-searches';
+      function getRecent() {
+        try {
+          return JSON.parse(localStorage.getItem(REC_KEY) || '[]');
+        } catch { return []; }
+      }
+      function pushRecent(q) {
+        if (!q) return;
+        let arr = getRecent();
+        arr = arr.filter(x => x !== q);
+        arr.unshift(q);
+        if (arr.length > 8) arr.length = 8;
+        localStorage.setItem(REC_KEY, JSON.stringify(arr));
+      }
+
+      const trending = ['lofi', 'chill', 'top hits', 'bollywood', 'acoustic', 'instrumental', 'indie'];
+
+      let items = []; // current displayed recommendation items
+      let activeIndex = -1;
+
+      // helper to highlight match in text
+      function highlight(text, q) {
+        if (!q) return text;
+        const idx = text.toLowerCase().indexOf(q.toLowerCase());
+        if (idx === -1) return text;
+        return text.slice(0, idx) + '<strong>' + text.slice(idx, idx + q.length) + '</strong>' + text.slice(idx + q.length);
+      }
+
+      function renderRecommendations(arr, query) {
+        items = arr;
+        activeIndex = -1;
+        recBox.innerHTML = '';
+        if (!arr || arr.length === 0) {
+          recBox.innerHTML = '<div class="rec-empty">No suggestions</div>';
+          recBox.style.display = 'block';
+          return;
+        }
+        arr.forEach((it, i) => {
+          const div = document.createElement('div');
+          div.className = 'search-rec-item';
+          div.dataset.index = i;
+          div.setAttribute('role', 'option');
+
+          const thumb = document.createElement('img');
+          thumb.className = 'search-rec-thumb';
+          thumb.src = it.artwork || it.cover || 'https://picsum.photos/80';
+          thumb.alt = '';
+
+          const meta = document.createElement('div');
+          meta.style.flex = '1';
+          meta.innerHTML = `<div>${highlight(it.title || it.trackName || it.trackName || '', query)}</div><small>${highlight(it.artist || it.artistName || '', query)}</small>`;
+
+          div.appendChild(thumb);
+          div.appendChild(meta);
+
+          div.addEventListener('click', () => {
+            selectRecommendation(i);
+          });
+
+          div.addEventListener('mouseover', () => {
+            setActive(i);
+          });
+
+          recBox.appendChild(div);
+        });
+        recBox.style.display = 'block';
+      }
+
+      function setActive(idx) {
+        const nodes = recBox.querySelectorAll('.search-rec-item');
+        nodes.forEach(n => n.classList.remove('active'));
+        if (idx >= 0 && nodes[idx]) {
+          nodes[idx].classList.add('active');
+          activeIndex = idx;
+          // ensure into view
+          nodes[idx].scrollIntoView({ block: 'nearest' });
+        } else activeIndex = -1;
+      }
+
+      async function fetchSuggestionsOnline(q) {
+        // use the same itunesFetch function if available, else do a simple fetch
+        if (typeof itunesFetch === 'function') {
+          try {
+            const res = await itunesFetch(q, 8);
+            return res.map(r => ({ title: r.trackName, artist: r.artistName, artwork: (r.artworkUrl100 || '').replace('100x100', '200x200'), audio: r.previewUrl }));
+          } catch (e) { return []; }
+        } else {
+          return [];
+        }
+      }
+
+      async function updateRecommendations() {
+        const q = searchInput.value.trim();
+        if (!q) {
+          // show recent + trending
+          const recent = getRecent();
+          const recs = [];
+          recent.forEach(r => recs.push({ title: r, artist: 'Recent' }));
+          trending.forEach(t => recs.push({ title: t, artist: 'Trending' }));
+          renderRecommendations(recs, q);
+          return;
+        }
+        // Search locally first: playlist, recent, currentResults if available
+        const localMatches = [];
+        try {
+          // playlist array exists in page scope
+          if (Array.isArray(window.playlist)) {
+            window.playlist.forEach(p => {
+              if ((p.trackName || '').toLowerCase().includes(q.toLowerCase()) || (p.artistName || '').toLowerCase().includes(q.toLowerCase())) {
+                localMatches.push({ title: p.trackName, artist: p.artistName, artwork: p.artwork, audio: p.audio });
+              }
+            });
+          }
+          // recent
+          getRecent().forEach(r => {
+            if ((r || '').toLowerCase().includes(q.toLowerCase())) localMatches.push({ title: r, artist: 'Recent' });
+          });
+          // also include currentResults if present
+          if (window.currentResults) {
+            Object.values(window.currentResults).forEach(list => {
+              (list || []).forEach(it => {
+                const title = it.trackName || it.trackName || it.trackName || '';
+                const artist = it.artistName || it.artistName || '';
+                if (title.toLowerCase().includes(q.toLowerCase()) || artist.toLowerCase().includes(q.toLowerCase())) {
+                  localMatches.push({ title, artist, artwork: it.artworkUrl100 ? it.artworkUrl100.replace('100x100', '200x200') : (it.artwork || ''), audio: it.previewUrl || it.audio });
+                }
+              });
+            });
+          }
+        } catch (e) {
+          // ignore
+        }
+
+        // Dedupe by title+artist
+        const seen = new Set();
+        const dedup = [];
+        localMatches.forEach(i => {
+          const k = (i.title || '') + '|' + (i.artist || '');
+          if (!seen.has(k)) { seen.add(k); dedup.push(i); }
+        });
+
+        if (dedup.length >= 6) {
+          renderRecommendations(dedup.slice(0, 6), q);
+          return;
+        }
+
+        // supplement with online suggestions
+        const online = await fetchSuggestionsOnline(q);
+        const combined = dedup.concat(online).slice(0, 8);
+        renderRecommendations(combined, q);
+      }
+
+      function selectRecommendation(idx) {
+        const item = items[idx];
+        if (!item) return;
+        // push to recent searches (title)
+        const query = item.title || item.trackName || item;
+        if (typeof query === 'string') pushRecent(query);
+        // set input and perform search — use existing search handler
+        searchInput.value = item.title || item.trackName || query;
+        recBox.style.display = 'none';
+        // if recommendation has audio and a play helper exists, open overlay and play
+        if (item.audio && typeof openOverlayAndPlay === 'function') {
+          openOverlayAndPlay({ trackName: item.title, artistName: item.artist, audio: item.audio, artwork: item.artwork }, 'search');
+        } else {
+          // trigger the normal search button flow
+          searchBtn.click();
+        }
+      }
+
+      // keyboard navigation
+      searchInput.addEventListener('keydown', (e) => {
+        if (recBox.style.display !== 'block') return;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setActive(Math.min(activeIndex + 1, items.length - 1));
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setActive(Math.max(activeIndex - 1, 0));
+        } else if (e.key === 'Enter') {
+          if (activeIndex >= 0) {
+            e.preventDefault();
+            selectRecommendation(activeIndex);
+          } else {
+            // no active, perform normal search
+            searchBtn.click();
+          }
+        } else if (e.key === 'Escape') {
+          recBox.style.display = 'none';
+        }
+      });
+
+      // input debounce to avoid excessive fetches
+      let tId = 0;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(tId);
+        tId = setTimeout(updateRecommendations, 220);
+      });
+
+      // click outside to close recommendations
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#searchRecommendations') && !e.target.closest('#searchInput')) {
+          recBox.style.display = 'none';
+        }
+      });
+
+      // on search button click, save to recent
+      searchBtn.addEventListener('click', () => {
+        const q = searchInput.value.trim();
+        if (q) pushRecent(q);
+      });
+
+      // initial: show trending when focus
+      searchInput.addEventListener('focus', () => {
+        if (!searchInput.value.trim()) updateRecommendations();
+      });
+
+    })();
+
   </script>
 </body>
 
