@@ -4,9 +4,9 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "PASTE FROM FIREBASE",
-  authDomain: "PASTE FROM FIREBASE",
-  projectId: "PASTE FROM FIREBASE",
+  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+  authDomain: "chillbox-747f8.firebaseapp.com",
+  projectId: "chillbox-747f8",
 };
 
 export const app = initializeApp(firebaseConfig);
