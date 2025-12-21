@@ -973,9 +973,57 @@ document.addEventListener("click", e => {
 });
 
 </script>
+ <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+      import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 
+      const firebaseConfig = {
+        apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+        authDomain: "chillbox-747f8.firebaseapp.com",
+        projectId: "chillbox-747f8",
+        storageBucket: "chillbox-747f8.firebasestorage.app",
+        messagingSenderId: "808846502692",
+        appId: "1:808846502692:web:fd3a70a823506207f261b1"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // --- Step 4: Fetch movies ---
+      async function showMovies() {
+        const moviesCol = collection(db, "movies");
+        const movieSnapshot = await getDocs(moviesCol);
+        const movies = movieSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        const container = document.getElementById("movies");
+        container.innerHTML = "";
+        movies.forEach(movie => {
+          const div = document.createElement("div");
+          div.innerHTML = `<h3>${movie.title}</h3><button onclick="playMovie('${movie.id}')">Play</button>`;
+          container.appendChild(div);
+        });
+      }
+
+      // --- Step 5: Record user activity ---
+      async function playMovie(movieId) {
+        try {
+          await addDoc(collection(db, "user_activity"), {
+            userId: "user123", // Replace with dynamic logged-in user ID
+            contentType: "movie",
+            contentId: movieId,
+            datePlayed: new Date().toISOString()
+          });
+          alert("Movie played and activity recorded!");
+        } catch (e) {
+          console.error("Error recording activity: ", e);
+        }
+      }
+
+      showMovies();
+    </script>
 </body>
 </html>
+
 
 
 
