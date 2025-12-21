@@ -304,6 +304,7 @@ a { text-decoration: none; color: white; }
       <a href="AboutUs.html" class="active">About US</a>
     </nav>
     </div>
+  <div id="userProfile"></div>
   </header>
 <div class="header fade-in">
     <h1>About ChillBox</h1>
@@ -513,6 +514,24 @@ function submitFeedback() {
 }
 
 </script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+onAuthStateChanged(auth,(user)=>{
+  if(!user){
+    location.href="login.html";
+  }else{
+    document.getElementById("userProfile").innerHTML =
+      `👤 ${user.email} 
+       <button onclick="logout()">Logout</button>`;
+  }
+});
+
+window.logout = function(){
+  signOut(auth).then(()=>location.href="login.html");
+}
+</script>
 </body>
 </html>
