@@ -918,13 +918,11 @@ import { onAuthStateChanged } from
 
 onAuthStateChanged(auth,(user)=>{
   if(!user){
-    // Not logged in → go to login page
     window.location.href = "login.html";
-  }else{
-    console.log("Logged in as:", user.email);
   }
 });
 </script>
+
 <script type="module">
 import { auth } from "./firebase.js";
 
@@ -933,6 +931,7 @@ console.log("Firebase connected:", auth);
 
 </body>
 </html>
+
 
 
 
