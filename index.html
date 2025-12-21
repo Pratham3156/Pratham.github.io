@@ -472,7 +472,29 @@ nav.navbar a:hover {
 
   <p class="footer-copy">© 2025 ChillBox Entertainment. All rights reserved.</p>
 </footer>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+    authDomain: "chillbox-747f8.firebaseapp.com",
+    projectId: "chillbox-747f8",
+    storageBucket: "chillbox-747f8.firebasestorage.app",
+    messagingSenderId: "808846502692",
+    appId: "1:808846502692:web:fd3a70a823506207f261b1",
+    measurementId: "G-E4M4CH9BNY"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 
 <script>
 const API_KEY = "166830f0c57dfdbf8f9a4ebeb942d300";
@@ -896,5 +918,6 @@ function closeModal() {
 </script>
 </body>
 </html>
+
 
 
