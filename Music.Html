@@ -794,6 +794,7 @@
         <div id="searchRecommendations" role="listbox" aria-label="Search recommendations"></div>
       </div>
     </div>
+<div id="userProfile"></div>
   </header>
 
   <div class="wrap scroll-container">
@@ -2228,6 +2229,25 @@
     })();
 
   </script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){
+    location.href="login.html";
+  }else{
+    document.getElementById("userProfile").innerHTML =
+      `👤 ${user.email} 
+       <button onclick="logout()">Logout</button>`;
+  }
+});
+
+window.logout = function(){
+  signOut(auth).then(()=>location.href="login.html");
+}
+</script>
 </body>
 
 </html>
