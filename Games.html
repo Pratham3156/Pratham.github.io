@@ -311,7 +311,13 @@ h2 { margin-bottom: 12px; }
   </div>
   <input type="text" id="search" placeholder="Search games...">
 </nav>
-   <div id="userProfile"></div>
+  <div class="profile-container">
+  <img id="profileImg" src="default-avatar.png" alt="Profile">
+  
+  <div class="profile-menu" id="profileMenu">
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
 </header>
 <!-- SEARCH RESULTS -->
 <section id="searchSection" class="hidden">
@@ -576,6 +582,7 @@ window.logout = function(){
 </script>
 </body>
 </html>
+
 
 
 
