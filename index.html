@@ -940,6 +940,7 @@ function closeModal() {
   const frame = document.getElementById("movieFrame");
   if (frame) frame.src = "";
 }
+</script>
   <script type="module">
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from
@@ -969,7 +970,6 @@ document.addEventListener("click", e => {
     profileMenu.style.display = "none";
   }
 });
-</script>
 
 </script>
 <script type="module">
@@ -1011,6 +1011,7 @@ console.log("Firebase connected:", auth);
 
 </body>
 </html>
+
 
 
 
