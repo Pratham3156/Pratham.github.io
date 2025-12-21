@@ -925,9 +925,15 @@ onAuthStateChanged(auth,(user)=>{
   }
 });
 </script>
+<script type="module">
+import { auth } from "./firebase.js";
+
+console.log("Firebase connected:", auth);
+</script>
 
 </body>
 </html>
+
 
 
 
