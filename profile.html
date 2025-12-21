@@ -1,0 +1,17 @@
+<h2>Your History</h2>
+<ul id="history"></ul>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { collection, getDocs } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const list = document.getElementById("history");
+const ref = collection(db,"users",auth.currentUser.uid,"history");
+const snap = await getDocs(ref);
+
+snap.forEach(doc=>{
+ const d = doc.data();
+ list.innerHTML += `<li>${d.type} - ${d.title}</li>`;
+});
+</script>
