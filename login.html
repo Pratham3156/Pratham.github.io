@@ -170,8 +170,16 @@ window.signup = function(){
   }
 
   createUserWithEmailAndPassword(auth, email, password)
-    .then(() => window.location.href = "index.html")
-    .catch(err => alert(err.message));
+  .then((userCredential) => {
+    console.log("🔥 USER CREATED:", userCredential.user);
+    alert("Signup success");
+    window.location.href = "index.html";
+  })
+  .catch(err => {
+    console.error("❌ SIGNUP FAILED:", err);
+    alert(err.code + " - " + err.message);
+  });
+
 };
 </script>
 
