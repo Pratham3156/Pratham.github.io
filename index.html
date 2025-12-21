@@ -911,8 +911,24 @@ window.logout = function(){
   signOut(auth).then(()=>location.href="login.html");
 }
 </script>
+  <script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){
+    // Not logged in → go to login page
+    window.location.href = "login.html";
+  }else{
+    console.log("Logged in as:", user.email);
+  }
+});
+</script>
+
 </body>
 </html>
+
 
 
 
