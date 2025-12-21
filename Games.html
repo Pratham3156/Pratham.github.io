@@ -1,1775 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ChillBox — Games</title>
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    /* Your existing CSS remains the same */
-    :root {
-      --black: #101820;
-      --accent: #1db954;
-      --glow: 0 0 20px #1db954, 0 0 40px #1db954, 0 0 60px #1db954;
-      --card: #111;
-      --muted: rgba(255, 255, 255, 0.65);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    html,
-    body {
-      height: 100%;
-      background: #000;
-      color: #fff;
-      font-family: Roboto, Inter, system-ui, Arial;
-    }
-
-    body {
-      padding-top: 70px;
-      overflow-x: hidden
-    }
-
-    /* ===== HEADER ===== */
-    header {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 6%;
-      background-color: #000;
-      z-index: 9999;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6)
-    }
-
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none
-    }
-
-    .logo i {
-      color: limegreen
-    }
-
-    nav.navbar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      font-size: 17.5px;
-      flex: 1
-    }
-
-    nav.navbar a {
-      color: #fff;
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: all .2s
-    }
-
-    nav.navbar a.active,
-    nav.navbar a:hover {
-      background: var(--accent);
-      color: #000
-    }
-
-    /* search */
-    .search-box {
-      background: #fff;
-      border-radius: 6px;
-      padding: 6px 15px;
-      display: flex;
-      align-items: center;
-      height: 30px
-    }
-
-    #searchInput {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      width: 180px;
-      background: transparent;
-      color: #000;
-      transition: width .25s
-    }
-
-    #searchInput::placeholder {
-      color: #555
-    }
-
-    #searchInput:focus {
-      width: 250px
-    }
-
-    /* NEW: User Profile */
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-left: 15px;
-    }
-
-    .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* hero */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 45vh;
-      overflow: hidden;
-    }
-
-    .hero-slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: #000;
-      opacity: 0;
-      transition: opacity .9s;
-    }
-
-    .hero-slide.active {
-      opacity: 1;
-    }
-
-    .hero-content {
-      position: absolute;
-      bottom: 50px;
-      left: 60px;
-      z-index: 10;
-      color: #fff;
-      max-width: 500px
-    }
-
-    .hero-content h1 {
-      font-size: 40px;
-      margin: 0
-    }
-
-    .hero-content p {
-      font-size: 16px;
-      margin: 10px 0 20px
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 10px 18px;
-      background: var(--accent);
-      border-radius: 6px;
-      font-weight: 700;
-      color: #000;
-      cursor: pointer;
-      text-decoration: none;
-      border: none;
-      transition: all 0.3s;
-    }
-
-    .btn:hover {
-      color: #fff;
-      box-shadow: var(--glow);
-      transform: scale(1.03)
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-    }
-
-    .btn-outline:hover {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .btn-small {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
-
-    .hero-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 32px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 50%;
-      padding: 8px 12px;
-      cursor: pointer;
-      z-index: 50;
-      color: #fff
-    }
-
-    .hero-nav.left {
-      left: 20px
-    }
-
-    .hero-nav.right {
-      right: 20px
-    }
-
-    .hero-nav:hover {
-      background: rgba(0, 0, 0, 0.7)
-    }
-
-    /* NEW: Quick Stats Bar */
-    .stats-bar {
-      display: flex;
-      justify-content: space-around;
-      padding: 15px 6%;
-      background: #0a0a0a;
-      border-bottom: 1px solid #222;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 5px;
-    }
-
-    /* categories top bar */
-    .categories {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      padding: 20px;
-      background: #0d0d0d;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s ease;
-    }
-
-    .categories button {
-      background: #111;
-      color: #fff;
-      border: 1px solid #222;
-      padding: 8px 16px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: .2s
-    }
-
-    .categories button.active,
-    .categories button:hover {
-      background: var(--accent);
-      color: #000;
-      box-shadow: var(--glow)
-    }
-
-    /* ===== vertical sections with horizontal carousel rows ===== */
-    .section-wrap {
-      padding: 10px 6% 30px;
-    }
-
-    .section {
-      margin-bottom: 18px;
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.4s ease;
-    }
-
-    .section.hidden {
-      opacity: 0;
-      transform: translateY(20px);
-      pointer-events: none;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .section .title {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--accent)
-    }
-
-    .view-all {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .row-outer {
-      position: relative
-    }
-
-    .row {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 6px 6px 12px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .row::-webkit-scrollbar {
-      display: none
-    }
-
-    /* Game card - Enhanced */
-    .game-card {
-      min-width: 200px;
-      max-width: 200px;
-      background: var(--card);
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      transition: transform .18s, box-shadow .18s;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .game-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6)
-    }
-
-    .game-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      display: block;
-      background: #222
-    }
-
-    .game-badge {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: var(--accent);
-      color: #000;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .game-tags {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
-
-    .game-tag {
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      padding: 2px 6px;
-      border-radius: 8px;
-      font-size: 9px;
-      font-weight: 600;
-    }
-
-    .game-tag.gamepad {
-      background: #ff6b35;
-    }
-
-    .game-tag.multiplayer {
-      background: #4ecdc4;
-    }
-
-    .game-tag.easy {
-      background: #1db954;
-    }
-
-    .game-tag.medium {
-      background: #ffd166;
-      color: #000;
-    }
-
-    .game-tag.hard {
-      background: #ef476f;
-    }
-
-    .game-info {
-      padding: 10px;
-    }
-
-    .game-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 5px;
-    }
-
-    .game-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .game-rating {
-      color: #ffd700;
-    }
-    
-    /* NEW CSS: Play Button Overlay on Game Card */
-    .play-overlay {
-      position: absolute;
-      /* Cover the top image part */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 140px; /* Same height as .game-card img */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.75);
-      opacity: 0;
-      transition: opacity .2s;
-      z-index: 10;
-    }
-
-    .game-card:hover .play-overlay {
-      opacity: 1;
-    }
-
-    .play-btn-card {
-      background: var(--accent);
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transform: scale(0.9);
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .play-btn-card:hover {
-      transform: scale(1.0);
-      box-shadow: var(--glow);
-    }
-    /* END NEW CSS */
-
-    /* arrows overlay for each row */
-    .row-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.65));
-      color: #fff;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      opacity: 0;
-      transition: opacity .18s, transform .18s;
-      z-index: 40;
-      border: none;
-    }
-
-    .row-outer:hover .row-arrow {
-      opacity: 1
-    }
-
-    .row-arrow.left {
-      left: 6px
-    }
-
-    .row-arrow.right {
-      right: 6px
-    }
-
-    .row-arrow:active {
-      transform: translateY(-50%) scale(.96)
-    }
-
-    /* modal - Enhanced */
-    #movieModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.95);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999
-    }
-
-    #movieModal.active {
-      display: flex
-    }
-
-    .modal-content {
-      width: 90%;
-      height: 85%;
-      background: #111;
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-header {
-      padding: 15px 20px;
-      background: #000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-controls {
-      display: flex;
-      gap: 10px;
-    }
-
-    .modal-title {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    #gameFrame {
-      flex: 1;
-      border: none;
-    }
-
-    #movieModal .closeBtn {
-      font-size: 24px;
-      color: #fff;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 5px;
-    }
-
-    /* NEW: Game Details Page */
-    #gameDetailsPage {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 100000;
-      overflow-y: auto;
-      display: none;
-    }
-
-    #gameDetailsPage.active {
-      display: block;
-    }
-
-    .game-details-header {
-      position: relative;
-      height: 50vh;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .game-details-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    }
-
-    .game-details-content {
-      position: relative;
-      padding: 30px 6%;
-    }
-
-    .game-details-back {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
-      color: #fff;
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 10;
-    }
-
-    .game-details-main {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 30px;
-      margin-top: 20px;
-    }
-
-    .game-details-sidebar {
-      background: var(--card);
-      padding: 20px;
-      border-radius: 12px;
-    }
-
-    .similar-games {
-      margin-top: 30px;
-    }
-
-    /* NEW: Toast Notifications */
-    .toast {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: var(--accent);
-      color: #000;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      z-index: 10000;
-      transform: translateX(400px);
-      transition: transform 0.3s ease;
-    }
-
-    .toast.show {
-      transform: translateX(0);
-    }
-
-    /* NEW: Loading Overlay */
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100000;
-    }
-
-    .loading-overlay.active {
-      display: flex;
-    }
-
-    /* NEW: Infinite Scroll */
-    .infinite-scroll-end {
-      text-align: center;
-      padding: 20px;
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .load-more-btn {
-      display: block;
-      width: 200px;
-      margin: 20px auto;
-      padding: 10px 20px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* responsive */
-    @media (max-width:900px) {
-      .game-card {
-        min-width: 160px;
-        max-width: 160px
-      }
-
-      .hero-content {
-        left: 28px;
-        bottom: 30px
-      }
-
-      .hero-content h1 {
-        font-size: 28px
-      }
-
-      .hero-content p {
-        font-size: 14px
-      }
-
-      .categories {
-        gap: 10px;
-        padding: 15px
-      }
-
-      .categories button {
-        padding: 6px 12px;
-        font-size: 14px
-      }
-
-      .featured-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .stats-bar {
-        padding: 10px 4%;
-      }
-
-      .stat-number {
-        font-size: 18px;
-      }
-
-      .game-details-main {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Loading spinner */
-    .loading-spinner {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto;
-      border: 6px solid #111;
-      border-top: 6px solid var(--accent);
-      border-radius: 50%;
-      animation: spin .9s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    /* NEW: Fullscreen styles */
-    .fullscreen-mode {
-      position: fixed;
-      top: 10px;
-      right: 60px;
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      z-index: 1000;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChillBox — Play Games</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: #0a0f19;
+  color: #fff;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background: linear-gradient(to bottom, #000, #0a0f19);
+}
+header{
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(4px);
+}
+
+.logo { font-size: 26px; font-weight: 700; color: white; text-decoration: none; gap: 8px; margin-top: 10px;}
+i { color: #1db954;}
+a{ text-decoration: none; color: white; 
+  font-size: 0.95em;
+  font-weight: 500;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+a { cursor: pointer; opacity: 0.8;
+  transition: 0.3s; 
+   margin-top: 10px;
+  font-size: 17px;}
+.nav-links a {
+  padding: 5px;
+}
+.nav-links .active {
+  background: #1db954;
+  color: black;
+  /*padding: 8px 18px;*/
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 5px;
+}
+.nav-links a:hover {
+  opacity: 1;
+  background-color: #1db954;
+  border-radius: 8px;
+  color: black;
+}
+
+#search {
+  background: #111;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+}
+  #searchInput:focus {
+  width: 250px;
+}
+
+/* SECTIONS */
+section {
+  padding: 20px 40px;
+  overflow:
+}
+
+.hidden { display: none; }
+h2 { margin-bottom: 12px; }
+
+/* SLIDER */
+.slider {
+  position: relative;
+}
+
+.games-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+/* ARROWS */
+.arrow {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.7);
+  border: none;
+  color: white;
+  font-size: 28px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 5;
+  filter: blur(1px);
+}
+
+.arrow.left { left: -10px; }
+.arrow.right { right: -10px; }
+
+.arrow:hover {
+  background: #1db954;
+  color: black;
+  box-shadow: 0 0 20px white; 
+}
+
+/* GRID */
+.games-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px 40px;
+}
+
+/* CARD */
+.game-card {
+  min-width: 200px;
+  background: #151b2c;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.game-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 0 20px white; /*rgba(45,255,45,0.2);*/
+}
+
+.game-card img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+
+.game-info {
+  padding: 10px;
+}
+
+.game-info h3 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.rating {
+  font-size: 12px;
+  color: gold;
+  margin-bottom: 6px;
+}
+
+.play-btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #1db954;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* MODAL */
+.game-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.game-modal iframe {
+  width: 80%;
+  height: 80%;
+  border-radius: 14px;
+  border: none;
+}
+
+.close, .fullscreen {
+  position: absolute;
+  top: 20px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close { right: 30px; }
+.fullscreen { right: 70px; }
+
+.loader {
+  text-align: center;
+  padding: 30px;
+  opacity: 0.6;
+}
+#searchSection {
+  padding-top: 10px;
+}
+#recentSection {
+  margin-top: 80px;
+  border: 1px solid #222;
+}
+.footer {
+  background: #0b0b0b;
+  padding: 50px 6%;
+  color: #ccc;
+  margin-top: 60px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.footer i{
+  color: limegreen;
+}
+.footer-logo {
+  font-size: 45px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.footer-brand p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.footer-social a {
+  margin-right: 12px;
+  color: white;
+  font-size: 18px;
+  transition: 0.3s;
+}
+.footer-social a:hover {
+  color: #1db954;
+}
+
+.footer-section {
+  min-width: 150px;
+  margin-top: 70px;
+}
+
+.footer-section h3 {
+  color: white;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.footer-section a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: 0.3s;
+}
+.footer-section a:hover {
+  color: #1db954;
+}
+
+.footer-copy {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: #777;
+  font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 20px;
+}
+
+</style>
 </head>
 
 <body>
 
-  <header>
-    <a class="logo" href="#"><i class="fas fa-infinity"></i> ChillBox</a>
+<!-- NAVBAR -->
+ <header>
+<nav class="navbar">
+  <a class="logo" href="new_game.html"> <i class="fas fa-infinity"></i> ChillBox</a>
+  <div class="nav-links">
+    <a href="index.html">Movies</a>
+    <a href="Music.html">Music</a>
+    <a class="active" href="new_game.html">Games</a>
+    <a href="AboutUs.html">About</a>
+  </div>
+  <input type="text" id="search" placeholder="Search games...">
+</nav>
+</header>
+<!-- SEARCH RESULTS -->
+<section id="searchSection" class="hidden">
+  <h2>Search Results</h2>
+  <div class="games-container" id="searchResults"></div>
+</section>
 
-    <nav class="navbar" aria-label="main">
-      <a href="index.html">Movies</a>
-      <a href="Music.Html">Music</a>
-      <a class="active" href="Games.html">Games</a>
-      <a href="AboutUs.html">About</a>
-    </nav>
+<!-- RECENTLY PLAYED -->
+<section id="recentSection" class="hidden">
+  <h2>Recently Played</h2>
+  <div class="slider">
+    <button class="arrow left" onclick="slide('recentGames', -1)">‹</button>
+    <div class="games-row" id="recentGames"></div>
+    <button class="arrow right" onclick="slide('recentGames', 1)">›</button>
+  </div>
+</section>
 
-    <div class="search-box">
-      <input id="searchInput" placeholder="Search games...">
-    </div>
+<!-- CATEGORY SECTIONS -->
+<section>
+  <h2>Action Games</h2>
+  <div class="slider">
+    <button class="arrow left" onclick="slide('actionGames', -1)">‹</button>
+    <div class="games-row" id="actionGames"></div>
+    <button class="arrow right" onclick="slide('actionGames', 1)">›</button>
+  </div>
+</section>
 
-    <div class="user-profile">
-      <div class="user-avatar" onclick="toggleUserMenu()">
-        <i class="fas fa-user"></i>
+<section>
+  <h2>Racing Games</h2>
+  <div class="slider">
+    <button class="arrow left" onclick="slide('racingGames', -1)">‹</button>
+    <div class="games-row" id="racingGames"></div>
+    <button class="arrow right" onclick="slide('racingGames', 1)">›</button>
+  </div>
+</section>
+
+<section>
+  <h2>Puzzle Games</h2>
+  <div class="slider">
+    <button class="arrow left" onclick="slide('puzzleGames', -1)">‹</button>
+    <div class="games-row" id="puzzleGames"></div>
+    <button class="arrow right" onclick="slide('puzzleGames', 1)">›</button>
+  </div>
+</section>
+
+<section>
+  <h2>Sports Games</h2>
+  <div class="slider">
+    <button class="arrow left" onclick="slide('sportsGames', -1)">‹</button>
+    <div class="games-row" id="sportsGames"></div>
+    <button class="arrow right" onclick="slide('sportsGames', 1)">›</button>
+  </div>
+</section>
+
+<!-- ALL GAMES -->
+<h2 style="padding-left:40px;">All Games</h2>
+<div class="games-container" id="games"></div>
+<div class="loader" id="loader">Loading more games...</div>
+
+<!-- GAME MODAL -->
+<div class="game-modal" id="gameModal">
+  <span class="close" onclick="closeGame()">✖</span>
+  <button class="fullscreen" onclick="fullscreen()">⛶</button>
+  <iframe id="gameFrame"></iframe>
+</div>
+<footer class="footer">
+  <div class="footer-content">
+
+    <div class="footer-brand">
+      <h2 class="footer-logo"><i class="fas fa-infinity"></i> ChillBox</h2>
+      <p>Stream Movies, play<br>Games, and enjoy<br>Music – all in one place.</p>
+
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
-  </header>
 
-  <div class="stats-bar" id="statsBar">
-    <div class="stat-item">
-      <div class="stat-number" id="totalGames">0</div>
-      <div class="stat-label">Total Games</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-number" id="playedToday">0</div>
-      <div class="stat-label">Played Today</div>
-    </div>
+    <div class="footer-section">
+      <h3>Sections</h3>
+      <a href="movie.html">Movies</a>
+      <a href="Music.html">Music</a>
+      <a href="Games.html">Games</a>
+      <a href="AboutUs.html">About Us</a>
     </div>
 
-  <div class="categories" id="categoryBar">
-    <button class="active" data-cat="all">All</button>
-    <button data-cat="action">Action</button>
-    <button data-cat="racing">Racing</button>
-    <button data-cat="arcade">Arcade</button>
-    <button data-cat="sports">Sports</button>
-    <button data-cat="puzzle">Puzzle</button>
-    <button data-cat="adventure">Adventure</button>
-    <button data-cat="strategy">Strategy</button>
-    <button data-cat="multiplayer">Multiplayer</button>
+    <div class="footer-section">
+      <h3>Support</h3>
+      <a href="#">FAQ</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a>
+    </div>
+
   </div>
 
-  <section class="hero" id="hero">
-    <div class="hero-nav left" onclick="prevSlide()">&#10094;</div>
-    <div class="hero-nav right" onclick="nextSlide()">&#10095;</div>
-  </section>
+  <p class="footer-copy">© 2025 ChillBox Entertainment. All rights reserved.</p>
+</footer>
+<script>
+const API = "https://rss.gamemonetize.com/rssfeed.php?format=json&amount=150";
+let allGames = [];
+let visible = 24;
 
-  <div class="section-wrap" id="sectionWrap">
-    <div style="text-align:center;padding:60px">
-      <div class="loading-spinner"></div>
-    </div>
-  </div>
+fetch(API)
+  .then(res => res.json())
+  .then(data => {
+    allGames = data.map(g => ({
+      ...g,
+      rating: (Math.random() * 1.5 + 3.5).toFixed(1)
+    }));
+    loadRecent();
+    loadCategoryRows();
+    renderAll();
+  });
 
-  <div class="section-wrap">
-    <section class="section">
-      <div class="section-header">
-        <div class="title">🔥 Featured Games</div>
-        <a href="#" class="view-all" onclick="openViewAll('featured')">View All</a>
+function stars(r) {
+  return "★".repeat(Math.floor(r)) + "☆".repeat(5 - Math.floor(r)) + ` (${r})`;
+}
+
+function gameCard(game) {
+  return `
+    <div class="game-card">
+      <img loading="lazy" src="${game.thumb}">
+      <div class="game-info">
+        <h3>${game.title}</h3>
+        <div class="rating">${stars(game.rating)}</div>
+        <button class="play-btn" onclick="play('${game.url}','${game.title}')">Play Now</button>
       </div>
-      <div class="featured-grid" id="featuredGames">
-        </div>
-    </section>
-  </div>
-
-  <div class="section-wrap">
-    <section class="section">
-      <div class="section-header">
-        <div class="title">🕐 Recently Played</div>
-        <a href="#" class="view-all" onclick="clearRecentHistory()">Clear History</a>
-      </div>
-      <div class="recent-games" id="recentGames">
-        </div>
-    </section>
-  </div>
-
-  <div id="movieModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title" id="modalGameTitle">Playing Game</div>
-        <div class="modal-controls">
-          <button class="btn btn-small" onclick="toggleFullscreen()" id="fullscreenBtn">
-            <i class="fas fa-expand"></i> Fullscreen
-          </button>
-          <button class="closeBtn" onclick="closeModal()">&times;</button>
-        </div>
-      </div>
-      <iframe id="gameFrame" allowfullscreen allow="autoplay; fullscreen"></iframe>
-    </div>
-  </div>
-
-  <div id="gameDetailsPage">
-    <div class="game-details-header" id="detailsHeader">
-      <button class="game-details-back" onclick="closeGameDetails()">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <div class="game-details-overlay"></div>
-    </div>
-    <div class="game-details-content">
-      <h1 id="detailsTitle">Game Title</h1>
-      <div class="game-details-main">
-        <div>
-          <div id="detailsDescription"></div>
-          <div class="similar-games">
-            <h3>Similar Games</h3>
-            <div class="row" id="similarGames"></div>
-          </div>
-        </div>
-        <div class="game-details-sidebar">
-          <button class="btn" style="width:100%;margin-bottom:15px" id="detailsPlayBtn">Play Now</button>
-          <div id="detailsInfo"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="viewAllPage" style="display:none">
-    <div class="section-wrap">
-      <div style="display:flex;align-items:center;gap:15px;margin-bottom:20px">
-        <button class="btn btn-small" onclick="closeViewAll()">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-        <h2 id="viewAllTitle">All Games</h2>
-      </div>
-      <div class="featured-grid" id="viewAllGrid"></div>
-      <div id="infiniteScrollTrigger"></div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-  </div>
-
-  <script>
-    /* ---------- Enhanced Config & Elements ---------- */
-    const sectionWrap = document.getElementById('sectionWrap');
-    const hero = document.getElementById('hero');
-    const searchInput = document.getElementById('searchInput');
-    const categoryBar = document.getElementById('categoryBar');
-    const modal = document.getElementById('movieModal');
-    const gameFrame = document.getElementById('gameFrame');
-    const featuredGames = document.getElementById('featuredGames');
-    const recentGames = document.getElementById('recentGames');
-    const statsBar = document.getElementById('statsBar');
-    const toast = document.getElementById('toast');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const gameDetailsPage = document.getElementById('gameDetailsPage');
-    const viewAllPage = document.getElementById('viewAllPage');
-
-    const categories = ['action', 'racing', 'arcade', 'sports', 'puzzle', 'adventure', 'strategy', 'multiplayer'];
-    const displayNames = {
-      action: 'Action',
-      racing: 'Racing',
-      arcade: 'Arcade',
-      sports: 'Sports',
-      puzzle: 'Puzzle',
-      adventure: 'Adventure',
-      strategy: 'Strategy',
-      multiplayer: 'Multiplayer'
-    };
-
-    let allGames = [];
-    let heroGames = [];
-    let currentSlide = 0;
-    let slideInterval;
-    let isFullscreen = false;
-    let currentViewAllCategory = '';
-    let viewAllPageIndex = 0;
-    const GAMES_PER_PAGE = 12;
-
-    let userData = {
-      // Removed 'favorites' from userData
-      recentlyPlayed: JSON.parse(localStorage.getItem('recentlyPlayed')) || [],
-      playCount: JSON.parse(localStorage.getItem('playCount')) || {}
-    };
-
-    const fallbackImg = 'https://via.placeholder.com/600x400/222/fff?text=Game+Preview';
-
-    // NEW: Enhanced game tags and metadata
-    const DIFFICULTY_LEVELS = ['easy', 'medium', 'hard'];
-    const CONTROL_TYPES = ['keyboard', 'mouse', 'touch', 'gamepad'];
-    const AGE_RATINGS = ['E', 'E10+', 'T', 'M'];
-
-    function generateGameMetadata(game) {
-      const difficulties = ['easy', 'medium', 'hard'];
-      const controls = ['keyboard', 'mouse'];
-      const hasMultiplayer = Math.random() > 0.7;
-      const supportsGamepad = Math.random() > 0.5;
-
-      if (supportsGamepad) {
-        controls.push('gamepad');
-      }
-      if (Math.random() > 0.3) {
-        controls.push('touch');
-      }
-
-      return {
-        difficulty: difficulties[Math.floor(Math.random() * difficulties.length)],
-        controls: controls,
-        multiplayer: hasMultiplayer,
-        gamepad: supportsGamepad,
-        ageRating: AGE_RATINGS[Math.floor(Math.random() * AGE_RATINGS.length)]
-      };
-    }
-
-    // NEW: Fullscreen functionality
-    function toggleFullscreen() {
-      if (!isFullscreen) {
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-          elem.msRequestFullscreen();
-        }
-        isFullscreen = true;
-        document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-compress"></i> Exit Fullscreen';
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-        isFullscreen = false;
-        document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
-      }
-    }
-
-    // NEW: Game details page
-    function openGameDetails(game) {
-      const header = document.getElementById('detailsHeader');
-      const title = document.getElementById('detailsTitle');
-      const description = document.getElementById('detailsDescription');
-      const info = document.getElementById('detailsInfo');
-      const playBtn = document.getElementById('detailsPlayBtn');
-      const similar = document.getElementById('similarGames');
-
-      // Set background image
-      header.style.backgroundImage = `url('${game.background_image || game.thumb_1 || game.thumb || fallbackImg}')`;
-      title.textContent = game.title || game.name || 'Untitled Game';
-      description.innerHTML = `<p>${game.description || game.description_raw || 'No description available.'}</p>`;
-
-      // Generate game info
-      const metadata = game.metadata || generateGameMetadata(game);
-      info.innerHTML = `
-        <div style="margin-bottom:15px">
-          <strong>Difficulty:</strong> 
-          <span class="game-tag ${metadata.difficulty}">${metadata.difficulty.toUpperCase()}</span>
-        </div>
-        <div style="margin-bottom:15px">
-          <strong>Controls:</strong> 
-          ${metadata.controls.map(control => `<span class="game-tag">${control}</span>`).join(' ')}
-        </div>
-        <div style="margin-bottom:15px">
-          <strong>Age Rating:</strong> 
-          <span class="game-tag">${metadata.ageRating}</span>
-        </div>
-        ${metadata.multiplayer ? '<div><span class="game-tag multiplayer">Multiplayer</span></div>' : ''}
-        ${metadata.gamepad ? '<div><span class="game-tag gamepad">Gamepad Supported</span></div>' : ''}
-        <div style="margin-top:15px">
-          <strong>Rating:</strong> ⭐ ${game.rating || game.rating || 'N/A'}/5
-        </div>
-        <div style="margin-top:10px">
-          <strong>Plays:</strong> 👥 ${game.plays || 'N/A'}
-        </div>
-      `;
-
-      playBtn.onclick = () => openModal(game.url, game);
-
-      // Show similar games
-      similar.innerHTML = '';
-      const similarGames = allGames
-        .filter(g => g.category === game.category && g.url !== game.url)
-        .slice(0, 6);
-
-      similarGames.forEach(similarGame => {
-        const card = createGameCard(similarGame, true);
-        similar.appendChild(card);
-      });
-
-      gameDetailsPage.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeGameDetails() {
-      gameDetailsPage.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // NEW: View All page with infinite scroll
-    function openViewAll(category) {
-      currentViewAllCategory = category;
-      viewAllPageIndex = 0;
-
-      document.getElementById('viewAllTitle').textContent =
-        category === 'featured' ? 'All Featured Games' : `All ${displayNames[category] || category} Games`;
-
-      loadViewAllPage();
-      document.querySelector('.section-wrap').style.display = 'none';
-      viewAllPage.style.display = 'block';
-    }
-
-    function closeViewAll() {
-      viewAllPage.style.display = 'none';
-      document.querySelector('.section-wrap').style.display = 'block';
-    }
-
-    function loadViewAllPage() {
-      const grid = document.getElementById('viewAllGrid');
-      const games = currentViewAllCategory === 'featured' ?
-        allGames.slice(0, (viewAllPageIndex + 1) * GAMES_PER_PAGE) :
-        allGames.filter(game => {
-          if (currentViewAllCategory === 'all') return true;
-          const rawCategory = (game.category || '').toLowerCase();
-          return rawCategory.includes(currentViewAllCategory);
-        }).slice(0, (viewAllPageIndex + 1) * GAMES_PER_PAGE);
-
-      grid.innerHTML = games.map(game => `
-        <div class="featured-card" onclick="openGameDetails(${escapeQuote(JSON.stringify(game))})">
-          <img src="${game.background_image || game.thumb_1 || game.thumb || fallbackImg}" 
-               alt="${escapeHtml(game.title || game.name || '')}" 
-               onerror="this.src='${fallbackImg}'">
-          <div class="featured-content">
-            <div class="game-title">${escapeHtml(game.title || game.name || 'Untitled')}</div>
-            <div class="game-meta">
-              <span class="game-rating">⭐ ${game.rating || 'N/A'}</span>
-              <span>👥 ${game.plays || 'N/A'} plays</span>
-            </div>
-            ${game.metadata ? `
-              <div style="margin:8px 0">
-                ${game.metadata.gamepad ? '<span class="game-tag gamepad">Gamepad</span>' : ''}
-                ${game.metadata.multiplayer ? '<span class="game-tag multiplayer">Multiplayer</span>' : ''}
-                <span class="game-tag ${game.metadata.difficulty}">${game.metadata.difficulty}</span>
-              </div>
-            ` : ''}
-            <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.4">
-              ${escapeHtml((game.description || game.description_raw || 'An exciting HTML5 game').substring(0, 100))}...
-            </p>
-            <button class="btn" style="margin-top:10px;width:100%" 
-                    onclick="event.stopPropagation(); openModal('${escapeQuote(game.url)}', ${escapeQuote(JSON.stringify(game))})">
-              Play Now
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      viewAllPageIndex++;
-    }
-
-    // MODIFIED: Enhanced game card creation WITH a 'Play Now' button overlay
-    function createGameCard(game, simple = false) {
-      const card = document.createElement('div');
-      card.className = 'game-card';
-
-      const metadata = game.metadata || generateGameMetadata(game);
-      game.metadata = metadata; // Store metadata for later use
-
-      // Check if game.url exists before allowing play
-      const playButtonHtml = game.url ? `
-        <div class="play-overlay">
-          <button class="play-btn-card" 
-                  data-url="${escapeQuote(game.url)}" 
-                  data-game='${escapeQuote(JSON.stringify(game))}' 
-                  onclick="event.stopPropagation(); window.openModal(this.dataset.url, JSON.parse(this.dataset.game))">
-            <i class="fas fa-play"></i> Play Now
-          </button>
-        </div>
-      ` : `<div class="play-overlay" style="opacity:0.9;cursor:default;">
-             <span class="game-tag hard" style="font-size:12px">URL N/A</span>
-           </div>`;
-
-      card.innerHTML = `
-        <img loading="lazy" src="${game.background_image || game.thumb_1 || game.thumb || fallbackImg}" 
-             alt="${escapeHtml(game.title || game.name || '')}" 
-             onerror="this.src='${fallbackImg}'">
-        ${playButtonHtml}
-        <div class="game-tags">
-          ${metadata.gamepad ? '<span class="game-tag gamepad">🎮</span>' : ''}
-          ${metadata.multiplayer ? '<span class="game-tag multiplayer">👥</span>' : ''}
-          <span class="game-tag ${metadata.difficulty}">${metadata.difficulty.toUpperCase()}</span>
-        </div>
-        <div class="game-info">
-          <div class="game-title">${escapeHtml(game.title || game.name || 'Untitled')}</div>
-          <div class="game-meta">
-            <span class="game-rating">⭐ ${game.rating || 'N/A'}</span>
-            <span>👥 ${game.plays || 'N/A'}</span>
-          </div>
-        </div>
-      `;
-
-      if (!simple) {
-        // Main card click (outside the Play Now button) opens the details page
-        card.addEventListener('click', () => openGameDetails(game));
-      } else {
-        // Simple cards (e.g., Similar Games) still open the modal directly on card click
-        card.addEventListener('click', () => openModal(game.url, game));
-      }
-
-      return card;
-    }
-
-    // Removed updateCardBadge function
-
-    // NEW: Preload hero images
-    function preloadHeroImages(games) {
-      games.forEach(game => {
-        const img = new Image();
-        img.src = game.background_image || game.thumb_1 || game.thumb || fallbackImg;
-      });
-    }
-
-    // NEW: Smooth category transitions
-    function filterByCategory(category) {
-      const sections = document.querySelectorAll('#sectionWrap .section');
-
-      sections.forEach(section => {
-        section.classList.add('hidden');
-      });
-
-      setTimeout(() => {
-        sections.forEach(section => {
-          const row = section.querySelector('.row');
-          const rowCategory = row?.dataset.key;
-          if (category === 'all' || rowCategory === category) {
-            section.style.display = 'block';
-            setTimeout(() => section.classList.remove('hidden'), 50);
-          } else {
-            section.style.display = 'none';
-          }
-        });
-      }, 200);
-    }
-
-    // NEW: Clear recent history
-    function clearRecentHistory() {
-      userData.recentlyPlayed = [];
-      localStorage.setItem('recentlyPlayed', JSON.stringify(userData.recentlyPlayed));
-      updateRecentlyPlayed();
-      showToast('Recent history cleared');
-    }
-
-    /* ---------- Enhanced Game Loading ---------- */
-    async function loadGames() {
-      showLoading();
-      try {
-        // Use a curated list of real games with actual images
-        allGames = createRealGames();
-        
-        heroGames = allGames.slice(0, 5);
-        preloadHeroImages(heroGames);
-        setupHero(heroGames);
-        buildSections(allGames);
-        updateFeaturedGames();
-        updateRecentlyPlayed();
-        updateStats();
-
-        showToast('🎮 Games loaded successfully!');
-      } catch (err) {
-        console.error('Load games failed', err);
-        // Fallback to sample games
-        allGames = createSampleGames();
-        heroGames = allGames.slice(0, 5);
-        setupHero(heroGames);
-        buildSections(allGames);
-        updateFeaturedGames();
-        updateRecentlyPlayed();
-        updateStats();
-        showToast('⚠️ Using sample games data');
-      } finally {
-        hideLoading();
-      }
-    }
-
-    // Create real games with actual game posters
-    function createRealGames() {
-      return [
-        {
-          name: "The Witcher 3: Wild Hunt",
-          description_raw: "As war rages on, you take on the greatest contract of your life - tracking down the Child of Prophecy, a living weapon that can alter the shape of the world.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wya.jpg",
-          slug: "the-witcher-3-wild-hunt",
-          category: "action",
-          rating: "4.9",
-          playtime: 12500000,
-          url: "https://cdn.htmlgames.com/3DCarSimulator/"
-        },
-        {
-          name: "Grand Theft Auto V",
-          description_raw: "Grand Theft Auto V for PC offers players the option to explore the award-winning world of Los Santos and Blaine County in resolutions of up to 4k and beyond.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tfy.jpg",
-          slug: "grand-theft-auto-v",
-          category: "action",
-          rating: "4.8",
-          playtime: 9800000,
-          url: "https://cdn.htmlgames.com/GrandTheftAuto/"
-        },
-        {
-          name: "Red Dead Redemption 2",
-          description_raw: "America, 1899. The end of the wild west era has begun. After a robbery goes badly wrong, Arthur Morgan and the Van der Linde gang are forced to flee.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2f0a.jpg",
-          slug: "red-dead-redemption-2",
-          category: "adventure",
-          rating: "4.9",
-          playtime: 7500000,
-          url: "https://cdn.htmlgames.com/WesternShooting/"
-        },
-        {
-          name: "The Last of Us Part II",
-          description_raw: "Five years after their dangerous journey across the post-pandemic United States, Ellie and Joel have settled down in Jackson, Wyoming.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2irx.jpg",
-          slug: "the-last-of-us-part-ii",
-          category: "action",
-          rating: "4.7",
-          playtime: 5200000,
-          url: "https://cdn.htmlgames.com/ZombieShooter/"
-        },
-        {
-          name: "Cyberpunk 2077",
-          description_raw: "Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2r0f.jpg",
-          slug: "cyberpunk-2077",
-          category: "action",
-          rating: "4.3",
-          playtime: 6800000,
-          url: "https://cdn.htmlgames.com/CyberpunkRunner/"
-        },
-        {
-          name: "God of War",
-          description_raw: "His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tmu.jpg",
-          slug: "god-of-war",
-          category: "action",
-          rating: "4.9",
-          playtime: 4500000,
-          url: "https://cdn.htmlgames.com/GodOfWar/"
-        },
-        {
-          name: "Minecraft",
-          description_raw: "Minecraft is a game about placing blocks and going on adventures. Build anything you can imagine with unlimited resources in Creative mode, or go on grand expeditions in Survival.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co49x5.jpg",
-          slug: "minecraft",
-          category: "adventure",
-          rating: "4.8",
-          playtime: 25000000,
-          url: "https://cdn.htmlgames.com/Minecraft/"
-        },
-        {
-          name: "Fortnite",
-          description_raw: "Fortnite is the free, always evolving, multiplayer game where you and your friends battle to be the last one standing or collaborate to create your dream Fortnite world.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ekc.jpg",
-          slug: "fortnite",
-          category: "multiplayer",
-          rating: "4.2",
-          playtime: 35000000,
-          url: "https://cdn.htmlgames.com/FortniteBattle/"
-        },
-        {
-          name: "Call of Duty: Warzone",
-          description_raw: "Welcome to Warzone, the massive free-to-play combat arena which now features the brand-new map, Al Mazrah.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2huk.jpg",
-          slug: "call-of-duty-warzone",
-          category: "multiplayer",
-          rating: "4.1",
-          playtime: 28000000,
-          url: "https://cdn.htmlgames.com/CallOfDuty/"
-        },
-        {
-          name: "FIFA 23",
-          description_raw: "FIFA 23 brings The World's Game to the pitch, with HyperMotion2 Technology, men's and women's FIFA World Cup, cross-play, and more.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5wqu.jpg",
-          slug: "fifa-23",
-          category: "sports",
-          rating: "4.0",
-          playtime: 12000000,
-          url: "https://cdn.htmlgames.com/SoccerChampions/"
-        },
-        {
-          name: "Rocket League",
-          description_raw: "Rocket League is a high-powered hybrid of arcade-style soccer and vehicular mayhem with easy-to-understand controls and fluid, physics-driven competition.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1s66.jpg",
-          slug: "rocket-league",
-          category: "sports",
-          rating: "4.5",
-          playtime: 18000000,
-          url: "https://cdn.htmlgames.com/RocketLeague/"
-        },
-        {
-          name: "Among Us",
-          description_raw: "Play with 4-15 players online or via local WiFi as you attempt to prepare your spaceship for departure, but beware as one will be an impostor bent on killing everyone!",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2cua.jpg",
-          slug: "among-us",
-          category: "multiplayer",
-          rating: "4.3",
-          playtime: 9500000,
-          url: "https://cdn.htmlgames.com/AmongUs/"
-        },
-        {
-          name: "Portal 2",
-          description_raw: "Portal 2 draws from the award-winning formula of innovative gameplay, story, and music that earned the original Portal over 70 industry accolades.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2rpt.jpg",
-          slug: "portal-2",
-          category: "puzzle",
-          rating: "4.9",
-          playtime: 8500000,
-          url: "https://cdn.htmlgames.com/PortalPuzzle/"
-        },
-        {
-          name: "Stardew Valley",
-          description_raw: "You've inherited your grandfather's old farm plot in Stardew Valley. Armed with hand-me-down tools and a few coins, you set out to begin your new life.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r0y.jpg",
-          slug: "stardew-valley",
-          category: "strategy",
-          rating: "4.8",
-          playtime: 15000000,
-          url: "https://cdn.htmlgames.com/FarmSimulator/"
-        },
-        {
-          name: "Hades",
-          description_raw: "Defy the god of the dead as you hack and slash out of the Underworld in this rogue-like dungeon crawler from the creators of Bastion and Transistor.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ihl.jpg",
-          slug: "hades",
-          category: "action",
-          rating: "4.8",
-          playtime: 4200000,
-          url: "https://cdn.htmlgames.com/HadesAdventure/"
-        },
-        {
-          name: "Forza Horizon 5",
-          description_raw: "Your Ultimate Horizon Adventure awaits! Explore the vibrant open world landscapes of Mexico with limitless, fun driving action in the world's greatest cars.",
-          background_image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co3p0d.jpg",
-          slug: "forza-horizon-5",
-          category: "racing",
-          rating: "4.7",
-          playtime: 7800000,
-          url: "https://cdn.htmlgames.com/RacingExtreme/"
-        }
-      ];
-    }
-
-    // Create sample games when API fails
-    function createSampleGames() {
-      const sampleGames = [];
-      const gameTitles = [
-        'Epic Adventure Quest', 'Space Runner', 'Puzzle Master', 'Racing Extreme',
-        'Sports Challenge', 'Arcade Classic', 'Strategy Battle', 'Multiplayer Mayhem',
-        'Fantasy RPG', 'Shooting Arena', 'Puzzle Solver', 'Racing Pro'
-      ];
-
-      // Sample game images from real games
-      const sampleImages = [
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co1wya.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co1tfy.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co2f0a.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co2irx.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co2r0f.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co1tmu.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co49x5.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co2ekc.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co2huk.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co5wqu.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co1s66.jpg',
-        'https://images.igdb.com/igdb/image/upload/t_cover_big/co2cua.jpg'
-      ];
-
-      for (let i = 0; i < 30; i++) {
-        const category = categories[Math.floor(Math.random() * categories.length)];
-        sampleGames.push({
-          name: gameTitles[Math.floor(Math.random() * gameTitles.length)],
-          description_raw: 'An exciting HTML5 game you can play in your browser.',
-          background_image: sampleImages[Math.floor(Math.random() * sampleImages.length)],
-          slug: `game-${i}`,
-          category: category,
-          rating: (Math.random() * 2 + 3).toFixed(1),
-          playtime: Math.floor(Math.random() * 10000),
-          url: `https://cdn.htmlgames.com/Game${i}/`
-        });
-      }
-      return sampleGames;
-    }
-
-    // Rest of your existing functions (setupHero, buildSections, etc.)
-    function setupHero(games) {
-      if (games.length === 0) {
-        hero.innerHTML = `<div class="hero-slide active" style="background:linear-gradient(135deg, #1db954, #000)">
-          <div class="hero-content"><h1>HTML5 Games</h1><p>Discover amazing browser games</p></div></div>`;
-        return;
-      }
-
-      hero.innerHTML = `<div class="hero-nav left" onclick="prevSlide()">&#10094;</div><div class="hero-nav right" onclick="nextSlide()">&#10095;</div>`;
-      games.forEach((game, index) => {
-        const slide = document.createElement('div');
-        slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
-        slide.style.backgroundImage = `url('${game.background_image || game.thumb_1 || game.thumb || fallbackImg}')`;
-        slide.innerHTML = `<div class="hero-content"><h1>${escapeHtml(game.title || game.name || '')}</h1>
-          <p>${escapeHtml((game.description || game.description_raw || 'Play this amazing game').slice(0, 100))}...</p>
-          <button class="btn" onclick="openModal('${escapeQuote(game.url)}', ${escapeQuote(JSON.stringify(game))})">Play Now</button></div>`;
-        hero.appendChild(slide);
-      });
-
-      if (slideInterval) clearInterval(slideInterval);
-      slideInterval = setInterval(nextSlide, 6000);
-    }
-
-    function buildSections(games) {
-      const groups = {};
-      groups['all'] = games;
-
-      categories.forEach(cat => groups[cat] = []);
-      groups['others'] = [];
-
-      games.forEach(game => {
-        if (!game.category) {
-          groups['others'].push(game);
-          return;
-        }
-
-        const rawCategory = game.category.toLowerCase();
-        let matched = false;
-
-        for (const cat of categories) {
-          if (rawCategory.includes(cat)) {
-            groups[cat].push(game);
-            matched = true;
-            break;
-          }
-        }
-
-        if (!matched) groups['others'].push(game);
-      });
-
-      sectionWrap.innerHTML = '';
-
-      createSection('all', 'All Games', groups['all']);
-      categories.forEach(cat => {
-        if (groups[cat] && groups[cat].length > 0) {
-          createSection(cat, displayNames[cat], groups[cat]);
-        }
-      });
-
-      if (groups['others'] && groups['others'].length > 0) {
-        createSection('others', 'Other Games', groups['others']);
-      }
-
-      hookupCategoryBar();
-    }
-
-    function createSection(key, title, games) {
-      const section = document.createElement('section');
-      section.className = 'section';
-      section.innerHTML = `
-        <div class="section-header">
-          <div class="title">${escapeHtml(title)}</div>
-          <a href="#" class="view-all" onclick="openViewAll('${key}')">View All</a>
-        </div>
-        <div class="row-outer">
-          <div class="row" data-key="${key}"></div>
-          <button class="row-arrow left" aria-label="scroll-left"><i class="fa fa-chevron-left"></i></button>
-          <button class="row-arrow right" aria-label="scroll-right"><i class="fa fa-chevron-right"></i></button>
-        </div>
-      `;
-
-      const row = section.querySelector('.row');
-      games.forEach(game => {
-        if (!game.url) return;
-
-        const card = createGameCard(game);
-        row.appendChild(card);
-      });
-
-      const leftBtn = section.querySelector('.row-arrow.left');
-      const rightBtn = section.querySelector('.row-arrow.right');
-      leftBtn.addEventListener('click', () => scrollRow(row, -1));
-      rightBtn.addEventListener('click', () => scrollRow(row, 1));
-
-      addDragToScroll(row);
-      sectionWrap.appendChild(section);
-    }
-
-    function updateFeaturedGames() {
-      const featured = [...allGames].sort(() => 0.5 - Math.random()).slice(0, 3);
-      featuredGames.innerHTML = featured.map(game => `
-        <div class="featured-card" onclick="openGameDetails(${escapeQuote(JSON.stringify(game))})">
-          <img src="${game.background_image || game.thumb_1 || game.thumb || fallbackImg}" 
-               alt="${escapeHtml(game.title || game.name || '')}" 
-               onerror="this.src='${fallbackImg}'">
-          <div class="featured-content">
-            <div class="game-title">${escapeHtml(game.title || game.name || 'Untitled')}</div>
-            <div class="game-meta">
-              <span class="game-rating">⭐ ${game.rating || 'N/A'}</span>
-              <span>👥 ${game.plays || 'N/A'} plays</span>
-            </div>
-            ${game.metadata ? `
-              <div style="margin:8px 0">
-                ${game.metadata.gamepad ? '<span class="game-tag gamepad">Gamepad</span>' : ''}
-                ${game.metadata.multiplayer ? '<span class="game-tag multiplayer">Multiplayer</span>' : ''}
-                <span class="game-tag ${game.metadata.difficulty}">${game.metadata.difficulty}</span>
-              </div>
-            ` : ''}
-            <p style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.4">
-              ${escapeHtml((game.description || game.description_raw || 'An exciting HTML5 game').substring(0, 100))}...
-            </p>
-            <button class="btn" style="margin-top:10px;width:100%" onclick="event.stopPropagation(); openModal('${escapeQuote(game.url)}', ${escapeQuote(JSON.stringify(game))})">
-              Play Now
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function updateRecentlyPlayed() {
-      recentGames.innerHTML = '';
-      userData.recentlyPlayed.forEach(game => {
-        const recentGame = document.createElement('div');
-        recentGame.className = 'recent-game';
-        recentGame.innerHTML = `
-          <img src="${game.background_image || game.thumb_1 || game.thumb || fallbackImg}" 
-               alt="${escapeHtml(game.title || game.name || '')}" 
-               onerror="this.src='${fallbackImg}'">
-          <div style="font-size:12px;color:var(--muted)">${escapeHtml(game.title || game.name || 'Untitled').substring(0, 15)}...</div>
-        `;
-        recentGame.addEventListener('click', () => openModal(game.url, game));
-        recentGames.appendChild(recentGame);
-      });
-    }
-
-    function updateStats() {
-      document.getElementById('totalGames').textContent = allGames.length;
-      // document.getElementById('favorites').textContent = userData.favorites.length; // Removed
-      const today = new Date().toDateString();
-      const playedToday = Object.values(userData.playCount).filter(date =>
-        new Date(date).toDateString() === today
-      ).length;
-      document.getElementById('playedToday').textContent = playedToday;
-    }
-
-    function showToast(message, duration = 3000) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, duration);
-    }
-
-    function showLoading() {
-      loadingOverlay.classList.add('active');
-    }
-
-    function hideLoading() {
-      loadingOverlay.classList.remove('active');
-    }
-
-    // Removed isFavorite function
-
-    // Removed toggleFavorite function
-
-    function addToRecentlyPlayed(game) {
-      const existingIndex = userData.recentlyPlayed.findIndex(g => g.url === game.url);
-      if (existingIndex !== -1) {
-        userData.recentlyPlayed.splice(existingIndex, 1);
-      }
-      userData.recentlyPlayed.unshift(game);
-      userData.recentlyPlayed = userData.recentlyPlayed.slice(0, 10);
-      localStorage.setItem('recentlyPlayed', JSON.stringify(userData.recentlyPlayed));
-      updateRecentlyPlayed();
-    }
-
-    function openModal(url, game = null) {
-      if (!url) {
-        showToast('❌ Game URL not available');
-        return;
-      }
-
-      if (game) {
-        document.getElementById('modalGameTitle').textContent = game.title || game.name || 'Playing Game';
-        addToRecentlyPlayed(game);
-        userData.playCount[game.url] = new Date().toISOString();
-        localStorage.setItem('playCount', JSON.stringify(userData.playCount));
-        updateStats();
-      }
-
-      showLoading();
-      let gameUrl = url;
-      if (url.includes('gamemonetize.com')) {
-        gameUrl = url.replace('https://www.gamemonetize.com/', 'https://html5.gamemonetize.com/');
-      }
-
-      gameFrame.src = gameUrl;
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      gameFrame.onload = () => hideLoading();
-    }
-
-    function closeModal() {
-      modal.classList.remove('active');
-      gameFrame.src = '';
-      document.body.style.overflow = '';
-      hideLoading();
-    }
-
-    function nextSlide() {
-      const slides = document.querySelectorAll('.hero-slide');
-      if (slides.length === 0) return;
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
-
-    function prevSlide() {
-      const slides = document.querySelectorAll('.hero-slide');
-      if (slides.length === 0) return;
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
-
-    function scrollRow(row, direction) {
-      const scrollAmount = row.clientWidth * 0.8;
-      row.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
-    }
-
-    function addDragToScroll(row) {
-      let isDown = false, startX, scrollLeft;
-      row.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - row.offsetLeft; scrollLeft = row.scrollLeft; });
-      row.addEventListener('mouseleave', () => { isDown = false; });
-      row.addEventListener('mouseup', () => { isDown = false; });
-      row.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - row.offsetLeft; row.scrollLeft = scrollLeft - (x - startX) * 2; });
-      row.addEventListener('touchstart', (e) => { isDown = true; startX = e.touches[0].pageX - row.offsetLeft; scrollLeft = row.scrollLeft; });
-      row.addEventListener('touchend', () => { isDown = false; });
-      row.addEventListener('touchmove', (e) => { if (!isDown) return; const x = e.touches[0].pageX - row.offsetLeft; row.scrollLeft = scrollLeft - (x - startX) * 2; });
-    }
-
-    function hookupCategoryBar() {
-      categoryBar.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          categoryBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          filterByCategory(btn.dataset.cat);
-        });
-      });
-    }
-
-    function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-    function escapeQuote(text) { return text.replace(/'/g, "\\'"); }
-    function debounce(func, wait) { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), wait); }; }
-
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
-
-    function toggleUserMenu() {
-      showToast(`👋 Welcome to ChillBox Games!`);
-    }
-
-    // Initialize everything
-    loadGames();
-
-    // NEW: Infinite scroll observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && viewAllPage.style.display !== 'none') {
-          loadViewAllPage();
-        }
-      });
+    </div>`;
+}
+
+function loadCategoryRows() {
+  renderRow("Action", "actionGames");
+  renderRow("Racing", "racingGames");
+  renderRow("Puzzle", "puzzleGames");
+  renderRow("Sports", "sportsGames");
+}
+
+function renderRow(cat, id) {
+  document.getElementById(id).innerHTML =
+    allGames.filter(g => g.category?.includes(cat)).slice(0, 12).map(gameCard).join("");
+}
+
+function renderAll() {
+  document.getElementById("games").innerHTML =
+    allGames.slice(0, visible).map(gameCard).join("");
+}
+
+window.addEventListener("scroll", () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+    visible += 12;
+    renderAll();
+  }
+});
+
+function slide(id, dir) {
+  document.getElementById(id).scrollBy({
+    left: dir * 400,
+    behavior: "smooth"
+  });
+}
+
+const searchInput = document.getElementById("search");
+const searchSection = document.getElementById("searchSection");
+const searchResults = document.getElementById("searchResults");
+
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim().toLowerCase();
+
+  if (query === "") {
+    // Restore normal layout
+    searchSection.classList.add("hidden");
+    document.querySelectorAll("section").forEach(sec => {
+      if (sec.id !== "searchSection") sec.style.display = "block";
     });
+    document.getElementById("games").style.display = "grid";
+    return;
+  }
 
-    observer.observe(document.getElementById('infiniteScrollTrigger'));
+  // Hide other sections
+  document.querySelectorAll("section").forEach(sec => {
+    if (sec.id !== "searchSection") sec.style.display = "none";
+  });
+  document.getElementById("games").style.display = "none";
 
-    // Expose functions globally
-    window.openModal = openModal;
-    window.closeModal = closeModal;
-    window.nextSlide = nextSlide;
-    window.prevSlide = prevSlide;
-    window.viewAll = openViewAll; // Changed from viewAll to openViewAll for clarity
-    // window.toggleFavorite = toggleFavorite; // Removed
-    window.openGameDetails = openGameDetails;
-    window.closeGameDetails = closeGameDetails;
-    window.openViewAll = openViewAll;
-    window.closeViewAll = closeViewAll;
-    window.clearRecentHistory = clearRecentHistory;
-    window.toggleFullscreen = toggleFullscreen;
-  </script>
+  // Show search results
+  searchSection.classList.remove("hidden");
+
+  const results = allGames.filter(game =>
+    game.title.toLowerCase().includes(query)
+  );
+
+  searchResults.innerHTML = results.length
+    ? results.map(gameCard).join("")
+    : `<p style="opacity:.6">No games found</p>`;
+});
+
+/* PLAY */
+function play(url, title) {
+  document.getElementById("gameModal").style.display = "flex";
+  document.getElementById("gameFrame").src = url;
+  saveRecent({ title, url });
+}
+
+function closeGame() {
+  document.getElementById("gameModal").style.display = "none";
+  document.getElementById("gameFrame").src = "";
+}
+
+function fullscreen() {
+  document.getElementById("gameFrame").requestFullscreen();
+}
+
+/* RECENT */
+function saveRecent(game) {
+  let recent = JSON.parse(localStorage.getItem("recent")) || [];
+  recent = recent.filter(g => g.title !== game.title);
+  recent.unshift(game);
+  if (recent.length > 5) recent.pop();
+  localStorage.setItem("recent", JSON.stringify(recent));
+  loadRecent();
+}
+
+function loadRecent() {
+  const recent = JSON.parse(localStorage.getItem("recent"));
+  if (!recent || !recent.length) return;
+  document.getElementById("recentSection").classList.remove("hidden");
+  document.getElementById("recentGames").innerHTML =
+    recent.map(g =>
+      `<div class="game-card">
+        <div class="game-info">
+          <h3>${g.title}</h3>
+          <button class="play-btn" onclick="play('${g.url}','${g.title}')">Continue</button>
+        </div>
+      </div>`
+    ).join("");
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeGame();
+});
+</script>
+
 </body>
 </html>
