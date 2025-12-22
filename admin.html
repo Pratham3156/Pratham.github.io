@@ -9,6 +9,11 @@ import { collection, getDocs } from
 const list = document.getElementById("list");
 
 const usersSnap = await getDocs(collection(db,"users"));
+const ADMIN_EMAIL = "prathamsumesara09@gmail.com";
+if(user.email !== ADMIN_EMAIL){
+  alert("Not allowed");
+  location.href = "index.html";
+}
 
 usersSnap.forEach(docu => {
   const li = document.createElement("li");
