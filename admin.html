@@ -2,11 +2,63 @@
 <html>
 <head>
   <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .users {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #4f46e5;
+      color: white;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+    }
+
+    .email {
+      font-weight: bold;
+      word-break: break-all;
+    }
+
+    .uid {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
 
-<h2>Admin Panel</h2>
-<ul id="list"></ul>
+<h2>👑 Admin Panel</h2>
+
+<div class="users" id="users"></div>
 
 <script type="module">
 import { auth, db } from "./firebase.js";
@@ -16,7 +68,7 @@ import { collection, getDocs } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const ADMIN_EMAIL = "prathamsumesara09@gmail.com";
-const list = document.getElementById("list");
+const usersDiv = document.getElementById("users");
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -24,20 +76,28 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 🔐 Admin check
   if (user.email !== ADMIN_EMAIL) {
-    alert("Not allowed");
+    alert("Access denied");
     location.href = "index.html";
     return;
   }
 
-  // 📄 Fetch users
-  const usersSnap = await getDocs(collection(db, "users"));
+  const snap = await getDocs(collection(db, "users"));
 
-  usersSnap.forEach(docu => {
-    const li = document.createElement("li");
-    li.textContent = docu.data().email || docu.id;
-    list.appendChild(li);
+  snap.forEach(docu => {
+    const data = docu.data();
+    const firstLetter = (data.email || "U")[0].toUpperCase();
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="avatar">${firstLetter}</div>
+      <div class="email">${data.email || "No email"}</div>
+      <div class="uid">UID: ${docu.id}</div>
+    `;
+
+    usersDiv.appendChild(card);
   });
 });
 </script>
