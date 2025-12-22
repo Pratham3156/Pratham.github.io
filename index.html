@@ -1040,9 +1040,29 @@ onAuthStateChanged(auth, async (user) => {
   }, { merge: true });
 });
 </script>
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { addDoc, collection } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+window.logActivity = async function(category, title) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await addDoc(
+    collection(db, "users", user.uid, "activity"),
+    {
+      category,
+      title,
+      time: new Date()
+    }
+  );
+};
+</script>
 
 </body>
 </html>
+
 
 
 
