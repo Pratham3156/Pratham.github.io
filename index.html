@@ -455,7 +455,7 @@ nav.navbar a:hover {
     <p class="hero-lang" id="heroLang"></p>
     <p class="hero-rank" id="heroRank"></p>
     <p class="hero-desc" id="heroDesc"></p>
-    <div class="btn">Watch Now</div>
+    <div class="btn" onclick="watchMovie()">Watch Now</div>
   </div>
   <div class="nav-arrow nav-left" id="prevBtn">&#10094;</div>
   <div class="nav-arrow nav-right" id="nextBtn">&#10095;</div>
@@ -1059,9 +1059,19 @@ window.logActivity = async function(category, title) {
   );
 };
 </script>
+<script type="module">
+import { saveHistory } from "./history.js";
+
+window.watchMovie = function () {
+  const movieTitle = document.getElementById("heroTitle").innerText;
+  saveHistory("movie", movieTitle, "index.html");
+  alert("Movie added to watch history");
+};
+</script>
 
 </body>
 </html>
+
 
 
 
