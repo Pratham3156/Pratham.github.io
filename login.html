@@ -3,52 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in - ChillBox</title>
+  <title>Sign in – ChillBox</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --google-blue: #1a73e8;
-      --google-gray: #5f6368;
-      --border-color: #dadce0;
+      --blue: #1a73e8;
+      --text-dark: #202124;
+      --text-light: #5f6368;
+      --border: #dadce0;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Roboto', sans-serif;
       background-color: #fff;
+      margin: 0;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
     }
 
     .login-card {
       width: 100%;
-      max-width: 450px;
+      max-width: 448px;
       padding: 48px 40px 36px;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border);
       border-radius: 8px;
       text-align: center;
+      box-shadow: 0 1px 2px rgba(60,64,67,.15);
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 500;
-      margin-bottom: 10px;
-      color: #202124;
+      margin-bottom: 12px;
+      color: var(--text-dark);
     }
 
     h2 {
       font-size: 24px;
       font-weight: 400;
-      margin-bottom: 8px;
-      color: #202124;
+      margin: 0;
+      color: var(--text-dark);
     }
 
-    p {
-      color: #202124;
+    .subtitle {
+      margin-top: 8px;
+      margin-bottom: 32px;
       font-size: 16px;
-      margin-bottom: 40px;
+      color: var(--text-dark);
     }
 
     .input-group {
@@ -58,52 +67,72 @@
 
     input {
       width: 100%;
+      height: 56px;
       padding: 13px 15px;
       font-size: 16px;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border);
       border-radius: 4px;
-      box-sizing: border-box;
       outline: none;
       transition: border 0.2s;
     }
 
     input:focus {
-      border: 2px solid var(--google-blue);
-      padding: 12px 14px; /* Adjust padding to prevent jumping when border thickens */
+      border: 2px solid var(--blue);
+      padding: 12px 14px;
     }
 
     .button-container {
+      margin-top: 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 40px;
     }
 
     .signup-btn {
-      color: var(--google-blue);
       background: none;
       border: none;
+      color: var(--blue);
+      font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      font-size: 14px;
-      padding: 10px 0;
+      padding: 8px 0;
     }
 
     .login-btn {
-      background-color: var(--google-blue);
+      background-color: var(--blue);
       color: white;
-      padding: 10px 24px;
       border: none;
-      border-radius: 4px;
-      font-weight: 500;
-      cursor: pointer;
+      padding: 10px 24px;
       font-size: 14px;
-      transition: background-color 0.2s;
+      font-weight: 500;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, background-color 0.2s;
     }
 
     .login-btn:hover {
       background-color: #1765cc;
-      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+      box-shadow: 0 1px 2px rgba(60,64,67,.3),
+                  0 1px 3px rgba(60,64,67,.15);
+    }
+
+    /* Footer (Google-like) */
+    .footer {
+      position: absolute;
+      bottom: 16px;
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer a {
+      color: var(--text-light);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -111,13 +140,14 @@
 
 <div class="login-card">
   <div class="logo">ChillBox</div>
+
   <h2>Sign in</h2>
-  <p>Use your ChillBox Account</p>
+  <div class="subtitle">Use your ChillBox Account</div>
 
   <div class="input-group">
     <input id="email" type="email" placeholder="Email or phone" autocomplete="username">
   </div>
-  
+
   <div class="input-group">
     <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
   </div>
@@ -126,6 +156,12 @@
     <button class="signup-btn" onclick="signup()">Create account</button>
     <button class="login-btn" onclick="login()">Next</button>
   </div>
+</div>
+
+<div class="footer">
+  <a href="#">Help</a>
+  <a href="#">Privacy</a>
+  <a href="#">Terms</a>
 </div>
 
 <script type="module">
@@ -152,7 +188,6 @@ window.signup = async function () {
 
   const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-  // 🔥 SAVE USER TO FIRESTORE
   await setDoc(doc(db, "users", userCred.user.uid), {
     email: email,
     role: "user",
