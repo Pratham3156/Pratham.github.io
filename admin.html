@@ -1,23 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+
 <h2>Admin Panel</h2>
 <ul id="list"></ul>
 
 <script type="module">
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection, getDocs } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+const ADMIN_EMAIL = "prathamsumesara09@gmail.com";
 const list = document.getElementById("list");
 
-const usersSnap = await getDocs(collection(db,"users"));
-const ADMIN_EMAIL = "prathamsumesara09@gmail.com";
-if(user.email !== ADMIN_EMAIL){
-  alert("Not allowed");
-  location.href = "index.html";
-}
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
 
-usersSnap.forEach(docu => {
-  const li = document.createElement("li");
-  li.textContent = docu.id + " → " + docu.data().email;
-  list.appendChild(li);
+  // 🔐 Admin check
+  if (user.email !== ADMIN_EMAIL) {
+    alert("Not allowed");
+    location.href = "index.html";
+    return;
+  }
+
+  // 📄 Fetch users
+  const usersSnap = await getDocs(collection(db, "users"));
+
+  usersSnap.forEach(docu => {
+    const li = document.createElement("li");
+    li.textContent = docu.data().email || docu.id;
+    list.appendChild(li);
+  });
 });
 </script>
+
+</body>
+</html>
