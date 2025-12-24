@@ -1,69 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>User Profile</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>My Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-  background:#0f0f0f;
-  color:#fff;
-  font-family:Arial, sans-serif;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-.profile-box{
-  background:#1b1b1b;
-  padding:30px;
-  border-radius:12px;
-  width:320px;
-  text-align:center;
-  box-shadow:0 0 25px rgba(0,255,150,0.3);
-}
+    .profile-box {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    }
 
-.profile-box img{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  object-fit:cover;
-  border:3px solid #00ffae;
-  margin-bottom:15px;
-}
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #1db954;
+      margin-bottom: 15px;
+    }
 
-.profile-box h2{
-  margin:10px 0 5px;
-}
+    h2 {
+      margin: 10px 0;
+    }
 
-.profile-box p{
-  font-size:14px;
-  color:#bbb;
-}
+    p {
+      font-size: 14px;
+      color: #ccc;
+      word-break: break-all;
+    }
 
-button{
-  margin-top:20px;
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:6px;
-  background:#00ffae;
-  font-weight:bold;
-  cursor:pointer;
-}
-</style>
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .back-btn {
+      background: #333;
+      color: white;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
 </head>
 <body>
 
-<div class="profile-box">
-  <img id="profileImg" src="default-avatar.png">
-  <h2 id="userName">Loading...</h2>
-  <p id="userEmail"></p>
-  <button onclick="logout()">Logout</button>
-</div>
+  <div class="profile-box">
+    <img id="profileImage" class="profile-img" src="default-avatar.png">
+    <h2 id="userName">Loading...</h2>
+    <p id="userEmail"></p>
 
-<script type="module" src="profile.js"></script>
+    <button class="back-btn" onclick="goBack()">⬅ Back</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import { onAuthStateChanged, signOut } 
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const nameEl = document.getElementById("userName");
+    const emailEl = document.getElementById("userEmail");
+    const imageEl = document.getElementById("profileImage");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        location.replace("login.html");
+        return;
+      }
+
+      nameEl.innerText = user.displayName || "User";
+      emailEl.innerText = user.email;
+
+      if (user.photoURL) {
+        imageEl.src = user.photoURL;
+      }
+    });
+
+    window.logout = function () {
+      signOut(auth).then(() => {
+        location.replace("login.html");
+      });
+    };
+
+    window.goBack = function () {
+      history.back();
+    };
+  </script>
+
 </body>
 </html>
