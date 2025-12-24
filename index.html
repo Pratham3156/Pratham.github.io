@@ -380,6 +380,53 @@ nav.navbar a:hover {
   border-top: 1px solid rgba(255,255,255,0.1);
   padding-top: 20px;
 }
+/* ===== PROFILE ICON FIX ===== */
+.profile-container {
+  position: relative;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+#profileImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1db954;
+  background: #222;
+}
+
+/* Dropdown */
+.profile-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #111;
+  border-radius: 6px;
+  display: none;
+  min-width: 140px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+  z-index: 9999;
+}
+
+.profile-menu a,
+.profile-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profile-menu a:hover,
+.profile-menu button:hover {
+  background: #1db954;
+  color: black;
+}
 
 </style>
 </head>
@@ -397,11 +444,14 @@ nav.navbar a:hover {
     <input type="text" id="searchInput" placeholder="Search movies..." />
     <div id="searchResults"></div>
   </div>
-<a href="profile.html">
-  <img id="profileImg" src="default-avatar.png">
-</a>
-
-
+<div class="profile-container" onclick="toggleProfileMenu()">
+  <img id="profileImg" src="default-avatar.png" alt="Profile">
+  
+  <div class="profile-menu" id="profileMenu">
+    <a href="profile.html">Profile</a>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
 </header>
 
 <!-- HERO -->
@@ -1051,6 +1101,7 @@ window.logout = function () {
 
 </body>
 </html>
+
 
 
 
