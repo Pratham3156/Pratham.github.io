@@ -203,7 +203,7 @@ window.signup = async function () {
 window.login = function () {
   signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
     .then(() => location.href = "index.html")
-    .catch(err => alert("no id found"));
+    .catch(err => alert("enter Email-id & Password"));
 };
 </script>
 
