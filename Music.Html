@@ -773,46 +773,50 @@
     }
 .profile-container {
   position: relative;
-  display: inline-block;
+  margin-left: 15px;
   cursor: pointer;
 }
 
 #profileImg {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #00ffd5;
+  border: 2px solid #1db954;
+  background: #222;
 }
 
+/* Dropdown */
 .profile-menu {
   position: absolute;
-  top: 55px;
+  top: 50px;
   right: 0;
-  background: #222;
+  background: #111;
   border-radius: 6px;
   display: none;
-  min-width: 120px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  min-width: 140px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+  z-index: 9999;
 }
 
 .profile-menu a,
 .profile-menu button {
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   background: none;
   border: none;
   color: white;
   text-align: left;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .profile-menu a:hover,
 .profile-menu button:hover {
-  background: #333;
+  background: #1db954;
+  color: black;
 }
-
   </style>
 </head>
 
@@ -836,9 +840,11 @@
         <div id="searchRecommendations" role="listbox" aria-label="Search recommendations"></div>
       </div>
     </div>
-<div class="profile-container">
+<div class="profile-container" onclick="toggleProfileMenu()">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
+  
   <div class="profile-menu" id="profileMenu">
+    <a href="profile.html">Profile</a>
     <button onclick="logout()">Logout</button>
   </div>
 </div>
