@@ -380,47 +380,6 @@ nav.navbar a:hover {
   border-top: 1px solid rgba(255,255,255,0.1);
   padding-top: 20px;
 }
-.profile-container {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-
-#profileImg {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #00ffd5;
-}
-
-.profile-menu {
-  position: absolute;
-  top: 55px;
-  right: 0;
-  background: #222;
-  border-radius: 6px;
-  display: none;
-  min-width: 120px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-
-.profile-menu a,
-.profile-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background: none;
-  border: none;
-  color: white;
-  text-align: left;
-  cursor: pointer;
-}
-
-.profile-menu a:hover,
-.profile-menu button:hover {
-  background: #333;
-}
 
 </style>
 </head>
@@ -438,13 +397,10 @@ nav.navbar a:hover {
     <input type="text" id="searchInput" placeholder="Search movies..." />
     <div id="searchResults"></div>
   </div>
- <div class="profile-container">
-  <img id="profileImg" src="default-avatar.png" alt="Profile">
-  
-  <div class="profile-menu" id="profileMenu">
-    <button onclick="logout()">Logout</button>
-  </div>
-</div>
+<a href="profile.html">
+  <img id="profileImg" src="default-avatar.png">
+</a>
+
 
 </header>
 
@@ -1095,6 +1051,7 @@ window.logout = function () {
 
 </body>
 </html>
+
 
 
 
