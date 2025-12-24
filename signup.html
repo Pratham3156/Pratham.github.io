@@ -1,16 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Create Account</title>
+  <title>Signup</title>
+  <style>
+    body{
+  background:#121212;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:Arial;
+}
+
+.auth-box{
+  background:#1e1e1e;
+  padding:30px;
+  width:320px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.auth-box input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:5px;
+  border:none;
+}
+
+.auth-box button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  background:#1db954;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.google-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  background:white;
+  color:black;
+}
+
+.google-btn img{
+  width:18px;
+}
+
+.divider{
+  margin:15px 0;
+  color:#aaa;
+}
+
+a{ color:#1db954; }
+  </style>
 </head>
 <body>
 
-<h2>Create Account</h2>
+<div class="auth-box">
+  <h2>Create Account</h2>
 
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<button onclick="signup()">Create Account</button>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="emailSignup()">Signup</button>
 
-<script type="module" src="auth-ui.js"></script>
+  <div class="divider">OR</div>
+
+  <button class="google-btn" onclick="googleSignup()">
+    <img src="https://developers.google.com/identity/images/g-logo.png">
+    Continue with Google
+  </button>
+
+  <p>
+    Already have an account?
+    <a href="login.html">Login</a>
+  </p>
+</div>
+
+<script type="module">
+import { auth } from "./firebase.js";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const provider = new GoogleAuthProvider();
+
+window.emailSignup = () => {
+  createUserWithEmailAndPassword(auth,email.value,password.value)
+    .then(()=>location.replace("index.html"))
+    .catch(e=>alert(e.message));
+};
+
+window.googleSignup = () => {
+  signInWithPopup(auth, provider)
+    .then(()=>location.replace("index.html"))
+    .catch(e=>alert(e.message));
+};
+</script>
+
 </body>
 </html>
