@@ -1,17 +1,16 @@
-<h2>Your History</h2>
-<ul id="history"></ul>
+<img id="profileImg" width="120" style="border-radius:50%">
+<p id="email"></p>
 
 <script type="module">
-import { auth, db } from "./firebase.js";
-import { collection, getDocs } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const list = document.getElementById("history");
-const ref = collection(db,"users",auth.currentUser.uid,"history");
-const snap = await getDocs(ref);
+onAuthStateChanged(auth, user => {
+  if (!user) return location.href="login.html";
 
-snap.forEach(doc=>{
- const d = doc.data();
- list.innerHTML += `<li>${d.type} - ${d.title}</li>`;
+  document.getElementById("profileImg").src =
+    user.photoURL || "default-avatar.png";
+  document.getElementById("email").innerText = user.email;
 });
 </script>
