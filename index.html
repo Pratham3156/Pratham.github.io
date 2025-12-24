@@ -1075,12 +1075,15 @@ import { onAuthStateChanged } from
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    location.replace("login.html");
+    // not logged in → force login
+    window.location.replace("login.html");
   }
 });
 </script>
+
 </body>
 </html>
+
 
 
 
