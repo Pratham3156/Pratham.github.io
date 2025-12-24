@@ -1,62 +1,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
-<style>
-body {
-  font-family: Arial;
-  background: #f2f2f2;
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
+  <title>Login</title>
+  <style>
+    body{
+  background:#121212;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:Arial;
 }
-.box {
-  background: white;
-  padding: 30px;
-  width: 320px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0,0,0,.2);
-}
-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.google {
-  background: #fff;
-  border: 1px solid #ddd;
-}
-</style>
-</head>
 
+.auth-box{
+  background:#1e1e1e;
+  padding:30px;
+  width:320px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.auth-box input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:5px;
+  border:none;
+}
+
+.auth-box button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  background:#1db954;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.google-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  background:white;
+  color:black;
+}
+
+.google-btn img{
+  width:18px;
+}
+
+.divider{
+  margin:15px 0;
+  color:#aaa;
+}
+
+a{ color:#1db954; }
+  </style>
+</head>
 <body>
-<div class="box">
-  <h2>Sign in</h2>
+
+<div class="auth-box">
+  <h2>Login</h2>
 
   <!-- EMAIL LOGIN -->
-  <input id="email" placeholder="Email">
+  <input id="email" type="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
   <button onclick="emailLogin()">Login</button>
 
-  <hr>
+  <div class="divider">OR</div>
 
   <!-- GOOGLE LOGIN -->
-  <button class="google" onclick="googleLogin()">
+  <button class="google-btn" onclick="googleLogin()">
+    <img src="https://developers.google.com/identity/images/g-logo.png">
     Continue with Google
   </button>
 
-  <p style="text-align:center;margin-top:10px;">
-    New user? <a href="signup.html">Create account</a>
+  <p>
+    Don't have an account?
+    <a href="signup.html">Create account</a>
   </p>
 </div>
 
-<script type="module" src="auth-ui.js"></script>
+<script type="module">
+import { auth } from "./firebase.js";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const provider = new GoogleAuthProvider();
+
+window.emailLogin = () => {
+  signInWithEmailAndPassword(auth,email.value,password.value)
+    .then(()=>location.replace("index.html"))
+    .catch(e=>alert(e.message));
+};
+
+window.googleLogin = () => {
+  signInWithPopup(auth, provider)
+    .then(()=>location.replace("index.html"))
+    .catch(e=>alert(e.message));
+};
+</script>
+
 </body>
 </html>
