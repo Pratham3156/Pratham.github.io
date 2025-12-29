@@ -1098,9 +1098,16 @@ window.logout = function () {
   });
 };
 </script>
+  <script>
+import { saveWatchHistory } from "./history.js";
 
+watchButton.addEventListener("click", () => {
+  saveWatchHistory("Stranger Things", "Web Series");
+});
+</script>
 </body>
 </html>
+
 
 
 
