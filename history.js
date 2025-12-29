@@ -1,23 +1,47 @@
-<script type="module">
-import { auth, db } from "./firebase.js";
-import {
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { auth } from "./firebase.js";
+import { db } from "./firebase.js";
 
-export async function saveHistory(type, title, page) {
+export async function saveWatchHistory(title, type) {
   const user = auth.currentUser;
   if (!user) return;
 
   await addDoc(
-    collection(db, "users", user.uid, "history"),
+    collection(db, "users", user.uid, "watchHistory"),
     {
-      type: type,       // movie / game / music
       title: title,
-      page: page,
-      timestamp: serverTimestamp()
+      type: type,
+      watchedAt: serverTimestamp()
     }
   );
 }
-</script>
+
+export async function saveListenHistory(song, artist) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await addDoc(
+    collection(db, "users", user.uid, "listenHistory"),
+    {
+      title: song,
+      artist: artist,
+      listenedAt: serverTimestamp()
+    }
+  );
+}
+
+
+export async function savePlayHistory(game, score) {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await addDoc(
+    collection(db, "users", user.uid, "playHistory"),
+    {
+      game: game,
+      score: score,
+      playedAt: serverTimestamp()
+    }
+  );
+}
