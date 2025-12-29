@@ -81,6 +81,17 @@
     <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 
+  <h2>Watch History</h2>
+<ul id="watchList"></ul>
+
+<h2>Listen History</h2>
+<ul id="listenList"></ul>
+
+<h2>Game History</h2>
+<ul id="playList"></ul>
+
+<script type="module" src="profile.js"></script>
+
   <script type="module">
     import { auth } from "./firebase.js";
     import { onAuthStateChanged, signOut } 
