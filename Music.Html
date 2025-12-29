@@ -2413,26 +2413,6 @@ document.addEventListener("click", e => {
 });
 
 </script>
-<script type="module" src="auth-guard.js"></script>
-<script type="module">
-import { auth } from "./firebase.js";
-import { signOut } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-window.logout = function () {
-  signOut(auth).then(() => {
-    window.location.replace("login.html");
-  });
-};
-</script>
-<script>
-import { saveListenHistory } from "./history.js";
-
-musicPlayBtn.addEventListener("click", () => {
-  saveListenHistory("Believer", "Imagine Dragons");
-});
-
-</script>
 </body>
 
 </html>
