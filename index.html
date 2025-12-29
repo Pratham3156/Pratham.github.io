@@ -1098,15 +1098,29 @@ window.logout = function () {
   });
 };
 </script>
-  <script>
-import { saveWatchHistory } from "./history.js";
+ import { collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { auth } from "./firebase.js";
+import { db } from "./firebase.js";
 
-watchButton.addEventListener("click", () => {
-  saveWatchHistory("Stranger Things", "Web Series");
-});
-</script>
+async function saveTestHistory() {
+  if (!auth.currentUser) return;
+
+  await addDoc(
+    collection(db, "users", auth.currentUser.uid, "watchHistory"),
+    {
+      title: "My First Movie",
+      watchedAt: serverTimestamp()
+    }
+  );
+
+  alert("History saved");
+}
+saveTestHistory();
+
 </body>
 </html>
+
 
 
 
