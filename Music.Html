@@ -2425,7 +2425,14 @@ window.logout = function () {
   });
 };
 </script>
+<script>
+import { saveListenHistory } from "./history.js";
 
+musicPlayBtn.addEventListener("click", () => {
+  saveListenHistory("Believer", "Imagine Dragons");
+});
+
+</script>
 </body>
 
 </html>
