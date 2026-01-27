@@ -461,7 +461,7 @@ nav.navbar a:hover {
     <p class="hero-lang" id="heroLang"></p>
     <p class="hero-rank" id="heroRank"></p>
     <p class="hero-desc" id="heroDesc"></p>
-    <div class="btn" onclick="watchMovie()">Watch Now</div>
+    <div class="btn" id="play" onclick="watchMovie()">Watch Now</div>
   </div>
   <div class="nav-arrow nav-left" id="prevBtn">&#10094;</div>
   <div class="nav-arrow nav-right" id="nextBtn">&#10095;</div>
@@ -1033,6 +1033,23 @@ import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, setDoc } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from 
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+
+import { getFirestore, addDoc, collection, serverTimestamp } from 
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+  authDomain: "chillbox-747f8.firebaseapp.com",
+  projectId: "chillbox-747f8",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+</script>
+
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -1098,8 +1115,26 @@ window.logout = function () {
   });
 };
 </script>
+  <script type="module">
+import { addDoc, collection, serverTimestamp } from 
+"https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+document.getElementById("play").onclick = async () => {
+  await addDoc(collection(db, "activity_logs"), {
+    userId: "guest_user",
+    type: "movie",
+    itemId: "movie_101",
+    action: "play",
+    timestamp: serverTimestamp()
+  });
+
+  alert("Saved to Firestore ✅");
+};
+</script>
+
 </body>
 </html>
+
 
 
 
