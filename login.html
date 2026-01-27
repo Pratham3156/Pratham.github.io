@@ -4,7 +4,6 @@
   <link rel="icon" type="image/png" href="logo.png">
   <title>Login</title>
 <head>
-  <script src="https://www.google.com/recaptcha/enterprise.js?render=6Lef0VcsAAAAAOOym7lmLIuZgdAMGd9XT6JJjySx"></script>
   <style>
     body{
   margin:0;
@@ -143,14 +142,6 @@ window.googleSignup = () => {
     .then(() => location.replace("index.html"))
     .catch(err => alert(err.message));
 };
-</script>
-<script>
-  function onClick(e) {
-    e.preventDefault();
-    grecaptcha.enterprise.ready(async () => {
-      const token = await grecaptcha.enterprise.execute('6Lef0VcsAAAAAOOym7lmLIuZgdAMGd9XT6JJjySx', {action: 'LOGIN'});
-    });
-  }
 </script>
 </body>
 </html>
