@@ -18,12 +18,25 @@
 
   filter: saturate(1.2) contrast(1.1);
 }
-    .overlay{
+    .page-center{
+  position:relative;
+  z-index:1;
+
+  height:100vh;
+  width:100%;
+
+  display:flex;
+  justify-content:center;  /* horizontal center */
+  align-items:center;      /* vertical center */
+}
+
+   .overlay{
   position:absolute;
   inset:0;
-  background: rgba(0,0,0,0.35); /* 🔥 lighter */
+  background: rgba(0,0,0,0.35);
   z-index:0;
 }
+
 
 
   .auth-box{
@@ -86,7 +99,7 @@ button{
 <body>
 
 <div class="overlay"></div>
-
+ <div class="page-center">
 <div class="auth-box">
   <h2>Login</h2>
 
@@ -107,6 +120,7 @@ button{
     <a href="signup.html">Login</a>
   </p>
 </div>
+ </div>
 
 <script type="module">
 import { auth } from "./firebase.js";
