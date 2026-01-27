@@ -1,73 +1,140 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Signup</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <title>signup</title>
+<head>
   <style>
     body{
-  background:#121212;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  margin:0;
   height:100vh;
-  font-family:Arial;
+  position:relative;
+
+  background-image: url("bg (1).jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: saturate(1.2) contrast(1.1);
+}
+    .page-center{
+  position:relative;
+  z-index:1;
+
+  height:100vh;
+  width:100%;
+
+  display:flex;
+  justify-content:center;  /* horizontal center */
+  align-items:center;      /* vertical center */
+}
+h2{
+  text-align: center;}
+   .overlay{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.35);
+  z-index:0;
 }
 
-.auth-box{
-  background:#1e1e1e;
+    .password-wrap{
+      position:relative;
+    }
+
+  .auth-box{
+  position:relative;
+  z-index:1;
+  background: rgba(20,20,20,0.85);
   padding:30px;
   width:320px;
-  border-radius:10px;
-  text-align:center;
+  border-radius:14px;
+  box-shadow:
+    0 0 40px rgba(0,0,0,0.8),
+    0 0 25px rgba(29,185,84,0.25);
+  backdrop-filter: blur(6px);
+    animation: slideFade 0.6s ease;
 }
 
-.auth-box input{
+input{
   width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:5px;
+  padding:12px;
+  margin:10px 0;
+  border-radius:6px;
   border:none;
+  outline:none;
 }
 
-.auth-box button{
+button{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin-top:10px;
   background:#1db954;
   border:none;
+  border-radius:6px;
   font-weight:bold;
   cursor:pointer;
 }
 
-.google-btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  background:white;
-  color:black;
-}
+    h2,p{ color:white; 
+        }
 
-.google-btn img{
-  width:18px;
-}
+    .google-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      background:white;
+      color:black;
+    }
 
-.divider{
-  margin:15px 0;
-  color:#aaa;
-}
+    .google-btn img{
+      width:18px;
+    }
 
-a{ color:#1db954; }
-    p,h2{color: white;}
+    .divider{
+      margin:15px 0;
+      color:#aaa;
+      text-align: center;
+    }
+
+    a{ color:#1db954; }
+        @keyframes slideFade{
+      from{
+        opacity:0;
+        transform: translateY(30px);
+      }
+      to{
+        opacity:1;
+        transform: translateY(0);
+      }
+    }
+.toggle-pass{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:12px;
+  color:#1db954;
+  cursor:pointer;
+  user-select:none;
+}
+    
   </style>
 </head>
+
 <body>
 
+<div class="overlay"></div>
+ <div class="page-center">
 <div class="auth-box">
-  <h2>Create Account</h2>
+  <h2>signup</h2>
 
   <input id="email" type="email" placeholder="Email">
+   <div class="password-wrap">
   <input id="password" type="password" placeholder="Password">
-  <button onclick="emailSignup()">Signup</button>
+  <span class="toggle-pass" onclick="togglePassword()">Show</span>
+   </div>
+  <button onclick="emailSignup()">signup</button>
 
   <div class="divider">OR</div>
 
@@ -77,11 +144,12 @@ a{ color:#1db954; }
   </button>
 
   <p>
-    Already have an account?
+    Already Have a Account?
     <a href="login.html">Login</a>
   </p>
 </div>
-
+ </div>
+<div id="errorBox" style="display:none; background:#ff3b3b20; color:#ff6b6b; padding:10px; border-radius:6px; margin-bottom:10px; font-size:13px;"></div>
 <script type="module">
 import { auth } from "./firebase.js";
 import {
@@ -93,17 +161,42 @@ import {
 const provider = new GoogleAuthProvider();
 
 window.emailSignup = () => {
-  createUserWithEmailAndPassword(auth,email.value,password.value)
-    .then(()=>location.replace("index.html"))
-    .catch(e=>alert(e.message));
+  createUserWithEmailAndPassword(auth, email.value, password.value)
+    .then(() => location.replace("index.html"))
+    .catch(err => {
+      if (err.code === "auth/invalid-email") {
+        showError("Please enter a valid email address.");
+      } else if (err.code === "auth/weak-password") {
+        showError("Password must be at least 6 characters.");
+      } else if (err.code === "auth/email-already-in-use") {
+        showError("This email is already registered.");
+      } else {
+        showError("Something went wrong. Please try again.");
+      }
+    })
+    .finally(() => {
+      loginBtn.textContent = "Signup";
+      loginBtn.disabled = false;
+    });
 };
 
 window.googleSignup = () => {
   signInWithPopup(auth, provider)
-    .then(()=>location.replace("index.html"))
-    .catch(e=>alert(e.message));
+    .then(() => location.replace("index.html"))
+    .catch(err => alert(err.message));
+};
+  window.togglePassword = () => {
+  const pass = document.getElementById("password");
+  const toggle = document.querySelector(".toggle-pass");
+
+  if(pass.type === "password"){
+    pass.type = "text";
+    toggle.innerText = "Hide";
+  }else{
+    pass.type = "password";
+    toggle.innerText = "Show";
+  }
 };
 </script>
-
 </body>
 </html>
