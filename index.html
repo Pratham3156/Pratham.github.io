@@ -1133,7 +1133,7 @@ document.getElementById("play").onclick = async () => {
 </script>
 <script>
   function logWatchEvent(type, itemId, title) {
-  const userId = getUserId();
+  const user = getUserId();
 
   const watchRef = ref(db, `watch_logs/${userId}`);
   const newLog = push(watchRef);
@@ -1149,6 +1149,7 @@ document.getElementById("play").onclick = async () => {
 </script>
 </body>
 </html>
+
 
 
 
