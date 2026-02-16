@@ -167,3 +167,95 @@ a { text-decoration: none; color: white; }
     <!-- Thank you message -->
     <div id="fb-success" class="fb-success">Thank you! Your feedback has been submitted ❤️</div>
 </div>
+</script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth,(user)=>{
+  if(!user){
+    location.href="login.html";
+  }else{
+    document.getElementById("userProfile").innerHTML =
+      `👤 ${user.email} 
+       <button onclick="logout()">Logout</button>`;
+  }
+});
+
+window.logout = function(){
+  signOut(auth).then(()=>location.href="login.html");
+}
+</script>
+  <script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    location.replace("login.html");
+  }
+});
+</script>
+  <script>
+function logout() {
+  auth.signOut().then(() => {
+    location.replace("login.html");
+  });
+}
+  </script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const profileImg = document.getElementById("profileImg");
+const profileMenu = document.getElementById("profileMenu");
+
+onAuthStateChanged(auth, user => {
+  if(!user){
+    window.location.href = "login.html";
+  }
+});
+
+profileImg.addEventListener("click", () => {
+  profileMenu.style.display =
+    profileMenu.style.display === "block" ? "none" : "block";
+});
+
+window.logout = function(){
+  signOut(auth).then(() => location.href="login.html");
+};
+
+// close menu if clicked outside
+document.addEventListener("click", e => {
+  if(!e.target.closest(".profile-container")){
+    profileMenu.style.display = "none";
+  }
+});
+
+</script>
+  <script type="module" src="auth-guard.js"></script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { signOut } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+window.logout = function () {
+  signOut(auth).then(() => {
+    window.location.replace("login.html");
+  });
+};
+</script>
+<script>
+const menuToggle = document.getElementById("menuToggle");
+const navbar = document.querySelector("nav.navbar");
+
+menuToggle.addEventListener("click", () => {
+  navbar.classList.toggle("show");
+});
+</script>
+
+</body>
+</html>
