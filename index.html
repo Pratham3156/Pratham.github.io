@@ -670,7 +670,7 @@ let heroMovies = [], currentIndex = 0;
 
 /* ===== TRENDING HERO MOVIES ===== */
 async function loadHeroMovies() {
-  const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=API_KEY&with_original_language=hi&region=IN`);
+  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
   const data = await res.json();
   heroMovies = data.results.sort(() => Math.random() - 0.5).slice(0, 10);
   createPaginationDots();
@@ -762,7 +762,7 @@ document.addEventListener("click", e => {
 /* ===== GENRE SLIDERS ===== */
 let genreMap = {};
 async function loadGenres() {
-  const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=API_KEY&with_original_language=hi&region=IN`);
+  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
   const data = await res.json();
   data.genres.forEach(g => genreMap[g.id] = g.name);
 }
@@ -1274,6 +1274,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
