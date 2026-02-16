@@ -92,6 +92,29 @@ a { text-decoration: none; color: white; }
     max-width: 700px;
     margin: 15px auto;
 }
+  <header>
+    <a class="logo" href="#"><i class="fas fa-infinity"></i> ChillBox</a>
+    <nav class="navbar" aria-label="main">
+      <a href="index.html">Movies</a>
+      <a href="Music.Html">Music</a>
+      <a href="Games.html">Games</a>
+      <a href="AboutUs.html">About US</a>
+      <a href="FeedBack.html" class="active">FeedBack</a>
+    </nav>
+  <div class="menu-toggle" id="menuToggle">
+  <i class="fas fa-bars"></i>
+</div>
+
+    </div>
+ <div class="profile-container" onclick="toggleProfileMenu()">
+  <img id="profileImg" src="default-avatar.png" alt="Profile">
+  
+  <div class="profile-menu" id="profileMenu">
+    <a href="profile.html">Profile</a>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
+  </header>
 
 <!-- FEEDBACK SECTION -->
 <h2 class="section-title fade-in">Give Us Your Feedback</h2>
