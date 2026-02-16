@@ -92,6 +92,142 @@ a { text-decoration: none; color: white; }
     max-width: 700px;
     margin: 15px auto;
 }
+  .feedback-box {
+    background: rgba(255,255,255,0.06);
+    padding: 25px;
+    border-radius: 14px;
+    margin-top: 25px;
+    color: #eee;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,255,136,0.1);
+}
+
+.fb-label {
+    display: block;
+    margin: 12px 0 5px;
+    color: limegreen;
+}
+
+.fb-input, .fb-textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.fb-input::placeholder,
+.fb-textarea::placeholder {
+    color: #bbb;
+}
+
+.fb-textarea {
+    height: 120px;
+    resize: none;
+}
+
+.fb-btn {
+    width: 100%;
+    background: limegreen;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #000;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.fb-btn:hover {
+    background: #00cc66;
+}
+
+.fb-success {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0,255,136,0.2);
+    color: limegreen;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: 600;
+    display: none;
+}
+
+/* Rating Stars */
+.rating span {
+    font-size: 28px;
+    cursor: pointer;
+    color: #444;
+    transition: 0.3s;
+    margin-right: 5px;
+}
+
+.rating span.active,
+.rating span:hover,
+.rating span:hover ~ span {
+    color: limegreen !important;
+}
+
+  .profile-container {
+  position: relative;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+#profileImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1db954;
+  background: #222;
+}
+
+/* Dropdown */
+.profile-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #111;
+  border-radius: 6px;
+  display: none;
+  min-width: 140px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+  z-index: 9999;
+}
+
+.profile-menu a,
+.profile-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.profile-menu a:hover,
+.profile-menu button:hover {
+  background: #1db954;
+  color: black;
+}
+  /* ================= RESPONSIVE ================= */
+
+/* Hide hamburger on desktop */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
   </style>
   <body>
   <header>
