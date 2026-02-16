@@ -11,6 +11,7 @@
   --black: #101820;
   --accent: #1db954;
   --glow: 0 0 20px #1db954, 0 0 40px #1db954, 0 0 60px #1db954;
+  --header-height: 70px;
 }
 
 body {
@@ -32,6 +33,7 @@ header {
   background-color: black;
   z-index: 9999;
   box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  height: var(--header-height);
 }
 .logo {
   font-size: 1.8rem;
@@ -556,6 +558,38 @@ nav.navbar a:hover {
 
   .footer-section {
     margin-top: 30px;
+  }
+}
+@media (max-width: 768px) {
+
+  body {
+    padding-top: var(--header-height);
+  }
+
+  .hero {
+    height: auto;
+    min-height: calc(100vh - var(--header-height));
+    padding: 40px 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .hero-content {
+    margin-top: 20px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+  }
+}
+  @media (max-width: 768px) {
+  .hero::after {
+    background: rgba(0,0,0,0.45);
   }
 }
 
@@ -1275,6 +1309,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
