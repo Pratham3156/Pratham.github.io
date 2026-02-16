@@ -825,10 +825,9 @@ loadContinueWatching();
 /* ===== MOVIE MODAL ===== */
 /* ===== MOVIE MODAL WITH AUTO SERVER DETECTION ===== */
 async function openMovieModal(movieId,  movieTitle) {
-  logWatchEvent("movie", movieId, movieTitle);
   const modal = document.getElementById("movieModal");
   const modalContent = document.getElementById("modalContent");
-
+  logWatchEvent("movie", movieId, movieTitle);
   modal.classList.add("active");
 
   modalContent.innerHTML = "<h2 style='text-align:center;'>Loading...</h2>";
@@ -1150,6 +1149,7 @@ document.getElementById("play").onclick = async () => {
 </script>
 </body>
 </html>
+
 
 
 
