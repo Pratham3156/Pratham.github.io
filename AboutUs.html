@@ -479,7 +479,7 @@ a { text-decoration: none; color: white; }
       <a href="Music.Html">Music</a>
       <a href="Games.html">Games</a>
       <a href="AboutUs.html" class="active">About US</a>
-      <a href="FeedBack">FeedBack</a>
+      <a href="FeedBack.html">FeedBack</a>
     </nav>
   <div class="menu-toggle" id="menuToggle">
   <i class="fas fa-bars"></i>
@@ -584,58 +584,7 @@ a { text-decoration: none; color: white; }
     </div>
 
 </div>
-    <!-- FEEDBACK SECTION -->
-<h2 class="section-title fade-in">Give Us Your Feedback</h2>
-
-<div class="feedback-box fade-in">
-    <p>Help us improve ChillBox by sharing your thoughts.</p>
-
-    <!-- Name -->
-    <label class="fb-label">Your Name</label>
-    <input type="text" id="fb-name" class="fb-input" placeholder="Enter your name">
-
-    <!-- Email -->
-    <label class="fb-label">Your Email (Optional)</label>
-    <input type="email" id="fb-email" class="fb-input" placeholder="Enter your email">
-
-    <!-- Category Dropdown -->
-    <label class="fb-label">Which part of ChillBox are you reviewing?</label>
-    <select id="fb-page" class="fb-input">
-        <option value="" disabled selected>Select a page</option>
-        <option>Movies Page</option>
-        <option>Music Page</option>
-        <option>Games Page</option>
-        <option>About Page</option>
-        <option>Home Page</option>
-        <option>Navigation / UI</option>
-        <option>Overall Website</option>
-    </select>
-
-    <!-- Feature Request -->
-    <label class="fb-label">Which new feature do you want?</label>
-    <input type="text" id="fb-feature" class="fb-input" placeholder="Example: Dark Mode, Game Download, Watch Later...">
-
-    <!-- Rating -->
-    <label class="fb-label">Rate your experience</label>
-    <div class="rating" id="starRating">
-        <span data-value="1">★</span>
-        <span data-value="2">★</span>
-        <span data-value="3">★</span>
-        <span data-value="4">★</span>
-        <span data-value="5">★</span>
-    </div>
-
-    <!-- Feedback Box -->
-    <label class="fb-label">Your Feedback</label>
-    <textarea id="fb-message" class="fb-textarea" placeholder="Write your experience..."></textarea>
-
-    <!-- Submit Button -->
-    <button class="fb-btn" onclick="submitFeedback()">Submit Feedback</button>
-
-    <!-- Thank you message -->
-    <div id="fb-success" class="fb-success">Thank you! Your feedback has been submitted ❤️</div>
-</div>
-
+   
 <script>
 // Fade-in animation for all elements with class="fade-in"
 const observer = new IntersectionObserver((entries) => {
