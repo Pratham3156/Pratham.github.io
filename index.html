@@ -824,7 +824,8 @@ loadContinueWatching();
 
 /* ===== MOVIE MODAL ===== */
 /* ===== MOVIE MODAL WITH AUTO SERVER DETECTION ===== */
-async function openMovieModal(movieId) {
+async function openMovieModal(movieId, movieTitle) {
+   logWatchEvent("movie", movieId, movieTitle);
   const modal = document.getElementById("movieModal");
   const modalContent = document.getElementById("modalContent");
 
@@ -873,6 +874,7 @@ async function openMovieModal(movieId) {
 
       <center>
         <h2>Watch Movie</h2>
+        
         <label><strong>Select Server:</strong></label>
         <select id="serverSelect" class="server-select">
           ${servers.map(s => `<option value="${s.url}">${s.name}</option>`).join("")}
@@ -1131,9 +1133,56 @@ document.getElementById("play").onclick = async () => {
   alert("Saved to Firestore ✅");
 };
 </script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+    authDomain: "chillbox-747f8.firebaseapp.com",
+    databaseURL: "https://chillbox-747f8-default-rtdb.firebaseio.com",
+    projectId: "chillbox-747f8",
+    storageBucket: "chillbox-747f8.firebasestorage.app",
+    messagingSenderId: "808846502692",
+    appId: "1:808846502692:web:fd3a70a823506207f261b1",
+    measurementId: "G-E4M4CH9BNY"
+  };
 
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+  authDomain: "chillbox-747f8.firebaseapp.com",
+  databaseURL: "https://chillbox-747f8-default-rtdb.firebaseio.com",
+  projectId: "chillbox-747f8",
+  appId: "1:808846502692:web:fd3a70a823506207f261b1",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+</script>
+  <script>
+  function logWatchEvent(type, itemId, title) {
+  const userId = getUserId();
+
+  const watchRef = ref(db, `watch_logs/${userId}`);
+  const newLog = push(watchRef);
+
+  set(newLog, {
+    type: type,          // movie / music / game
+    itemId: itemId,
+    title: title,
+    timestamp: Date.now()
+  });
+}
+</script>
 </body>
 </html>
+
 
 
 
