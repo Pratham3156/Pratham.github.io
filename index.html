@@ -592,6 +592,34 @@ nav.navbar a:hover {
     background: rgba(0,0,0,0.45);
   }
 }
+/* Desktop search */
+@media (min-width: 769px) {
+  .mobile-search {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+
+  .mobile-search {
+    width: 90%;
+    margin: 10px auto 15px;
+    position: relative;
+  }
+
+  .mobile-search input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+  }
+
+  #searchResults {
+    position: static;
+    max-height: 240px;
+    margin-top: 8px;
+  }
+}
 
 </style>
 </head>
@@ -599,12 +627,16 @@ nav.navbar a:hover {
 
 <header>
   <a class="logo" href="index.html"><i class="fas fa-infinity"></i> ChillBox</a>
-  <nav class="navbar">
+  <nav class="navbar
     <a class="active" href="index.html">Movies</a>
     <a href="Music.Html">Music</a>
     <a href="Games.html">Games</a>
     <a href="AboutUs.html">About</a>
     <a href="FeedBack.html">FeedBack</a>
+    <div class="mobile-search">
+    <input type="text" id="searchInput" placeholder="Search movies..." />
+    <div id="searchResults"></div>
+  </div>
   </nav>
    <div class="menu-toggle" id="menuToggle">
   <i class="fas fa-bars"></i>
@@ -1309,6 +1341,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
