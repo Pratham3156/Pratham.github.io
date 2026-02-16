@@ -305,6 +305,72 @@ a { text-decoration: none; color: white; }
     <!-- Thank you message -->
     <div id="fb-success" class="fb-success">Thank you! Your feedback has been submitted ❤️</div>
 </div>
+    <script>
+// Fade-in animation for all elements with class="fade-in"
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("show");
+    });
+});
+
+document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
+// Rating system
+const stars = document.querySelectorAll("#starRating span");
+let selectedRating = 0;
+
+stars.forEach((star) => {
+    star.addEventListener("click", () => {
+        selectedRating = star.getAttribute("data-value");
+
+        stars.forEach(s => s.classList.remove("active"));
+        for (let i = 0; i < selectedRating; i++) {
+            stars[i].classList.add("active");
+        }
+    });
+});
+
+// Submit Feedback
+function submitFeedback() {
+    const name = document.getElementById("fb-name").value;
+    const email = document.getElementById("fb-email").value;
+    const page = document.getElementById("fb-page").value;
+    const feature = document.getElementById("fb-feature").value;
+    const message = document.getElementById("fb-message").value;
+
+    if (!page || !message) {
+        alert("Please fill out required fields: Page & Feedback message.");
+        return;
+    }
+
+    // Simulated API storage (localStorage)
+    const fbData = {
+        name,
+        email,
+        page,
+        feature,
+        rating: selectedRating,
+        message,
+        time: new Date().toLocaleString()
+    };
+
+    // Save in localStorage
+    let allFeedback = JSON.parse(localStorage.getItem("chillboxFeedback")) || [];
+    allFeedback.push(fbData);
+    localStorage.setItem("chillboxFeedback", JSON.stringify(allFeedback));
+
+    // Show success message
+    document.getElementById("fb-success").style.display = "block";
+
+    // Reset form
+    setTimeout(() => {
+        document.getElementById("fb-success").style.display = "none";
+    }, 3000);
+
+    document.querySelectorAll(".fb-input, .fb-textarea").forEach(el => el.value = "");
+    stars.forEach(s => s.classList.remove("active"));
+    selectedRating = 0;
+}
+
 </script>
 <script type="module">
 import { auth } from "./firebase.js";
