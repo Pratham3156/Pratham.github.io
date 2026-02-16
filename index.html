@@ -827,9 +827,8 @@ loadContinueWatching();
 async function openMovieModal(movieId,  movieTitle) {
   const modal = document.getElementById("movieModal");
   const modalContent = document.getElementById("modalContent");
-  logWatchEvent("movie", movieId, movieTitle);
   modal.classList.add("active");
-
+  logWatchEvent("movie", movieId, movieTitle);
   modalContent.innerHTML = "<h2 style='text-align:center;'>Loading...</h2>";
 
   // ✅ fetch movie data
@@ -1049,7 +1048,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 </script>
-
+<script>
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -1149,6 +1148,7 @@ document.getElementById("play").onclick = async () => {
 </script>
 </body>
 </html>
+
 
 
 
