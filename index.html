@@ -824,7 +824,8 @@ loadContinueWatching();
 
 /* ===== MOVIE MODAL ===== */
 /* ===== MOVIE MODAL WITH AUTO SERVER DETECTION ===== */
-async function openMovieModal(movieId) {
+async function openMovieModal(movieId,  movieTitle) {
+  logWatchEvent("movie", movieId, movieTitle);
   const modal = document.getElementById("movieModal");
   const modalContent = document.getElementById("modalContent");
 
@@ -1131,9 +1132,25 @@ document.getElementById("play").onclick = async () => {
   alert("Saved to Firestore ✅");
 };
 </script>
+<script>
+  function logWatchEvent(type, itemId, title) {
+  const userId = getUserId();
 
+  const watchRef = ref(db, `watch_logs/${userId}`);
+  const newLog = push(watchRef);
+
+  set(newLog, {
+    type: type,
+    itemId: itemId,
+    title: title,
+    timestamp: Date.now()
+  });
+}
+
+</script>
 </body>
 </html>
+
 
 
 
