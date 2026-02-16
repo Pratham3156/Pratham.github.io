@@ -381,7 +381,7 @@ h2 { margin-bottom: 12px; }
     display: block;
   }
 
-  nav.navbar {
+  .nav-links {
     position: absolute;
     top: 65px;
     left: 0;
@@ -390,13 +390,13 @@ h2 { margin-bottom: 12px; }
     flex-direction: column;
     display: none;
     padding: 15px 0;
+    z-index: 999;
   }
-
  .nav-links.show {
     display: flex;
   }
 
-  nav.navbar a {
+  nav-links a {
     width: 100%;
     text-align: center;
     padding: 12px;
@@ -912,7 +912,7 @@ window.logout = function () {
 </script>
   <script>
 const menuToggle = document.getElementById("menuToggle");
-const navbar = document.querySelector("nav.navbar");
+const navlinks = document.querySelector("nav.links");
 
 menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
@@ -920,6 +920,7 @@ menuToggle.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
