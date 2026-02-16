@@ -596,11 +596,13 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 </script>
+  <script>
 function logout() {
   auth.signOut().then(() => {
     location.replace("login.html");
   });
 }
+  </script>
 <script type="module">
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from
