@@ -623,7 +623,7 @@ nav.navbar a:hover {
 
 <header>
   <a class="logo" href="index.html"><i class="fas fa-infinity"></i> ChillBox</a>
-  <nav class="navbar
+  <nav class="navbar">
     <a class="active" href="index.html">Movies</a>
     <a href="Music.Html">Music</a>
     <a href="Games.html">Games</a>
@@ -1526,15 +1526,7 @@ menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
 });
 </script>
-  <script>
-(function blockPopups() {
-  const originalOpen = window.open;
-  window.open = function () {
-    console.warn("Blocked popup redirect");
-    return null;
-  };
-})();
-  </script>
 </body>
 </html>
+
 
