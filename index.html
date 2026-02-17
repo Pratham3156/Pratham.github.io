@@ -912,37 +912,92 @@ createTheaterMoviesSlider();
 async function createAnimeSlider() {
   const container = document.getElementById("slidersContainer");
 
-  const res = await fetch(`https://api.themoviedb.org/3/discover/tv?with_genres=16&api_key=${API_KEY}`);
+  // 1️⃣ Fetch ongoing shows
+  const res = await fetch(
+    `https://api.themoviedb.org/3/tv/on_the_air?api_key=${API_KEY}&language=en-US&page=1`
+  );
   const data = await res.json();
-  const animes = data.results.slice(0, 15);
 
+  // 2️⃣ Filter only anime (Animation = 16)
+  let animeList = data.results.filter(show =>
+    show.genre_ids.includes(16)
+  );
+
+  // 3️⃣ Sort by TOP quality
+  animeList = animeList
+    .filter(a => a.vote_count > 100)
+    .sort((a, b) =>
+      (b.vote_average * b.vote_count + b.popularity) -
+      (a.vote_average * a.vote_count + a.popularity)
+    );
+
+  // 4️⃣ Force-add popular ongoing anime (like One Piece)
+  const forcedAnime = await Promise.all(
+    POPULAR_ONGOING_ANIME_IDS.map(id =>
+      fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`)
+        .then(r => r.json())
+    )
+  );
+
+  // 5️⃣ Merge lists (avoid duplicates)
+  const animeMap = new Map();
+
+  [...forcedAnime, ...animeList].forEach(anime => {
+    if (
+      anime &&
+      anime.poster_path &&
+      anime.genres?.some(g => g.id === 16) &&
+      anime.status === "Returning Series"
+    ) {
+      animeMap.set(anime.id, anime);
+    }
+  });
+
+  // 6️⃣ Final TOP list
+  const finalAnimeList = Array.from(animeMap.values()).slice(0, 15);
+
+  if (finalAnimeList.length === 0) return;
+
+  // 7️⃣ Build UI
   const section = document.createElement("div");
   section.className = "slider-section";
+
   section.innerHTML = `
-    <h2 class="slider-title">Anime</h2>
+    <h2 class="slider-title">🔥 Popular Ongoing Anime</h2>
+
     <div class="movie-slider" id="AnimeSlider"></div>
+
     <div class="slider-arrow slider-left" id="AnimeLeft">&#10094;</div>
-    <div class="slider-arrow slider-right" id="AnimeRight">&#10095;</div>`;
+    <div class="slider-arrow slider-right" id="AnimeRight">&#10095;</div>
+  `;
+
   container.appendChild(section);
 
   const slider = document.getElementById("AnimeSlider");
 
-  for (let anime of animes) {
+  finalAnimeList.forEach(anime => {
     const card = document.createElement("div");
     card.className = "movie-card";
+
     card.innerHTML = `
       <img src="https://image.tmdb.org/t/p/w500${anime.poster_path}">
       <div class="movie-overlay">
         <h3>${anime.name}</h3>
-        <p>⭐ ${anime.vote_average}/10</p>
-      </div>`;
-    slider.appendChild(card);
+        <p>⭐ ${anime.vote_average?.toFixed(1) || "N/A"}</p>
+        <p>📺 Ongoing</p>
+      </div>
+    `;
 
     card.onclick = () => openAnimeModal(anime.id);
-  }
+    slider.appendChild(card);
+  });
 
-  document.getElementById("AnimeLeft").addEventListener("click", () => slider.scrollBy({ left: -270, behavior: "smooth" }));
-  document.getElementById("AnimeRight").addEventListener("click", () => slider.scrollBy({ left: 270, behavior: "smooth" }));
+  // 8️⃣ Slider arrows
+  document.getElementById("AnimeLeft").onclick = () =>
+    slider.scrollBy({ left: -270, behavior: "smooth" });
+
+  document.getElementById("AnimeRight").onclick = () =>
+    slider.scrollBy({ left: 270, behavior: "smooth" });
 }
 
 createAnimeSlider();
@@ -1405,6 +1460,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
