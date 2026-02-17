@@ -11,6 +11,7 @@
   --black: #101820;
   --accent: #1db954;
   --glow: 0 0 20px #1db954, 0 0 40px #1db954, 0 0 60px #1db954;
+  --header-height: 70px;
 }
 
 body {
@@ -32,6 +33,7 @@ header {
   background-color: black;
   z-index: 9999;
   box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  height: var(--header-height);
 }
 .logo {
   font-size: 1.8rem;
@@ -427,19 +429,214 @@ nav.navbar a:hover {
   background: #1db954;
   color: black;
 }
+/* ================= RESPONSIVE ================= */
 
+/* Hide hamburger on desktop */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ---------- Tablets & Mobiles ---------- */
+@media (max-width: 1024px) {
+
+  header {
+    padding: 12px 4%;
+  }
+
+  .search-box {
+    margin-left: 0;
+  }
+
+  nav.navbar {
+    gap: 6px;
+    margin-left: 0;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+
+  body {
+    padding-top: 60px;
+  }
+
+  /* HEADER */
+  .menu-toggle {
+    display: block;
+  }
+
+  nav.navbar {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    background: black;
+    flex-direction: column;
+    display: none;
+    padding: 15px 0;
+  }
+
+  nav.navbar.show {
+    display: flex;
+  }
+
+  nav.navbar a {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+  }
+
+  .search-box {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  #searchInput {
+    width: 100%;
+  }
+
+  /* HERO */
+  .hero {
+    height: auto;
+    padding: 120px 20px 40px;
+  }
+
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+  }
+
+  .hero-lang,
+  .hero-rank {
+    font-size: 14px;
+  }
+
+  /* SLIDERS */
+  .slider-section {
+    padding: 20px 15px;
+  }
+
+  .movie-card {
+    width: 160px;
+    height: 240px;
+  }
+
+  /* MODAL */
+  #movieModal img.poster {
+    float: none;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  #movieModal h1 {
+    font-size: 26px;
+  }
+
+  #movieModal iframe {
+    height: 220px;
+  }
+
+  /* FOOTER */
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-section {
+    margin-top: 30px;
+  }
+}
+@media (max-width: 768px) {
+
+  body {
+    padding-top: var(--header-height);
+  }
+
+  .hero {
+    height: auto;
+    min-height: calc(100vh - var(--header-height));
+    padding: 40px 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .hero-content {
+    margin-top: 20px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+  }
+}
+  @media (max-width: 768px) {
+  .hero::after {
+    background: rgba(0,0,0,0.45);
+  }
+}
+/* Desktop search */
+@media (min-width: 769px) {
+  .mobile-search {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+
+  .mobile-search {
+    width: 90%;
+    margin: 10px auto 15px;
+    position: relative;
+  }
+
+  .mobile-search input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+  }
+
+  #searchResults {
+    position: static;
+    max-height: 240px;
+    margin-top: 8px;
+  }
+}
+@media (max-width: 768px) {
+  header > .search-box {
+    display: none;
+  }
+}
 </style>
 </head>
 <body>
 
 <header>
-  <a class="logo" href="#"><i class="fas fa-infinity"></i> ChillBox</a>
-  <nav class="navbar">
+  <a class="logo" href="index.html"><i class="fas fa-infinity"></i> ChillBox</a>
+  <nav class="navbar
     <a class="active" href="index.html">Movies</a>
     <a href="Music.Html">Music</a>
     <a href="Games.html">Games</a>
     <a href="AboutUs.html">About</a>
+    <a href="FeedBack.html">FeedBack</a>
+    <div class="mobile-search">
+    <input type="text" id="searchInput" placeholder="Search movies..." />
+    <div id="searchResults"></div>
+  </div>
   </nav>
+   <div class="menu-toggle" id="menuToggle">
+  <i class="fas fa-bars"></i>
+</div>
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search movies..." />
     <div id="searchResults"></div>
@@ -516,6 +713,7 @@ nav.navbar a:hover {
       <a href="Music.Html">Music</a>
       <a href="Games.html">Games</a>
       <a href="AboutUs.html">About Us</a>
+      <a href="admin-feedback.html">admin</a>
     </div>
 
     <div class="footer-section">
@@ -533,6 +731,12 @@ nav.navbar a:hover {
 const API_KEY = "166830f0c57dfdbf8f9a4ebeb942d300";
 const HERO = document.getElementById("hero");
 let heroMovies = [], currentIndex = 0;
+  const NEW_THEATER_MOVIES_API =
+  `https://api.themoviedb.org/3/movie/now_playing?` +
+  `api_key=${API_KEY}&` +
+  `region=IN&` +          // India theaters
+  `language=en-US&page=1`;
+
 
 /* ===== TRENDING HERO MOVIES ===== */
 async function loadHeroMovies() {
@@ -628,7 +832,7 @@ document.addEventListener("click", e => {
 /* ===== GENRE SLIDERS ===== */
 let genreMap = {};
 async function loadGenres() {
-  const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`);
+  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
   const data = await res.json();
   data.genres.forEach(g => genreMap[g.id] = g.name);
 }
@@ -642,42 +846,158 @@ const categories = [
   { title: "Romance", url: `https://api.themoviedb.org/3/discover/movie?with_genres=10749&api_key=${API_KEY}` },
   { title: "Science Fiction", url: `https://api.themoviedb.org/3/discover/movie?with_genres=878&api_key=${API_KEY}` }
 ];
-/* ===== TV SHOW SLIDERS ===== */
+/* ===== Threater Movie Slider ===== */
+  async function createTheaterMoviesSlider() {
+  const res = await fetch(NEW_THEATER_MOVIES_API);
+  const data = await res.json();
+
+  if (!data.results || data.results.length === 0) return;
+
+  // 🔥 Only VERY recent releases (last 60 days)
+  const today = new Date();
+  const movies = data.results.filter(movie => {
+    if (!movie.release_date) return false;
+    const releaseDate = new Date(movie.release_date);
+    const diffDays =
+      (today - releaseDate) / (1000 * 60 * 60 * 24);
+    return diffDays <= 60;
+  }).slice(0, 15);
+
+  const container = document.getElementById("slidersContainer");
+
+  const section = document.createElement("div");
+  section.className = "slider-section";
+
+  section.innerHTML = `
+    <h2 class="slider-title">🎥 New Theater Releases</h2>
+
+    <div class="movie-slider" id="TheaterSlider"></div>
+
+    <div class="slider-arrow slider-left" id="TheaterLeft">&#10094;</div>
+    <div class="slider-arrow slider-right" id="TheaterRight">&#10095;</div>
+  `;
+
+  container.appendChild(section);
+
+  const slider = document.getElementById("TheaterSlider");
+
+  movies.forEach(movie => {
+    if (!movie.poster_path) return;
+
+    const card = document.createElement("div");
+    card.className = "movie-card";
+
+    card.innerHTML = `
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+      <div class="movie-overlay">
+        <h3>${movie.title}</h3>
+        <p>📅 ${movie.release_date}</p>
+        <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+      </div>
+    `;
+
+    card.onclick = () => openMovieModal(movie.id);
+    slider.appendChild(card);
+  });
+
+  document.getElementById("TheaterLeft").onclick = () =>
+    slider.scrollBy({ left: -270, behavior: "smooth" });
+
+  document.getElementById("TheaterRight").onclick = () =>
+    slider.scrollBy({ left: 270, behavior: "smooth" });
+}
+createTheaterMoviesSlider();
+
 /* ===== ANIME SLIDER (TMDB Animation Genre) ===== */
 async function createAnimeSlider() {
   const container = document.getElementById("slidersContainer");
 
-  const res = await fetch(`https://api.themoviedb.org/3/discover/tv?with_genres=16&api_key=${API_KEY}`);
+  // 1️⃣ Fetch ongoing shows
+  const res = await fetch(
+    `https://api.themoviedb.org/3/tv/on_the_air?api_key=${API_KEY}&language=en-US&page=1`
+  );
   const data = await res.json();
-  const animes = data.results.slice(0, 15);
 
+  // 2️⃣ Filter only anime (Animation = 16)
+  let animeList = data.results.filter(show =>
+    show.genre_ids.includes(16)
+  );
+
+  // 3️⃣ Sort by TOP quality
+  animeList = animeList
+    .filter(a => a.vote_count > 100)
+    .sort((a, b) =>
+      (b.vote_average * b.vote_count + b.popularity) -
+      (a.vote_average * a.vote_count + a.popularity)
+    );
+
+  // 4️⃣ Force-add popular ongoing anime (like One Piece)
+  const forcedAnime = await Promise.all(
+    POPULAR_ONGOING_ANIME_IDS.map(id =>
+      fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`)
+        .then(r => r.json())
+    )
+  );
+
+  // 5️⃣ Merge lists (avoid duplicates)
+  const animeMap = new Map();
+
+  [...forcedAnime, ...animeList].forEach(anime => {
+    if (
+      anime &&
+      anime.poster_path &&
+      anime.genres?.some(g => g.id === 16) &&
+      anime.status === "Returning Series"
+    ) {
+      animeMap.set(anime.id, anime);
+    }
+  });
+
+  // 6️⃣ Final TOP list
+  const finalAnimeList = Array.from(animeMap.values()).slice(0, 15);
+
+  if (finalAnimeList.length === 0) return;
+
+  // 7️⃣ Build UI
   const section = document.createElement("div");
   section.className = "slider-section";
+
   section.innerHTML = `
-    <h2 class="slider-title">Anime</h2>
+    <h2 class="slider-title">🔥 Popular Ongoing Anime</h2>
+
     <div class="movie-slider" id="AnimeSlider"></div>
+
     <div class="slider-arrow slider-left" id="AnimeLeft">&#10094;</div>
-    <div class="slider-arrow slider-right" id="AnimeRight">&#10095;</div>`;
+    <div class="slider-arrow slider-right" id="AnimeRight">&#10095;</div>
+  `;
+
   container.appendChild(section);
 
   const slider = document.getElementById("AnimeSlider");
 
-  for (let anime of animes) {
+  finalAnimeList.forEach(anime => {
     const card = document.createElement("div");
     card.className = "movie-card";
+
     card.innerHTML = `
       <img src="https://image.tmdb.org/t/p/w500${anime.poster_path}">
       <div class="movie-overlay">
         <h3>${anime.name}</h3>
-        <p>⭐ ${anime.vote_average}/10</p>
-      </div>`;
-    slider.appendChild(card);
+        <p>⭐ ${anime.vote_average?.toFixed(1) || "N/A"}</p>
+        <p>📺 Ongoing</p>
+      </div>
+    `;
 
     card.onclick = () => openAnimeModal(anime.id);
-  }
+    slider.appendChild(card);
+  });
 
-  document.getElementById("AnimeLeft").addEventListener("click", () => slider.scrollBy({ left: -270, behavior: "smooth" }));
-  document.getElementById("AnimeRight").addEventListener("click", () => slider.scrollBy({ left: 270, behavior: "smooth" }));
+  // 8️⃣ Slider arrows
+  document.getElementById("AnimeLeft").onclick = () =>
+    slider.scrollBy({ left: -270, behavior: "smooth" });
+
+  document.getElementById("AnimeRight").onclick = () =>
+    slider.scrollBy({ left: 270, behavior: "smooth" });
 }
 
 createAnimeSlider();
@@ -827,9 +1147,7 @@ loadContinueWatching();
 async function openMovieModal(movieId) {
   const modal = document.getElementById("movieModal");
   const modalContent = document.getElementById("modalContent");
-
   modal.classList.add("active");
-
   modalContent.innerHTML = "<h2 style='text-align:center;'>Loading...</h2>";
 
   // ✅ fetch movie data
@@ -847,10 +1165,10 @@ async function openMovieModal(movieId) {
   const credits = await creditsRes.json();
 
   const servers = [
-    { name: "Vidsrc", url: `https://vidsrc.net/embed/movie?imdb=${movie.imdb_id}` },
-    { name: "MoviesAPI", url: `https://moviesapi.club/movie/${movie.imdb_id}` },
-    { name: "SmashyStream", url: `https://smashystream.com/embed/${movie.imdb_id}` },
-    { name: "Moviee", url: `https://moviee.to/embed/${movie.imdb_id}` }
+    { name: "Server 1", url: `https://vidsrc.net/embed/movie?imdb=${movie.imdb_id}` },
+    { name: "Server 2", url: `https://moviesapi.club/movie/${movie.imdb_id}` },
+    { name: "Server 3", url: `https://smashystream.com/embed/${movie.imdb_id}` },
+    { name: "Server 4", url: `https://moviee.to/embed/${movie.imdb_id}` }
   ];
 
   const actors = credits.cast.slice(0, 12).map(a => `
@@ -1049,7 +1367,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 </script>
-
+<script>
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -1130,6 +1448,14 @@ document.getElementById("play").onclick = async () => {
 
   alert("Saved to Firestore ✅");
 };
+</script>
+  <script>
+const menuToggle = document.getElementById("menuToggle");
+const navbar = document.querySelector("nav.navbar");
+
+menuToggle.addEventListener("click", () => {
+  navbar.classList.toggle("show");
+});
 </script>
 
 </body>
