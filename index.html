@@ -427,137 +427,6 @@ nav.navbar a:hover {
   background: #1db954;
   color: black;
 }
-/* ================= RESPONSIVE ================= */
-
-/* Hide hamburger on desktop */
-.menu-toggle {
-  display: none;
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-}
-
-/* ---------- Tablets & Mobiles ---------- */
-@media (max-width: 1024px) {
-
-  header {
-    padding: 12px 4%;
-  }
-
-  .search-box {
-    margin-left: 0;
-  }
-
-  nav.navbar {
-    gap: 6px;
-    margin-left: 0;
-  }
-}
-
-/* ---------- Mobile ---------- */
-@media (max-width: 768px) {
-
-  body {
-    padding-top: 60px;
-  }
-
-  /* HEADER */
-  .menu-toggle {
-    display: block;
-  }
-
-  nav.navbar {
-    position: absolute;
-    top: 65px;
-    left: 0;
-    right: 0;
-    background: black;
-    flex-direction: column;
-    display: none;
-    padding: 15px 0;
-  }
-
-  nav.navbar.show {
-    display: flex;
-  }
-
-  nav.navbar a {
-    width: 100%;
-    text-align: center;
-    padding: 12px;
-  }
-
-  .search-box {
-    width: 100%;
-    margin: 10px 0;
-  }
-
-  #searchInput {
-    width: 100%;
-  }
-
-  /* HERO */
-  .hero {
-    height: auto;
-    padding: 120px 20px 40px;
-  }
-
-  .hero-title {
-    font-size: 36px;
-  }
-
-  .hero-desc {
-    font-size: 16px;
-  }
-
-  .hero-lang,
-  .hero-rank {
-    font-size: 14px;
-  }
-
-  .nav-arrow {
-    display: none;
-  }
-
-  /* SLIDERS */
-  .slider-section {
-    padding: 20px 15px;
-  }
-
-  .movie-card {
-    width: 160px;
-    height: 240px;
-  }
-
-  .slider-arrow {
-    display: none;
-  }
-
-  /* MODAL */
-  #movieModal img.poster {
-    float: none;
-    width: 100%;
-    margin-bottom: 15px;
-  }
-
-  #movieModal h1 {
-    font-size: 26px;
-  }
-
-  #movieModal iframe {
-    height: 220px;
-  }
-
-  /* FOOTER */
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-section {
-    margin-top: 30px;
-  }
-}
 
 </style>
 </head>
@@ -575,9 +444,6 @@ nav.navbar a:hover {
     <input type="text" id="searchInput" placeholder="Search movies..." />
     <div id="searchResults"></div>
   </div>
-  <div class="menu-toggle" id="menuToggle">
-  <i class="fas fa-bars"></i>
-</div>
 <div class="profile-container" onclick="toggleProfileMenu()">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
   
@@ -670,7 +536,7 @@ let heroMovies = [], currentIndex = 0;
 
 /* ===== TRENDING HERO MOVIES ===== */
 async function loadHeroMovies() {
-  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
+  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
   const data = await res.json();
   heroMovies = data.results.sort(() => Math.random() - 0.5).slice(0, 10);
   createPaginationDots();
@@ -762,7 +628,7 @@ document.addEventListener("click", e => {
 /* ===== GENRE SLIDERS ===== */
 let genreMap = {};
 async function loadGenres() {
-  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
+  const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`);
   const data = await res.json();
   data.genres.forEach(g => genreMap[g.id] = g.name);
 }
@@ -961,7 +827,9 @@ loadContinueWatching();
 async function openMovieModal(movieId) {
   const modal = document.getElementById("movieModal");
   const modalContent = document.getElementById("modalContent");
+
   modal.classList.add("active");
+
   modalContent.innerHTML = "<h2 style='text-align:center;'>Loading...</h2>";
 
   // ✅ fetch movie data
@@ -1181,7 +1049,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 </script>
-<script>
+
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -1262,14 +1130,6 @@ document.getElementById("play").onclick = async () => {
 
   alert("Saved to Firestore ✅");
 };
-</script>
-  <script>
-const menuToggle = document.getElementById("menuToggle");
-const navbar = document.querySelector("nav.navbar");
-
-menuToggle.addEventListener("click", () => {
-  navbar.classList.toggle("show");
-});
 </script>
 
 </body>
