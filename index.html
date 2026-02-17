@@ -737,7 +737,13 @@ let heroMovies = [], currentIndex = 0;
   `region=IN&` +          // India theaters
   `language=en-US&page=1`;
 
-
+   const POPULAR_ONGOING_ANIME_IDS = [
+  37854, // One Piece
+  85937, // Demon Slayer
+  94605, // Jujutsu Kaisen
+  46298, // Attack on Titan (if still airing specials)
+  1429,  // Naruto Shippuden (specials / ongoing listings)
+];
 /* ===== TRENDING HERO MOVIES ===== */
 async function loadHeroMovies() {
   const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`);
@@ -1460,6 +1466,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
