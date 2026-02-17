@@ -1016,50 +1016,6 @@ async function createSliders() {
     });
   }
 }
-async function createTVSliders() {
-  const container = document.getElementById("slidersContainer");
-
-  for (let cat of tvCategories) {
-    const res = await fetch(cat.url);
-    const data = await res.json();
-    const shows = data.results.slice(0, 15);
-
-    const section = document.createElement("div");
-    section.className = "slider-section";
-    section.innerHTML = `
-      <h2 class="slider-title">${cat.title}</h2>
-      <div class="movie-slider" id="${cat.title.replace(/\s/g, '')}TVSlider"></div>
-      <div class="slider-arrow slider-left" id="${cat.title.replace(/\s/g, '')}TVLeft">&#10094;</div>
-      <div class="slider-arrow slider-right" id="${cat.title.replace(/\s/g, '')}TVRight">&#10095;</div>`;
-    container.appendChild(section);
-
-    const slider = document.getElementById(`${cat.title.replace(/\s/g, '')}TVSlider`);
-
-    for (let show of shows) {
-      const card = document.createElement("div");
-      card.className = "movie-card";
-      card.innerHTML = `
-        <img src="https://image.tmdb.org/t/p/w500${show.poster_path}">
-        <div class="movie-overlay">
-          <h3>${show.name}</h3>
-          <p>Rating: ⭐ ${show.vote_average}/10</p>
-        </div>`;
-      slider.appendChild(card);
-
-      // ✅ plays episodes
-      card.onclick = () => openTVShowModal(show.id);
-    }
-
-    document.getElementById(`${cat.title.replace(/\s/g, '')}TVLeft`).addEventListener("click", () => {
-      slider.scrollBy({ left: -270, behavior: "smooth" });
-    });
-    document.getElementById(`${cat.title.replace(/\s/g, '')}TVRight`).addEventListener("click", () => {
-      slider.scrollBy({ left: 270, behavior: "smooth" });
-    });
-  }
-}
-createTVSliders();
-
 createSliders();
 /* ===== Continue Watching (localStorage) ===== */
 /* ===== Continue Watching (localStorage + slider arrows + clear button) ===== */
@@ -1144,7 +1100,6 @@ async function openMovieModal(movieId) {
   { name: "Server 5", url: `https://moviesapi.club/movie/${movie.imdb_id}` }
 ];
 
-
   const actors = credits.cast.slice(0, 12).map(a => `
     <div class="actor-card">
       <img src="${a.profile_path ? `https://image.tmdb.org/t/p/w185${a.profile_path}` : 'https://via.placeholder.com/100x150'}">
@@ -1176,6 +1131,13 @@ async function openMovieModal(movieId) {
        </center>
        </div>
        ;
+       const frame = document.getElementById("movieFrame");
+  frame.src = servers[0];
+
+  document.getElementById("serverSelect").onchange = e => {
+    frame.src = e.target.value;
+  };
+}
        
 function closeModal() {
   const modal = document.getElementById("movieModal");
@@ -1378,6 +1340,7 @@ menuToggle.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
