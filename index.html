@@ -731,6 +731,12 @@ nav.navbar a:hover {
 const API_KEY = "166830f0c57dfdbf8f9a4ebeb942d300";
 const HERO = document.getElementById("hero");
 let heroMovies = [], currentIndex = 0;
+  const NEW_THEATER_MOVIES_API =
+  `https://api.themoviedb.org/3/movie/now_playing?` +
+  `api_key=${API_KEY}&` +
+  `region=IN&` +          // India theaters
+  `language=en-US&page=1`;
+
 
 /* ===== TRENDING HERO MOVIES ===== */
 async function loadHeroMovies() {
@@ -840,7 +846,68 @@ const categories = [
   { title: "Romance", url: `https://api.themoviedb.org/3/discover/movie?with_genres=10749&api_key=${API_KEY}` },
   { title: "Science Fiction", url: `https://api.themoviedb.org/3/discover/movie?with_genres=878&api_key=${API_KEY}` }
 ];
-/* ===== TV SHOW SLIDERS ===== */
+/* ===== Threater Movie Slider ===== */
+  async function createTheaterMoviesSlider() {
+  const res = await fetch(NEW_THEATER_MOVIES_API);
+  const data = await res.json();
+
+  if (!data.results || data.results.length === 0) return;
+
+  // 🔥 Only VERY recent releases (last 60 days)
+  const today = new Date();
+  const movies = data.results.filter(movie => {
+    if (!movie.release_date) return false;
+    const releaseDate = new Date(movie.release_date);
+    const diffDays =
+      (today - releaseDate) / (1000 * 60 * 60 * 24);
+    return diffDays <= 60;
+  }).slice(0, 15);
+
+  const container = document.getElementById("slidersContainer");
+
+  const section = document.createElement("div");
+  section.className = "slider-section";
+
+  section.innerHTML = `
+    <h2 class="slider-title">🎥 New Theater Releases</h2>
+
+    <div class="movie-slider" id="TheaterSlider"></div>
+
+    <div class="slider-arrow slider-left" id="TheaterLeft">&#10094;</div>
+    <div class="slider-arrow slider-right" id="TheaterRight">&#10095;</div>
+  `;
+
+  container.appendChild(section);
+
+  const slider = document.getElementById("TheaterSlider");
+
+  movies.forEach(movie => {
+    if (!movie.poster_path) return;
+
+    const card = document.createElement("div");
+    card.className = "movie-card";
+
+    card.innerHTML = `
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+      <div class="movie-overlay">
+        <h3>${movie.title}</h3>
+        <p>📅 ${movie.release_date}</p>
+        <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+      </div>
+    `;
+
+    card.onclick = () => openMovieModal(movie.id);
+    slider.appendChild(card);
+  });
+
+  document.getElementById("TheaterLeft").onclick = () =>
+    slider.scrollBy({ left: -270, behavior: "smooth" });
+
+  document.getElementById("TheaterRight").onclick = () =>
+    slider.scrollBy({ left: 270, behavior: "smooth" });
+}
+createTheaterMoviesSlider();
+
 /* ===== ANIME SLIDER (TMDB Animation Genre) ===== */
 async function createAnimeSlider() {
   const container = document.getElementById("slidersContainer");
@@ -1338,6 +1405,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
