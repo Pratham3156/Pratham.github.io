@@ -736,6 +736,12 @@ let heroMovies = [], currentIndex = 0;
   `api_key=${API_KEY}&` +
   `region=IN&` +          // India theaters
   `language=en-US&page=1`;
+  const UPCOMING_MOVIES_API =
+  `https://api.themoviedb.org/3/movie/upcoming?` +
+  `api_key=${API_KEY}&` +
+  `region=IN&` +        // India theaters
+  `language=en-US&page=1`;
+
 
    const POPULAR_ONGOING_ANIME_IDS = [
   37854, // One Piece
@@ -852,6 +858,67 @@ const categories = [
   { title: "Romance", url: `https://api.themoviedb.org/3/discover/movie?with_genres=10749&api_key=${API_KEY}` },
   { title: "Science Fiction", url: `https://api.themoviedb.org/3/discover/movie?with_genres=878&api_key=${API_KEY}` }
 ];
+/* ===== UpComming Movies ===== */
+  async function createUpcomingMoviesSlider() {
+  const res = await fetch(UPCOMING_MOVIES_API);
+  const data = await res.json();
+
+  if (!data.results || data.results.length === 0) return;
+
+  const today = new Date();
+
+  // 🔥 Keep only future releases
+  const upcomingMovies = data.results
+    .filter(movie => {
+      if (!movie.release_date || !movie.poster_path) return false;
+      const releaseDate = new Date(movie.release_date);
+      return releaseDate > today;
+    })
+    .slice(0, 15);
+
+  const container = document.getElementById("slidersContainer");
+
+  const section = document.createElement("div");
+  section.className = "slider-section";
+
+  section.innerHTML = `
+    <h2 class="slider-title">🎬 Coming Soon</h2>
+
+    <div class="movie-slider" id="UpcomingSlider"></div>
+
+    <div class="slider-arrow slider-left" id="UpcomingLeft">&#10094;</div>
+    <div class="slider-arrow slider-right" id="UpcomingRight">&#10095;</div>
+  `;
+
+  container.appendChild(section);
+
+  const slider = document.getElementById("UpcomingSlider");
+
+  upcomingMovies.forEach(movie => {
+    const card = document.createElement("div");
+    card.className = "movie-card";
+
+    card.innerHTML = `
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+      <div class="movie-overlay">
+        <h3>${movie.title}</h3>
+        <p>📅 ${movie.release_date}</p>
+        <p>⏳ Coming Soon</p>
+      </div>
+    `;
+
+    card.onclick = () => openMovieModal(movie.id);
+    slider.appendChild(card);
+  });
+
+  document.getElementById("UpcomingLeft").onclick = () =>
+    slider.scrollBy({ left: -270, behavior: "smooth" });
+
+  document.getElementById("UpcomingRight").onclick = () =>
+    slider.scrollBy({ left: 270, behavior: "smooth" });
+}
+createUpcomingMoviesSlider();
+
 /* ===== Threater Movie Slider ===== */
   async function createTheaterMoviesSlider() {
   const res = await fetch(NEW_THEATER_MOVIES_API);
@@ -1466,6 +1533,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
