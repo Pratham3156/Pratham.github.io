@@ -1,4 +1,3 @@
-<script>
 const API_KEY = "166830f0c57dfdbf8f9a4ebeb942d300";
 const HERO = document.getElementById("hero");
 let heroMovies = [], currentIndex = 0;
@@ -802,4 +801,3 @@ const navbar = document.querySelector("nav.navbar");
 menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
 });
-</script>
