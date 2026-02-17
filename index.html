@@ -1100,6 +1100,7 @@ async function openMovieModal(movieId) {
   { name: "Server 5", url: `https://moviesapi.club/movie/${movie.imdb_id}` }
 ];
 
+
   const actors = credits.cast.slice(0, 12).map(a => `
     <div class="actor-card">
       <img src="${a.profile_path ? `https://image.tmdb.org/t/p/w185${a.profile_path}` : 'https://via.placeholder.com/100x150'}">
@@ -1124,21 +1125,24 @@ async function openMovieModal(movieId) {
         <select id="serverSelect" class="server-select">
           ${servers.map(s => `<option value="${s.url}">${s.name}</option>`).join("")}
         </select>
-       <iframe id="movieFrame"
-       width="100%" height="420" allowfullscreen 
-       style="border-radius:6px;border:2px solid white;margin-top:10px;">
-       </iframe>
-       </center>
-       </div>
-       ;
-       const frame = document.getElementById("movieFrame");
-  frame.src = servers[0];
 
-  document.getElementById("serverSelect").onchange = e => {
-    frame.src = e.target.value;
-  };
+        <iframe id="movieFrame"
+          width="100%" height="420" allowfullscreen
+          style="border-radius:6px;border:2px solid white;margin-top:10px;">
+        </iframe>
+      </center>
+    </div>
+  `;
+
+  const serverSelect = document.getElementById("serverSelect");
+  const movieFrame = document.getElementById("movieFrame");
+
+   movieFrame.src = serverSelect.value; // ✅ load instantly
+
+  serverSelect.addEventListener("change", () => {
+    movieFrame.src = serverSelect.value;
+  });
 }
-       
 function closeModal() {
   const modal = document.getElementById("movieModal");
   modal.classList.remove("active");
@@ -1340,6 +1344,7 @@ menuToggle.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
