@@ -1238,11 +1238,13 @@ async function openMovieModal(movieId) {
   const credits = await creditsRes.json();
 
   const servers = [
-    { name: "Server 1", url: `https://vidsrc.net/embed/movie?imdb=${movie.imdb_id}` },
-    { name: "Server 2", url: `https://moviesapi.club/movie/${movie.imdb_id}` },
-    { name: "Server 3", url: `https://smashystream.com/embed/${movie.imdb_id}` },
-    { name: "Server 4", url: `https://moviee.to/embed/${movie.imdb_id}` }
-  ];
+  { name: "Server 1", url: `https://vidsrc.net/embed/movie?imdb=${movie.imdb_id}` },
+  { name: "Server 2", url: `https://vidsrc.me/embed/movie?imdb=${movie.imdb_id}` },
+  { name: "Server 3", url: `https://smashystream.com/embed/${movie.imdb_id}` },
+  { name: "Server 4", url: `https://www.2embed.cc/embed/${movie.imdb_id}` },
+  { name: "Server 5", url: `https://moviesapi.club/movie/${movie.imdb_id}` }
+];
+
 
   const actors = credits.cast.slice(0, 12).map(a => `
     <div class="actor-card">
@@ -1533,6 +1535,7 @@ menuToggle.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
