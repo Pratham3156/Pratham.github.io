@@ -1416,26 +1416,36 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.g
 const firebaseConfig = {
   apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
   authDomain: "chillbox-747f8.firebaseapp.com",
-  projectId: "chillbox-747f8"
+  projectId: "chillbox-747f8",
+  storageBucket: "chillbox-747f8.firebasestorage.app",
+  messagingSenderId: "808846502692",
+  appId: "1:808846502692:web:fd3a70a823506207f261b1"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// 👇 THIS MUST EXIST
 window.saveWatching = async (userId, movie) => {
-  await addDoc(collection(db, "watch_history"), {
-    userId: userId,
-    movieId: movie.id,
-    title: movie.title,
-    poster: movie.poster_path,
-    time: 0,              // we’ll update later
-    updatedAt: serverTimestamp()
-  });
+  try {
+    await addDoc(collection(db, "watch_history"), {
+      userId,
+      movieId: movie.id,
+      title: movie.title,
+      poster: movie.poster_path,
+      watchedAt: serverTimestamp()
+    });
+    console.log("🔥 Firestore saved:", movie.title);
+  } catch (err) {
+    console.error("❌ Firestore error:", err);
+  }
 };
 </script>
 
+
 </body>
 </html>
+
 
 
 
