@@ -1151,7 +1151,6 @@ async function openMovieModal(movieId) {
   loadContinueWatching();
 
   if (window.saveWatching) {
- if (currentUserEmail) {
   saveWatching(currentUserEmail, {
     id: movie.id,
     title: movie.title,
@@ -1428,7 +1427,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // 👇 THIS MUST EXIST
-window.saveWatching = async (user.email, movie) => {
+window.saveWatching = async (userId, movie) => {
   try {
     await addDoc(collection(db, "watch_history"), {
       userId,
@@ -1443,10 +1442,9 @@ window.saveWatching = async (user.email, movie) => {
   }
 };
 </script>
-
-
 </body>
 </html>
+
 
 
 
