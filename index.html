@@ -1151,7 +1151,7 @@ async function openMovieModal(movieId) {
   loadContinueWatching();
 
   if (window.saveWatching) {
-  saveWatching( userId, {
+  saveWatching( window.currentUserEmail, {
     id: movie.id,
     title: movie.title,
     poster_path: movie.poster_path
@@ -1250,9 +1250,9 @@ document.addEventListener("click", e => {
 
 </script>
  <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
-      import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
-
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged }from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
       const firebaseConfig = {
         apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
         authDomain: "chillbox-747f8.firebaseapp.com",
@@ -1434,6 +1434,7 @@ window.saveWatching = async (userId, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
