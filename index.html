@@ -1151,7 +1151,7 @@ async function openMovieModal(movieId) {
   loadContinueWatching();
 
   if (window.saveWatching) {
-  saveWatching( user123, {
+  saveWatching("user123", {
     id: movie.id,
     title: movie.title,
     poster_path: movie.poster_path
@@ -1159,7 +1159,7 @@ async function openMovieModal(movieId) {
 }
 
   const credits = await creditsRes.json();
-  
+
   const servers = [
   { name: "Server 1", url: `https://moviesapi.club/movie/${movie.imdb_id}` },
   { name: "Server 2", url: `https://vidsrc.me/embed/movie?imdb=${movie.imdb_id}` },
@@ -1250,9 +1250,9 @@ document.addEventListener("click", e => {
 
 </script>
  <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-      import { getAuth, onAuthStateChanged }from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+      import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
+
       const firebaseConfig = {
         apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
         authDomain: "chillbox-747f8.firebaseapp.com",
@@ -1303,7 +1303,6 @@ import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { doc, setDoc } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  </script>
 <script type="module">
 import { initializeApp } from 
 "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -1320,18 +1319,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 </script>
-<script type="module">
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-let currentUserEmail = null;
+<script>
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUserEmail = user.email;
-    console.log("Logged in as:", currentUserEmail);
-  } else {
-    console.log("User not logged in");
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
   }
+
+  await setDoc(doc(db, "users", user.uid), {
+    email: user.email,
+    lastLogin: new Date()
+  }, { merge: true });
 });
 </script>
 <script type="module">
@@ -1354,9 +1353,19 @@ window.logActivity = async function(category, title) {
 };
 </script>
 <script type="module">
+import { saveHistory } from "./history.js";
+
+window.watchMovie = function () {
+  const movieTitle = document.getElementById("heroTitle").innerText;
+  saveHistory("movie", movieTitle, "index.html");
+  alert("Movie added to watch history");
+};
+</script>
+<script type="module">
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     // not logged in → force login
@@ -1364,6 +1373,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 </script>
+<script type="module" src="auth-guard.js"></script>
 <script type="module">
 import { auth } from "./firebase.js";
 import { signOut } 
@@ -1406,46 +1416,26 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.g
 const firebaseConfig = {
   apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
   authDomain: "chillbox-747f8.firebaseapp.com",
-  projectId: "chillbox-747f8",
-  storageBucket: "chillbox-747f8.firebasestorage.app",
-  messagingSenderId: "808846502692",
-  appId: "1:808846502692:web:fd3a70a823506207f261b1"
+  projectId: "chillbox-747f8"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 👇 THIS MUST EXIST
 window.saveWatching = async (userId, movie) => {
-  try {
-    await addDoc(collection(db, "watch_history"), {
-      userId,
-      movieId: movie.id,
-      title: movie.title,
-      poster: movie.poster_path,
-      watchedAt: serverTimestamp()
-    });
-    console.log("🔥 Firestore saved:", movie.title);
-  } catch (err) {
-    console.error("❌ Firestore error:", err);
-  }
+  await addDoc(collection(db, "watch_history"), {
+    userId: userId,
+    movieId: movie.id,
+    title: movie.title,
+    poster: movie.poster_path,
+    time: 0,              // we’ll update later
+    updatedAt: serverTimestamp()
+  });
 };
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
