@@ -1151,7 +1151,7 @@ async function openMovieModal(movieId) {
   loadContinueWatching();
 
   if (window.saveWatching) {
-  saveWatching( user.email, {
+  saveWatching( userId, {
     id: movie.id,
     title: movie.title,
     poster_path: movie.poster_path
@@ -1373,7 +1373,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 </script>
-<script type="module" src="auth-guard.js"></script>
 <script type="module">
 import { auth } from "./firebase.js";
 import { signOut } 
@@ -1443,6 +1442,7 @@ window.saveWatching = async (userId, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
