@@ -1151,7 +1151,7 @@ async function openMovieModal(movieId) {
   loadContinueWatching();
 
   if (window.saveWatching) {
-  saveWatching( window.currentUserEmail, {
+  saveWatching( user123, {
     id: movie.id,
     title: movie.title,
     poster_path: movie.poster_path
@@ -1323,16 +1323,15 @@ const db = getFirestore(app);
 <script type="module">
 import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    location.href = "login.html";
-    return;
-  }
+let currentUserEmail = null;
 
-  await setDoc(doc(db, "users", user.uid), {
-    email: user.email,
-    lastLogin: new Date()
-  }, { merge: true });
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUserEmail = user.email;
+    console.log("Logged in as:", currentUserEmail);
+  } else {
+    console.log("User not logged in");
+  }
 });
 </script>
 <script type="module">
@@ -1434,6 +1433,7 @@ window.saveWatching = async (window.currentUserEmail, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
