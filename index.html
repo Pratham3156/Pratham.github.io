@@ -974,6 +974,66 @@ createUpcomingMoviesSlider();
     slider.scrollBy({ left: 270, behavior: "smooth" });
 }
 createTheaterMoviesSlider();
+/* ===== South Movie Slider ===== */
+  async function createSouthHindiDubbedTheaterSlider() {
+  const url =
+    `https://api.themoviedb.org/3/discover/movie?` +
+    `api_key=${API_KEY}` +
+    `&region=IN` +
+    `&with_release_type=3` +      // theatrical
+    `&primary_release_date.gte=2024-01-01` +
+    `&with_original_language=ta|te|ml|kn` +
+    `&sort_by=release_date.desc`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  console.log("South Movies Raw:", data.results);
+
+  if (!data.results || data.results.length === 0) {
+    console.warn("No South movies found");
+    return;
+  }
+
+  const container = document.getElementById("slidersContainer");
+
+  const section = document.createElement("div");
+  section.className = "slider-section";
+  section.innerHTML = `
+    <h2 class="slider-title">🔥 New South Movies (Hindi Dubbed)</h2>
+    <div class="movie-slider" id="SouthHindiSlider"></div>
+    <div class="slider-arrow slider-left" id="SouthHindiLeft">&#10094;</div>
+    <div class="slider-arrow slider-right" id="SouthHindiRight">&#10095;</div>
+  `;
+  container.appendChild(section);
+
+  const slider = document.getElementById("SouthHindiSlider");
+
+  data.results.slice(0, 15).forEach(movie => {
+    if (!movie.poster_path) return;
+
+    const card = document.createElement("div");
+    card.className = "movie-card";
+    card.innerHTML = `
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+      <div class="movie-overlay">
+        <h3>${movie.title}</h3>
+        <p>South • Hindi Dubbed</p>
+        <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+      </div>
+    `;
+
+    card.onclick = () => openMovieModal(movie.id);
+    slider.appendChild(card);
+  });
+
+  document.getElementById("SouthHindiLeft").onclick = () =>
+    slider.scrollBy({ left: -270, behavior: "smooth" });
+
+  document.getElementById("SouthHindiRight").onclick = () =>
+    slider.scrollBy({ left: 270, behavior: "smooth" });
+}
+createSouthHindiDubbedTheaterSlider();
 
 
 async function createSliders() {
@@ -1093,10 +1153,10 @@ async function openMovieModal(movieId) {
   const credits = await creditsRes.json();
 
   const servers = [
-  { name: "Server 1", url: `https://vidsrc.net/embed/movie?imdb=${movie.imdb_id}` },
+  { name: "Server 1", url: `https://moviesapi.club/movie/${movie.imdb_id}` },
   { name: "Server 2", url: `https://vidsrc.me/embed/movie?imdb=${movie.imdb_id}` },
   { name: "Server 3", url: `https://www.2embed.cc/embed/${movie.imdb_id}` },
-  { name: "Server 4", url: `https://moviesapi.club/movie/${movie.imdb_id}` }
+  { name: "Server 4", url: `https://vidsrc.net/embed/movie?imdb=${movie.imdb_id}` }
 ];
 
 
@@ -1343,6 +1403,7 @@ menuToggle.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
