@@ -1151,7 +1151,7 @@ async function openMovieModal(movieId) {
   loadContinueWatching();
 
   if (window.saveWatching) {
-  saveWatching(currentUserEmail, {
+  saveWatching( user.email, {
     id: movie.id,
     title: movie.title,
     poster_path: movie.poster_path
@@ -1443,6 +1443,7 @@ window.saveWatching = async (userId, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
