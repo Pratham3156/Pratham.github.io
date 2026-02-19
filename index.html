@@ -1320,8 +1320,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 </script>
-<script>
-
+<script type="module">
+import { onAuthStateChanged } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     location.href = "login.html";
@@ -1354,19 +1355,9 @@ window.logActivity = async function(category, title) {
 };
 </script>
 <script type="module">
-import { saveHistory } from "./history.js";
-
-window.watchMovie = function () {
-  const movieTitle = document.getElementById("heroTitle").innerText;
-  saveHistory("movie", movieTitle, "index.html");
-  alert("Movie added to watch history");
-};
-</script>
-<script type="module">
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     // not logged in → force login
@@ -1443,6 +1434,7 @@ window.saveWatching = async (userId, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
