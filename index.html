@@ -1157,10 +1157,9 @@ async function openMovieModal(movieId) {
     poster_path: movie.poster_path
   });
 }
-}
 
   const credits = await creditsRes.json();
-
+  
   const servers = [
   { name: "Server 1", url: `https://moviesapi.club/movie/${movie.imdb_id}` },
   { name: "Server 2", url: `https://vidsrc.me/embed/movie?imdb=${movie.imdb_id}` },
@@ -1444,6 +1443,7 @@ window.saveWatching = async (userId, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
