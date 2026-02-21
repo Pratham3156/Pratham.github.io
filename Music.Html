@@ -1212,6 +1212,20 @@
 
   <script>
 // ================= MUSIC HISTORY (FIRESTORE) =================
+// ================= FIREBASE INIT =================
+const firebaseConfig = {
+  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+  authDomain: "chillbox-747f8.firebaseapp.com",
+  projectId: "chillbox-747f8",
+  storageBucket: "chillbox-747f8.firebasestorage.app",
+  messagingSenderId: "808846502692",
+  appId: "1:808846502692:web:fd3a70a823506207f261b1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+window.auth = firebase.auth();
+window.db = firebase.firestore();
 async function saveMusicHistory(song) {
   if (!window.auth || !window.db) return;
 
@@ -1231,6 +1245,30 @@ async function saveMusicHistory(song) {
     console.log("Music history saved");
   } catch (err) {
     console.error("Music history error:", err);
+  }
+}
+async function saveMusicHistory(song) {
+  const user = auth.currentUser;
+  if (!user || !user.email) {
+    console.warn("User not logged in, skipping save");
+    return;
+  }
+
+  if (!song || !song.audio) return;
+
+  try {
+    await db.collection("musicHistory").add({
+      email: user.email,
+      title: song.trackName || "",
+      artist: song.artistName || "",
+      audio: song.audio,
+      artwork: song.artwork || "",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log("Music saved:", song.trackName);
+  } catch (err) {
+    console.error("Firestore error:", err);
   }
 }
 
@@ -2566,37 +2604,9 @@ menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
 });
 </script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js;
-import { getAuth } from ""https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js";
-import { getFirestore, addDoc, collection, serverTimestamp } from 
-"https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore-compat.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
-  authDomain: "chillbox-747f8.firebaseapp.com",
-  projectId: "chillbox-747f8",
-  storageBucket: "chillbox-747f8.firebasestorage.app",
-  messagingSenderId: "808846502692",
-  appId: "1:808846502692:web:fd3a70a823506207f261b1"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-async function saveMusic(music) {
-  const email = getUserEmail();
-  if (!email) return;
-
-  await db.collection("musicHistory").add({
-    email: email,
-    type: "music",
-    musicId: music.id,
-    title: music.title,
-    artist: music.artist || "Unknown",
-    cover: music.cover || "",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-}
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </body>
 </html>
