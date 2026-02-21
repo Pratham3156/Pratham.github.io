@@ -2474,17 +2474,6 @@ auth.onAuthStateChanged(user => {
     })();
 
   </script>
-<script type="module">
-import { auth } from "./firebase.js";
-import { onAuthStateChanged } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    location.replace("login.html");
-  }
-});
-</script>
 function logout() {
   auth.signOut().then(() => {
     location.replace("login.html");
