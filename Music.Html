@@ -1221,9 +1221,6 @@ const firebaseConfig = {
   messagingSenderId: "808846502692",
   appId: "1:808846502692:web:fd3a70a823506207f261b1"
 };
-
-firebase.initializeApp(firebaseConfig);
-
 window.auth = firebase.auth();
 window.db = firebase.firestore();
 async function saveMusicHistory(song) {
@@ -2479,25 +2476,6 @@ async function saveMusicHistory(song) {
     })();
 
   </script>
-<script type="module">
-import { auth, db } from "./firebase.js";
-import { addDoc, collection } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-window.logActivity = async function(category, title) {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  await addDoc(
-    collection(db, "users", user.uid, "activity"),
-    {
-      category,
-      title,
-      time: new Date()
-    }
-  );
-};
-</script>
 <script type="module">
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from
