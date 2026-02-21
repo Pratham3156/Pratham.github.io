@@ -1209,45 +1209,35 @@
 
     <p class="footer-copy">© 2025 ChillBox Entertainment. All rights reserved.</p>
   </footer>
-
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script>
 // ================= MUSIC HISTORY (FIRESTORE) =================
+// ================= FIREBASE INIT =================
 // ================= FIREBASE INIT =================
 const firebaseConfig = {
   apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
   authDomain: "chillbox-747f8.firebaseapp.com",
   projectId: "chillbox-747f8",
-  storageBucket: "chillbox-747f8.firebasestorage.app",
+  storageBucket: "chillbox-747f8.appspot.com",
   messagingSenderId: "808846502692",
   appId: "1:808846502692:web:fd3a70a823506207f261b1"
 };
-window.auth = firebase.auth();
-window.db = firebase.firestore();
-async function saveMusicHistory(song) {
-  if (!window.auth || !window.db) return;
 
-  const user = auth.currentUser;
-  if (!user || !user.email) return;
+// ✅ REQUIRED
+firebase.initializeApp(firebaseConfig);
 
-  try {
-    await db.collection("musicHistory").add({
-      email: user.email,
-      title: song.trackName || "",
-      artist: song.artistName || "",
-      audio: song.audio || "",
-      artwork: song.artwork || "",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+// ✅ AFTER init
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-    console.log("Music history saved");
-  } catch (err) {
-    console.error("Music history error:", err);
-  }
-}
+// ================= MUSIC HISTORY =================
 async function saveMusicHistory(song) {
   const user = auth.currentUser;
+
   if (!user || !user.email) {
-    console.warn("User not logged in, skipping save");
+    console.warn("User not logged in, skipping music save");
     return;
   }
 
@@ -1263,12 +1253,20 @@ async function saveMusicHistory(song) {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    console.log("Music saved:", song.trackName);
+    console.log("Music history saved:", song.trackName);
   } catch (err) {
-    console.error("Firestore error:", err);
+    console.error("Music history error:", err);
   }
 }
 
+// ================= AUTH DEBUG =================
+auth.onAuthStateChanged(user => {
+  if (user) {
+    console.log("Logged in:", user.email);
+  } else {
+    console.warn("No user logged in");
+  }
+});
     // Performance optimization helpers
     function debounce(func, wait) {
       let timeout;
@@ -2531,9 +2529,5 @@ menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
 });
 </script>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </body>
 </html>
