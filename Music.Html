@@ -1211,6 +1211,29 @@
   </footer>
 
   <script>
+// ================= MUSIC HISTORY (FIRESTORE) =================
+async function saveMusicHistory(song) {
+  if (!window.auth || !window.db) return;
+
+  const user = auth.currentUser;
+  if (!user || !user.email) return;
+
+  try {
+    await db.collection("musicHistory").add({
+      email: user.email,
+      title: song.trackName || "",
+      artist: song.artistName || "",
+      audio: song.audio || "",
+      artwork: song.artwork || "",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log("Music history saved");
+  } catch (err) {
+    console.error("Music history error:", err);
+  }
+}
+
     // Performance optimization helpers
     function debounce(func, wait) {
       let timeout;
@@ -1620,6 +1643,7 @@
 
       audio.src = t.audio;
       audio.play().catch(e => console.warn('play blocked', e));
+      saveMusicHistory(t);
       overlayArt.src = t.artwork || '';
       overlayTitle.textContent = t.trackName || '';
       overlayArtist.textContent = t.artistName || '';
@@ -2466,20 +2490,6 @@ window.logout = function(){
         });
       }
 
-      async function playMusic(musicId) {
-        try {
-          await addDoc(collection(db, "user_activity"), {
-            userId: "user123", // Replace with dynamic user ID
-            contentType: "music",
-            contentId: musicId,
-            datePlayed: new Date().toISOString()
-          });
-          alert("Music played and activity recorded!");
-        } catch (e) {
-          console.error("Error recording activity: ", e);
-        }
-      }
-
       showMusic();
 </script>
 <script type="module">
@@ -2556,6 +2566,38 @@ menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
 });
 </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js;
+import { getAuth } from ""https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js";
+import { getFirestore, addDoc, collection, serverTimestamp } from 
+"https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore-compat.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+  authDomain: "chillbox-747f8.firebaseapp.com",
+  projectId: "chillbox-747f8",
+  storageBucket: "chillbox-747f8.firebasestorage.app",
+  messagingSenderId: "808846502692",
+  appId: "1:808846502692:web:fd3a70a823506207f261b1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+async function saveMusic(music) {
+  const email = getUserEmail();
+  if (!email) return;
+
+  await db.collection("musicHistory").add({
+    email: email,
+    type: "music",
+    musicId: music.id,
+    title: music.title,
+    artist: music.artist || "Unknown",
+    cover: music.cover || "",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
 </body>
 
 </html>
