@@ -1400,9 +1400,7 @@ const db = getFirestore(app);
 // expose globally
 window.auth = auth;
 window.db = db;
-</script>
-  <script>
-window.saveWatching = async function (email, movie) {
+   window.saveWatching = async function (email, movie) {
   try {
     await addDoc(collection(db, "watch_history"), {
       email: email,
@@ -1419,9 +1417,12 @@ window.saveWatching = async function (email, movie) {
     console.error("❌ Firestore error:", err);
   }
 };
+   // expose auth
+window.auth = auth;
 </script>
 </body>
 </html>
+
 
 
 
