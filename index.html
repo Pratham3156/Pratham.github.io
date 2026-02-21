@@ -1150,8 +1150,8 @@ async function openMovieModal(movieId) {
   saveToContinueWatching(movie);
   loadContinueWatching();
 
-  if (currentUserEmail) {
-  saveWatching(currentUserEmail, {
+  if (user.email) {
+  saveWatching(user.email, {
     id: movie.id,
     title: movie.title,
     poster_path: movie.poster_path
@@ -1413,19 +1413,19 @@ menuToggle.addEventListener("click", () => {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
+  apiKey: "AIzaSyCG7awgsnkNtyOoqN7aRsRyAP4hNxZsvdo",
+  authDomain: "chillbox-747f8.firebaseapp.com",
   projectId: "chillbox-747f8",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_ID",
-  appId: "YOUR_APP_ID"
+  storageBucket: "chillbox-747f8.firebasestorage.app",
+  messagingSenderId: "808846502692",
+  appId: "1:808846502692:web:fd3a70a823506207f261b1"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // 👇 THIS MUST EXIST
-currentUserEmail = async (userId, movie) => {
+user.email = async (userId, movie) => {
   try {
     await addDoc(collection(db, "watch_history"), {
       userId,
@@ -1442,6 +1442,7 @@ currentUserEmail = async (userId, movie) => {
 </script>
 </body>
 </html>
+
 
 
 
