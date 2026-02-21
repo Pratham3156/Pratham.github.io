@@ -880,7 +880,7 @@ import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  function toggleProfileMenu() {
+function toggleProfileMenu() {
 const profileImg = document.getElementById("profileImg");
 const profileMenu = document.getElementById("profileMenu");
 
@@ -891,7 +891,6 @@ onAuthStateChanged(auth, user => {
 });
 
 profileImg.addEventListener("click", () => {
-  profileMenu.style.display =
     profileMenu.style.display === "block" ? "none" : "block";
 });
 
@@ -1017,6 +1016,7 @@ window.saveGameHistory = async function (game) {
 </script>
 </body>
 </html>
+
 
 
 
