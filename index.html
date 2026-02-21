@@ -1149,6 +1149,14 @@ async function openMovieModal(movieId) {
   // ✅ SAVE TO WATCH HISTORY
   saveToContinueWatching(movie);
   loadContinueWatching();
+
+  if (currentUserEmail) {
+  saveWatching(currentUserEmail, {
+    id: movie.id,
+    title: movie.title,
+    poster_path: movie.poster_path
+  });
+}
   
   const credits = await creditsRes.json();
 
@@ -1401,8 +1409,40 @@ menuToggle.addEventListener("click", () => {
   navbar.classList.toggle("show");
 });
 </script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "chillbox-747f8",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 👇 THIS MUST EXIST
+currentUserEmail = async (userId, movie) => {
+  try {
+    await addDoc(collection(db, "watch_history"), {
+      userId,
+      movieId: movie.id,
+      title: movie.title,
+      poster: movie.poster_path,
+      watchedAt: serverTimestamp()
+    });
+    console.log("🔥 Firestore saved:", movie.title);
+  } catch (err) {
+    console.error("❌ Firestore error:", err);
+  }
+};
+</script>
 </body>
 </html>
+
 
 
 
