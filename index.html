@@ -1227,6 +1227,7 @@ import { onAuthStateChanged, signOut } from
 
 const profileImg = document.getElementById("profileImg");
 const profileMenu = document.getElementById("profileMenu");
+    Menu = document.getElementById("profileMenu");
 
 onAuthStateChanged(auth, user => {
   if(!user){
@@ -1422,6 +1423,7 @@ window.auth = auth;
 </script>
 </body>
 </html>
+
 
 
 
