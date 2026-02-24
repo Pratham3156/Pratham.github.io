@@ -1422,8 +1422,18 @@ window.db = db;
    // expose auth
 window.auth = auth;
 </script>
+  <script>
+  function toggleProfileMenu() {
+    const menu = document.getElementById("profileMenu");
+    if (!menu) return;
+
+    menu.style.display =
+      menu.style.display === "block" ? "none" : "block";
+  }
+</script>
 </body>
 </html>
+
 
 
 
