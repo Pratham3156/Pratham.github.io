@@ -641,6 +641,7 @@ nav.navbar a:hover {
   
   <div class="profile-menu" id="profileMenu">
     <a href="profile.html">Profile</a>
+    <button onclick="goBack()">← Back</button>
     <button onclick="logout()">Logout</button>
   </div>
 </div>
@@ -1427,8 +1428,30 @@ window.auth = auth;
       menu.style.display === "block" ? "none" : "block";
   }
 </script>
+  <script>
+  // Back button
+  function goBack() {
+    window.history.back();
+  }
+
+  // Logout button (works with Firebase exposed auth)
+  function logout() {
+    if (!window.auth) {
+      alert("Auth not ready");
+      return;
+    }
+
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    }).catch(err => {
+      console.error(err);
+      alert("Logout failed");
+    });
+  }
+</script>
 </body>
 </html>
+
 
 
 
