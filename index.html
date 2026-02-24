@@ -1234,9 +1234,11 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-profileImg.addEventListener("click", () => {
-  profileMenu.style.display =
-    profileMenu.style.display === "block" ? "none" : "block";
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".profile-container")) {
+    document.getElementById("profileMenu").style.display = "none";
+  }
+});
 });
 
 window.logout = function(){
@@ -1422,6 +1424,7 @@ window.auth = auth;
 </script>
 </body>
 </html>
+
 
 
 
