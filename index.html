@@ -638,11 +638,17 @@ nav.navbar a:hover {
 </div>
 <div class="profile-container" onclick="toggleProfileMenu()">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
+  <div class="profile-box">
+    <img id="profileImage" class="profile-img" src="default-avatar.png">
+    <h2 id="userName">Loading...</h2>
+    <p id="userEmail"></p>
+
+    <button class="back-btn" onclick="goBack()">⬅ Back</button>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
   
   <div class="profile-menu" id="profileMenu">
     <a href="profile.html">Profile</a>
-    <button onclick="goBack()">← Back</button>
-    <button onclick="logout()">Logout</button>
   </div>
 </div>
 </header>
@@ -1449,8 +1455,42 @@ window.auth = auth;
     });
   }
 </script>
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import { onAuthStateChanged, signOut } 
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const nameEl = document.getElementById("userName");
+    const emailEl = document.getElementById("userEmail");
+    const imageEl = document.getElementById("profileImage");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        location.replace("login.html");
+        return;
+      }
+
+      nameEl.innerText = user.displayName || "User";
+      emailEl.innerText = user.email;
+
+      if (user.photoURL) {
+        imageEl.src = user.photoURL;
+      }
+    });
+
+    window.logout = function () {
+      signOut(auth).then(() => {
+        location.replace("login.html");
+      });
+    };
+
+    window.goBack = function () {
+      history.back();
+    };
+</script>
 </body>
 </html>
+
 
 
 
