@@ -609,8 +609,7 @@ nav.navbar a:hover {
     position: static;
     max-height: 240px;
     margin-top: 8px;
-  }
-}
+  }}
 @media (max-width: 768px) {
   header > .search-box {
     display: none;
@@ -638,19 +637,13 @@ nav.navbar a:hover {
 </div>
 <div class="profile-container" onclick="toggleProfileMenu()">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
-  <div class="profile-box">
-    <img id="profileImage" class="profile-img" src="default-avatar.png">
-    <h2 id="userName">Loading...</h2>
-    <p id="userEmail"></p>
-
-    <button class="back-btn" onclick="goBack()">⬅ Back</button>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
   
   <div class="profile-menu" id="profileMenu">
     <a href="profile.html">Profile</a>
+    <button onclick="logout()">Logout</button>
   </div>
 </div>
+
 </header>
 
 <!-- HERO -->
@@ -1222,14 +1215,13 @@ function closeModal() {
   if (frame) frame.src = "";
 }
 </script>
-  <script type="module">
+   <script type="module">
 import { auth } from "./firebase.js";
 import { onAuthStateChanged, signOut } from
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const profileImg = document.getElementById("profileImg");
 const profileMenu = document.getElementById("profileMenu");
-    Menu = document.getElementById("profileMenu");
 
 onAuthStateChanged(auth, user => {
   if(!user){
@@ -1237,11 +1229,9 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".profile-container")) {
-    document.getElementById("profileMenu").style.display = "none";
-  }
-});
+profileImg.addEventListener("click", () => {
+  profileMenu.style.display =
+    profileMenu.style.display === "block" ? "none" : "block";
 });
 
 window.logout = function(){
@@ -1254,7 +1244,6 @@ document.addEventListener("click", e => {
     profileMenu.style.display = "none";
   }
 });
-
 </script>
  <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
@@ -1425,71 +1414,9 @@ window.db = db;
    // expose auth
 window.auth = auth;
 </script>
-  <script>
-  function toggleProfileMenu() {
-    const menu = document.getElementById("profileMenu");
-    if (!menu) return;
-
-    menu.style.display =
-      menu.style.display === "block" ? "none" : "block";
-  }
-</script>
-  <script>
-  // Back button
-  function goBack() {
-    window.history.back();
-  }
-
-  // Logout button (works with Firebase exposed auth)
-  function logout() {
-    if (!window.auth) {
-      alert("Auth not ready");
-      return;
-    }
-
-    auth.signOut().then(() => {
-      window.location.href = "login.html";
-    }).catch(err => {
-      console.error(err);
-      alert("Logout failed");
-    });
-  }
-</script>
-  <script type="module">
-    import { auth } from "./firebase.js";
-    import { onAuthStateChanged, signOut } 
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    const nameEl = document.getElementById("userName");
-    const emailEl = document.getElementById("userEmail");
-    const imageEl = document.getElementById("profileImage");
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        location.replace("login.html");
-        return;
-      }
-
-      nameEl.innerText = user.displayName || "User";
-      emailEl.innerText = user.email;
-
-      if (user.photoURL) {
-        imageEl.src = user.photoURL;
-      }
-    });
-
-    window.logout = function () {
-      signOut(auth).then(() => {
-        location.replace("login.html");
-      });
-    };
-
-    window.goBack = function () {
-      history.back();
-    };
-</script>
 </body>
 </html>
+
 
 
 
