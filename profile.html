@@ -17,17 +17,9 @@
       height: 100vh;
     }
 
-    ..avatar-wrapper {
-  position: relative;
+   .avatar-initials {
   width: 120px;
   height: 120px;
-  margin: 20px auto;
-  cursor: pointer;
-}
-
-.avatar-initials {
-  width: 100%;
-  height: 100%;
   background: #1db954;
   color: black;
   font-size: 40px;
@@ -36,30 +28,20 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  margin: 20px auto;
 }
-
-.profile-image {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: none;
-}
+    </style>
 </head>
 <body>
 
- <div class="profile-card">
-
-  <div class="avatar-wrapper">
-    <div id="avatarInitials" class="avatar-initials"></div>
-    <img id="profileImage" class="profile-image" />
-    <input type="file" id="imageUpload" hidden />
+<div class="profile-card">
+ <img id="profileImage" class="profile-img" src="default-avatar.png">
+  <div class="avatar-initials" id="avatarInitials">
+    P
   </div>
 
   <h2 id="usernameText">Player</h2>
   <p id="emailText"></p>
-
-  <button onclick="triggerUpload()">Change Profile Picture</button>
 
 </div>
   <script type="module">
@@ -95,73 +77,35 @@
       history.back();
     };
   </script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  const avatarInitials = document.getElementById("avatarInitials");
-  const profileImage = document.getElementById("profileImage");
-  const imageUpload = document.getElementById("imageUpload");
+function extractInitials(email) {
+  let name = email.split("@")[0];
 
-  function extractInitials(email) {
-    let name = email.split("@")[0];
-    name = name.replace(/[^a-zA-Z]/g, "");
-    if (!name) return "P";
+  // remove numbers & special characters
+  name = name.replace(/[^a-zA-Z]/g, "");
 
-    return name.charAt(0).toUpperCase() +
-           (name.charAt(1)?.toUpperCase() || "");
+  if (!name) return "P";
+
+  return name.charAt(0).toUpperCase() +
+         (name.charAt(1)?.toUpperCase() || "");
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
   }
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
+  const cleanName = user.email.split("@")[0];
 
-    document.getElementById("usernameText").innerText =
-      user.email.split("@")[0];
-
-    document.getElementById("emailText").innerText = user.email;
-
-    const savedImage = localStorage.getItem("profileImage_" + user.uid);
-
-    if (savedImage) {
-      profileImage.src = savedImage;
-      profileImage.style.display = "block";
-      avatarInitials.style.display = "none";
-    } else {
-      avatarInitials.innerText = extractInitials(user.email);
-      avatarInitials.style.display = "flex";
-      profileImage.style.display = "none";
-    }
-  });
-
-  window.triggerUpload = function() {
-    imageUpload.click();
-  };
-
-  imageUpload.addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-      const base64Image = event.target.result;
-
-      const user = firebase.auth().currentUser;
-      localStorage.setItem(
-        "profileImage_" + user.uid,
-        base64Image
-      );
-
-      profileImage.src = base64Image;
-      profileImage.style.display = "block";
-      avatarInitials.style.display = "none";
-    };
-
-    reader.readAsDataURL(file);
-  });
-
+  document.getElementById("usernameText").innerText = cleanName;
+  document.getElementById("emailText").innerText = user.email;
+  document.getElementById("avatarInitials").innerText =
+    extractInitials(user.email);
 });
 </script>
 </body>
