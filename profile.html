@@ -95,73 +95,73 @@
       history.back();
     };
   </script>
-<script type="module">
-import { auth } from "./firebase.js";
-import { onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+<script>
+document.addEventListener("DOMContentLoaded", function() {
 
-const avatarInitials = document.getElementById("avatarInitials");
-const profileImage = document.getElementById("profileImage");
-const imageUpload = document.getElementById("imageUpload");
+  const avatarInitials = document.getElementById("avatarInitials");
+  const profileImage = document.getElementById("profileImage");
+  const imageUpload = document.getElementById("imageUpload");
 
-function extractInitials(email) {
-  let name = email.split("@")[0];
-  name = name.replace(/[^a-zA-Z]/g, "");
-  if (!name) return "P";
+  function extractInitials(email) {
+    let name = email.split("@")[0];
+    name = name.replace(/[^a-zA-Z]/g, "");
+    if (!name) return "P";
 
-  return name.charAt(0).toUpperCase() +
-         (name.charAt(1)?.toUpperCase() || "");
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    location.href = "login.html";
-    return;
+    return name.charAt(0).toUpperCase() +
+           (name.charAt(1)?.toUpperCase() || "");
   }
 
-  document.getElementById("usernameText").innerText =
-    user.email.split("@")[0];
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
 
-  document.getElementById("emailText").innerText = user.email;
+    document.getElementById("usernameText").innerText =
+      user.email.split("@")[0];
 
-  const savedImage = localStorage.getItem("profileImage_" + user.uid);
+    document.getElementById("emailText").innerText = user.email;
 
-  if (savedImage) {
-    profileImage.src = savedImage;
-    profileImage.style.display = "block";
-    avatarInitials.style.display = "none";
-  } else {
-    avatarInitials.innerText = extractInitials(user.email);
-    avatarInitials.style.display = "flex";
-    profileImage.style.display = "none";
-  }
-});
+    const savedImage = localStorage.getItem("profileImage_" + user.uid);
 
-window.triggerUpload = function() {
-  imageUpload.click();
-};
+    if (savedImage) {
+      profileImage.src = savedImage;
+      profileImage.style.display = "block";
+      avatarInitials.style.display = "none";
+    } else {
+      avatarInitials.innerText = extractInitials(user.email);
+      avatarInitials.style.display = "flex";
+      profileImage.style.display = "none";
+    }
+  });
 
-imageUpload.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = function(event) {
-    const base64Image = event.target.result;
-
-    const user = auth.currentUser;
-    localStorage.setItem(
-      "profileImage_" + user.uid,
-      base64Image
-    );
-
-    profileImage.src = base64Image;
-    profileImage.style.display = "block";
-    avatarInitials.style.display = "none";
+  window.triggerUpload = function() {
+    imageUpload.click();
   };
 
-  reader.readAsDataURL(file);
+  imageUpload.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      const base64Image = event.target.result;
+
+      const user = firebase.auth().currentUser;
+      localStorage.setItem(
+        "profileImage_" + user.uid,
+        base64Image
+      );
+
+      profileImage.src = base64Image;
+      profileImage.style.display = "block";
+      avatarInitials.style.display = "none";
+    };
+
+    reader.readAsDataURL(file);
+  });
+
 });
 </script>
 </body>
