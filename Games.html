@@ -493,14 +493,9 @@ h2 { margin-bottom: 12px; }
   <div class="menu-toggle" id="menuToggle">
   <i class="fas fa-bars"></i>
 </div>
-  <div class="profile-container" onclick="toggleProfileMenu()">
+ <a href="profile.html" class="profile-container">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
-  
-  <div class="profile-menu" id="profileMenu">
-    <a href="profile.html">Profile</a>
-    <button onclick="logout()">Logout</button>
-  </div>
-</div>
+</a>
 </div>
 </nav>
 </header>
@@ -1018,6 +1013,7 @@ window.saveGameHistory = async function (game) {
 </script>
 </body>
 </html>
+
 
 
 
