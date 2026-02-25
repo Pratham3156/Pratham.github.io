@@ -90,15 +90,21 @@ const nameEl = document.getElementById("userName");
 const emailEl = document.getElementById("userEmail");
 const imageEl = document.getElementById("profileImage");
 
-function extractCleanName(email) {
+function extractFirstName(email) {
   if (!email) return "Player";
 
+  // Take part before @
   let name = email.split("@")[0];
+
+  // Split by dot or underscore (remove surname)
   name = name.split(/[._]/)[0];
+
+  // Remove numbers & special characters
   name = name.replace(/[^a-zA-Z]/g, "");
 
   if (!name) return "Player";
 
+  // Capitalize properly
   return name.charAt(0).toUpperCase() +
          name.slice(1).toLowerCase();
 }
@@ -109,7 +115,9 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  nameEl.innerText = extractCleanName(user.email);
+  const firstName = extractFirstName(user.email);
+
+  nameEl.innerText = `Welcome, ${firstName} 👋`;
   emailEl.innerText = user.email;
 
   if (user.photoURL) {
