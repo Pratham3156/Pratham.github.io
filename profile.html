@@ -137,8 +137,8 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     const cleanName = extractCleanName(user.email);
 
-    document.getElementById("usernameText").innerText = cleanName;
-    document.getElementById("emailText").innerText = user.email;
+    document.getElementById("userName").innerText = cleanName;
+    document.getElementById("userEmail").innerText = user.email;
   }
 });
 </script>
