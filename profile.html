@@ -17,69 +17,51 @@
       height: 100vh;
     }
 
-    .profile-box {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 12px;
-      width: 320px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
-    }
+    .avatar-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 20px auto;
+  cursor: pointer;
+}
 
-    .profile-img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #1db954;
-      margin-bottom: 15px;
-    }
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  background: #1db954;
+  color: black;
+  font-size: 40px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
 
-    h2 {
-      margin: 10px 0;
-    }
-
-    p {
-      font-size: 14px;
-      color: #ccc;
-      word-break: break-all;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .back-btn {
-      background: #333;
-      color: white;
-    }
-
-    .logout-btn {
-      background: #e74c3c;
-      color: white;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-  </style>
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: none;
+}
 </head>
 <body>
 
-  <div class="profile-box">
-    <img id="profileImage" class="profile-img" src="default-avatar.png">
-    <h2 id="userName">Loading...</h2>
-    <p id="userEmail"></p>
+ <div class="profile-card">
 
-    <button class="back-btn" onclick="goBack()">⬅ Back</button>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+  <div class="avatar-wrapper">
+    <div id="avatarInitials" class="avatar-initials"></div>
+    <img id="profileImage" class="profile-image" />
+    <input type="file" id="imageUpload" hidden />
   </div>
+
+  <h2 id="usernameText">Player</h2>
+  <p id="emailText"></p>
+
+  <button onclick="triggerUpload()">Change Profile Picture</button>
+
+</div>
 
   <script type="module">
     import { auth } from "./firebase.js";
@@ -114,6 +96,73 @@
       history.back();
     };
   </script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, updateProfile }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+const storage = getStorage();
+const avatarInitials = document.getElementById("avatarInitials");
+const profileImage = document.getElementById("profileImage");
+const imageUpload = document.getElementById("imageUpload");
+
+function extractInitials(email) {
+  let name = email.split("@")[0];
+  name = name.replace(/[^a-zA-Z]/g, "");
+  if (!name) return "P";
+
+  return name.charAt(0).toUpperCase() +
+         (name.charAt(1)?.toUpperCase() || "");
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+  document.getElementById("usernameText").innerText =
+    user.displayName || user.email.split("@")[0];
+
+  document.getElementById("emailText").innerText = user.email;
+
+  if (user.photoURL) {
+    profileImage.src = user.photoURL;
+    profileImage.style.display = "block";
+    avatarInitials.style.display = "none";
+  } else {
+    avatarInitials.innerText = extractInitials(user.email);
+    avatarInitials.style.display = "flex";
+    profileImage.style.display = "none";
+  }
+});
+
+window.triggerUpload = function() {
+  imageUpload.click();
+};
+
+imageUpload.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const user = auth.currentUser;
+  const storageRef = ref(storage, "profilePictures/" + user.uid);
+
+  await uploadBytes(storageRef, file);
+  const downloadURL = await getDownloadURL(storageRef);
+
+  await updateProfile(user, {
+    photoURL: downloadURL
+  });
+
+  profileImage.src = downloadURL;
+  profileImage.style.display = "block";
+  avatarInitials.style.display = "none";
+
+  alert("Profile picture updated!");
+});
+</script>
 </body>
 </html>
