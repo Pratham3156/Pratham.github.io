@@ -615,17 +615,6 @@ nav.navbar a:hover {
     display: none;
   }
 }
-  .profile-menu {
-  position: absolute;
-  top: 60px; /* Adjust based on header height */
-  right: 0;
-  background: #111;
-  border: 1px solid #1db954; /* Green border to match theme */
-  border-radius: 6px;
-  display: none; /* Controlled by JS */
-  min-width: 150px;
-  z-index: 10000; /* Higher than header and hero */
-}
 </style>
 </head>
 <body>
@@ -646,7 +635,7 @@ nav.navbar a:hover {
    <div class="menu-toggle" id="menuToggle">
   <i class="fas fa-bars"></i>
 </div>
-<div class="profile-container" id="profileContainer">
+<div class="profile-container" onclick="toggleProfileMenu()">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
   
   <div class="profile-menu" id="profileMenu">
@@ -1435,8 +1424,40 @@ window.db = db;
    // expose auth
 window.auth = auth;
 </script>
+  <script>
+  function toggleProfileMenu() {
+    const menu = document.getElementById("profileMenu");
+    if (!menu) return;
+
+    menu.style.display =
+      menu.style.display === "block" ? "none" : "block";
+  }
+</script>
+  <script>
+  // Back button
+  function goBack() {
+    window.history.back();
+  }
+
+  // Logout button (works with Firebase exposed auth)
+  function logout() {
+    if (!window.auth) {
+      alert("Auth not ready");
+      return;
+    }
+
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    }).catch(err => {
+      console.error(err);
+      alert("Logout failed");
+    });
+  }
+</script>
+
 </body>
 </html>
+
 
 
 
