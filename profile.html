@@ -17,7 +17,7 @@
       height: 100vh;
     }
 
-    .avatar-wrapper {
+    ..avatar-wrapper {
   position: relative;
   width: 120px;
   height: 120px;
@@ -62,7 +62,6 @@
   <button onclick="triggerUpload()">Change Profile Picture</button>
 
 </div>
-
   <script type="module">
     import { auth } from "./firebase.js";
     import { onAuthStateChanged, signOut } 
@@ -98,12 +97,9 @@
   </script>
 <script type="module">
 import { auth } from "./firebase.js";
-import { onAuthStateChanged, updateProfile }
+import { onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-const storage = getStorage();
 const avatarInitials = document.getElementById("avatarInitials");
 const profileImage = document.getElementById("profileImage");
 const imageUpload = document.getElementById("imageUpload");
@@ -124,12 +120,14 @@ onAuthStateChanged(auth, (user) => {
   }
 
   document.getElementById("usernameText").innerText =
-    user.displayName || user.email.split("@")[0];
+    user.email.split("@")[0];
 
   document.getElementById("emailText").innerText = user.email;
 
-  if (user.photoURL) {
-    profileImage.src = user.photoURL;
+  const savedImage = localStorage.getItem("profileImage_" + user.uid);
+
+  if (savedImage) {
+    profileImage.src = savedImage;
     profileImage.style.display = "block";
     avatarInitials.style.display = "none";
   } else {
@@ -143,25 +141,27 @@ window.triggerUpload = function() {
   imageUpload.click();
 };
 
-imageUpload.addEventListener("change", async (e) => {
+imageUpload.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const user = auth.currentUser;
-  const storageRef = ref(storage, "profilePictures/" + user.uid);
+  const reader = new FileReader();
 
-  await uploadBytes(storageRef, file);
-  const downloadURL = await getDownloadURL(storageRef);
+  reader.onload = function(event) {
+    const base64Image = event.target.result;
 
-  await updateProfile(user, {
-    photoURL: downloadURL
-  });
+    const user = auth.currentUser;
+    localStorage.setItem(
+      "profileImage_" + user.uid,
+      base64Image
+    );
 
-  profileImage.src = downloadURL;
-  profileImage.style.display = "block";
-  avatarInitials.style.display = "none";
+    profileImage.src = base64Image;
+    profileImage.style.display = "block";
+    avatarInitials.style.display = "none";
+  };
 
-  alert("Profile picture updated!");
+  reader.readAsDataURL(file);
 });
 </script>
 </body>
