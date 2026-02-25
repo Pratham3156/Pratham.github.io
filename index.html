@@ -615,6 +615,17 @@ nav.navbar a:hover {
     display: none;
   }
 }
+  .profile-menu {
+  position: absolute;
+  top: 60px; /* Adjust based on header height */
+  right: 0;
+  background: #111;
+  border: 1px solid #1db954; /* Green border to match theme */
+  border-radius: 6px;
+  display: none; /* Controlled by JS */
+  min-width: 150px;
+  z-index: 10000; /* Higher than header and hero */
+}
 </style>
 </head>
 <body>
@@ -635,7 +646,7 @@ nav.navbar a:hover {
    <div class="menu-toggle" id="menuToggle">
   <i class="fas fa-bars"></i>
 </div>
-<div class="profile-container" onclick="toggleProfileMenu()">
+<div class="profile-container" id="profileContainer">
   <img id="profileImg" src="default-avatar.png" alt="Profile">
   
   <div class="profile-menu" id="profileMenu">
@@ -1216,34 +1227,44 @@ function closeModal() {
 }
 </script>
    <script type="module">
-import { auth } from "./firebase.js";
-import { onAuthStateChanged, signOut } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const profileImg = document.getElementById("profileImg");
-const profileMenu = document.getElementById("profileMenu");
+  const profileContainer = document.getElementById("profileContainer");
+  const profileMenu = document.getElementById("profileMenu");
 
-onAuthStateChanged(auth, user => {
-  if(!user){
-    window.location.href = "login.html";
-  }
-});
+  // 1. Toggle Menu on Click
+  profileContainer.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevents immediate closing
+    const isDisplayed = profileMenu.style.display === "block";
+    profileMenu.style.display = isDisplayed ? "none" : "block";
+  });
 
-profileImg.addEventListener("click", () => {
-  profileMenu.style.display =
-    profileMenu.style.display === "block" ? "none" : "block";
-});
-
-window.logout = function(){
-  signOut(auth).then(() => location.href="login.html");
-};
-
-// close menu if clicked outside
-document.addEventListener("click", e => {
-  if(!e.target.closest(".profile-container")){
+  // 2. Close menu if user clicks anywhere else on the screen
+  document.addEventListener("click", () => {
     profileMenu.style.display = "none";
-  }
-});
+  });
+
+  // 3. Global Logout Function
+  window.logout = function() {
+    signOut(auth)
+      .then(() => {
+        window.location.replace("login.html");
+      })
+      .catch((error) => console.error("Logout Error:", error));
+  };
+
+  // 4. Auth Guard
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "login.html";
+    } else {
+      // Optional: Set profile image from Google/Firebase if available
+      if (user.photoURL) {
+        document.getElementById("profileImg").src = user.photoURL;
+      }
+    }
+  });
 </script>
  <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
@@ -1416,6 +1437,7 @@ window.auth = auth;
 </script>
 </body>
 </html>
+
 
 
 
