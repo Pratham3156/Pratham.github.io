@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChillBox - Web Series</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #101820;
+  --accent: #1db954;
+  --glow: 0 0 20px #1db954, 0 0 40px #1db954;
+  --header-height: 70px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: black;
+  color: #fff;
+  overflow-x: hidden;
+  padding-top: 70px;
+}
+
+/* ===== HEADER & NAVBAR ===== */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 6%;
+  background-color: black;
+  z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  height: var(--header-height);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.logo i { color: limegreen; }
+
+.search-box {
+  position: relative;
+  margin-left: 100px;
+}
+
+#searchInput {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  outline: none;
+  width: 180px;
+  transition: width 0.3s ease;
+}
+
+#searchInput:focus { width: 250px; }
+
+#searchResults {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background: #111;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 6px;
+  display: none;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+#searchResults div {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#searchResults div:hover { background: rgba(255,255,255,0.1); }
+
+#searchResults img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+nav.navbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 17.5px;
+  margin-left: 40px;
+}
+
+nav.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+nav.navbar a.active,
+nav.navbar a:hover { 
+  background: var(--accent); 
+  color: #000; 
+  font-weight: 600;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  display: flex;
+  align-items: center;
+  padding-left: 60px;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 1s ease-in-out;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.65);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 600px;
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.hero-title { font-size: 55px; font-weight: 900; margin: 0; }
+.hero-lang { margin: 15px 0; font-size: 18px; color: #ddd; }
+.hero-rank { font-size: 20px; color: #00ffae; font-weight: bold; }
+.hero-desc { margin: 15px 0; font-size: 16px; color: #ccc; max-width: 500px; line-height: 1.5; }
+
+.btn { 
+  display: inline-block; 
+  padding: 12px 25px; 
+  background: var(--accent); 
+  border-radius: 6px; 
+  font-size: 17px; 
+  margin-right: 10px; 
+  cursor: pointer; 
+  font-weight: 700; 
+  color: black; 
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  color: white;
+  box-shadow: var(--glow);
+  transform: scale(1.05);
+}
+
+.nav-arrow { 
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%);
+  font-size: 26px; 
+  cursor: pointer; 
+  z-index: 6; 
+  background: rgba(0,0,0,0.5); 
+  padding: 8px 14px; 
+  border-radius: 50%; 
+  transition: all 0.3s ease;
+  color: #fff;
+}
+
+.nav-arrow:hover {
+  background: rgba(0,0,0,0.8);
+  transform: translateY(-50%) scale(1.2);
+}
+
+.nav-left { left: 20px; }
+.nav-right { right: 20px; }
+
+/* ===== SLIDER SECTIONS ===== */
+.slider-section { padding: 20px 50px; position: relative; }
+.slider-title { font-size: 24px; margin-bottom: 15px; font-weight: 700; color: #fff; }
+.movie-slider { display: flex; overflow-x: hidden; scroll-behavior: smooth; }
+
+.movie-card { 
+  width: 230px; height: 340px;
+  margin-right: 15px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.3s ease; 
+  border-radius: 8px;
+  overflow: hidden;
+  background: #151b2c;
+}
+
+.movie-card img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; transition: transform 0.3s ease; }
+.movie-card:hover img { transform: scale(1.05); }
+
+.movie-overlay {
+  position: absolute; bottom: 0; left: 0; width: 100%;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 10px;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.movie-overlay h3 { font-size: 15px; font-weight: 700; margin: 3px 0; }
+.movie-overlay p { font-size: 12px; margin: 2px 0; line-height: 1.3; color: #ccc; }
+
+.slider-arrow { 
+  position: absolute; 
+  top: 50%; transform: translateY(-50%);
+  font-size: 30px; cursor: pointer; z-index: 10;
+  background: rgba(0,0,0,0.6); padding: 5px 12px; border-radius: 50%;
+  color: #fff; transition: all 0.3s;
+}
+
+.slider-left { left: 10px; }
+.slider-right { right: 10px; }
+.slider-arrow:hover { background: var(--accent); color: black; transform: translateY(-50%) scale(1.1); }
+
+/* ===== MODAL & EPISODES UI ===== */
+#seriesModal {
+  position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%;
+  background: #0d0d0d; display: block; overflow-y: auto;
+  z-index: 9999; padding: 40px 5%; box-sizing: border-box;
+  transition: bottom 0.5s ease;
+}
+#seriesModal.active { bottom: 0; }
+#seriesModal .closeBtn {
+  position: absolute; top: 20px; right: 30px;
+  font-size: 40px; cursor: pointer; color: #fff; z-index: 10;
+}
+
+.modal-header-info { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 25px; }
+.modal-header-info img.poster { width: 220px; border-radius: 8px; object-fit: cover; }
+.modal-details { flex: 1; min-width: 280px; }
+.modal-details h1 { font-size: 32px; color: #fff; margin-bottom: 10px; }
+.modal-details p { font-size: 14px; line-height: 1.6; color: #ccc; margin-bottom: 8px; }
+
+/* Player Container */
+.player-container { text-align: center; margin: 20px 0; background: #000; padding: 15px; border-radius: 10px; border: 1px solid #222; }
+.player-controls { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+.server-select {
+  background: #111; color: #fff; border: 1px solid var(--accent);
+  padding: 8px 12px; border-radius: 6px; cursor: pointer; outline: none; font-weight: 600;
+}
+.switch-server-btn {
+  background: var(--accent); color: #000; border: none;
+  padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 700; transition: 0.2s;
+}
+.switch-server-btn:hover { background: #189b45; color: #fff; }
+
+#seriesFrame { width: 100%; max-width: 900px; height: 500px; border: none; border-radius: 8px; background: #000; }
+
+/* Season & Episodes Controls */
+.episodes-section { margin-top: 30px; background: #141414; padding: 20px; border-radius: 10px; }
+.season-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.season-bar h2 { font-size: 22px; color: var(--accent); }
+.season-dropdown {
+  background: #222; color: #fff; border: 1px solid #444;
+  padding: 8px 15px; border-radius: 6px; font-size: 15px; cursor: pointer; outline: none;
+}
+
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.episode-card {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.episode-card:hover {
+  background: #2a2a2a;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.episode-card.active-ep {
+  border-color: var(--accent);
+  background: #233729;
+}
+
+.episode-card img {
+  width: 90px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #333;
+}
+
+.episode-info h4 { font-size: 14px; color: #fff; margin-bottom: 4px; line-height: 1.2; }
+.episode-info span { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+/* PROFILE DROPDOWN */
+.profile-container { position: relative; margin-left: 15px; cursor: pointer; }
+#profileImg { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #1db954; background: #222; }
+
+/* FOOTER */
+.footer { background: #0b0b0b; padding: 50px 6%; color: #ccc; margin-top: 60px; }
+.footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; }
+.footer i { color: limegreen; }
+.footer-logo { font-size: 45px; font-weight: 700; color: white; margin-bottom: 10px; }
+.footer-brand p { line-height: 1.6; margin-bottom: 15px; }
+.footer-social a { margin-right: 12px; color: white; font-size: 18px; transition: 0.3s; }
+.footer-social a:hover { color: var(--accent); }
+.footer-section { min-width: 150px; margin-top: 40px; }
+.footer-section h3 { color: white; margin-bottom: 12px; font-size: 18px; }
+.footer-section a { display: block; color: #ccc; text-decoration: none; margin-bottom: 8px; transition: 0.3s; }
+.footer-section a:hover { color: var(--accent); }
+.footer-copy { text-align: center; margin-top: 30px; color: #777; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+
+/* RESPONSIVE */
+.menu-toggle { display: none; font-size: 24px; color: white; cursor: pointer; }
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
+  nav.navbar { position: absolute; top: 65px; left: 0; right: 0; background: black; flex-direction: column; display: none; padding: 15px 0; margin-left: 0; }
+  nav.navbar.show { display: flex; }
+  nav.navbar a { width: 100%; text-align: center; padding: 12px; }
+  .hero { height: auto; padding: 40px 20px; }
+  .hero-title { font-size: 32px; }
+  .movie-card { width: 160px; height: 240px; }
+  .slider-section { padding: 20px 15px; }
+  #seriesFrame { height: 250px; }
+  .footer-content { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html"><i class="fas fa-infinity"></i> ChillBox</a>
+  <nav class="navbar">
+    <a href="index.html">Movies</a>
+    <a class="active" href="Webseries.html">Web Series</a>
+    <a href="Music.Html">Music</a>
+    <a href="Games.html">Games</a>
+    <a href="AboutUs.html">About</a>
+    <a href="FeedBack.html">FeedBack</a>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search series..." />
+      <div id="searchResults"></div>
+    </div>
+  </nav>
+  <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+  <a href="profile.html" class="profile-container">
+    <img id="profileImg" src="default-avatar.png" alt="Profile">
+  </a>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <h1 class="hero-title" id="heroTitle">Loading...</h1>
+    <p class="hero-lang" id="heroLang"></p>
+    <p class="hero-rank" id="heroRank"></p>
+    <p class="hero-desc" id="heroDesc"></p>
+    <div class="btn" id="playBtn">Watch Now</div>
+  </div>
+  <div class="nav-arrow nav-left" id="prevBtn">&#10094;</div>
+  <div class="nav-arrow nav-right" id="nextBtn">&#10095;</div>
+</section>
+
+<!-- DYNAMIC SLIDERS CONTAINER -->
+<div id="slidersContainer"></div>
+
+<!-- SERIES MODAL WITH SEASON & EPISODES -->
+<div id="seriesModal">
+  <span class="closeBtn" onclick="closeModal()">&times;</span>
+  <div id="modalContent"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <h2 class="footer-logo"><i class="fas fa-infinity"></i> ChillBox</h2>
+      <p>Stream Movies, Web Series, play<br>Games, and enjoy Music – all in one place.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h3>Sections</h3>
+      <a href="index.html">Movies</a>
+      <a href="Webseries.html">Web Series</a>
+      <a href="Music.Html">Music</a>
+      <a href="Games.html">Games</a>
+      <a href="AboutUs.html">About Us</a>
+    </div>
+    <div class="footer-section">
+      <h3>Support</h3>
+      <a href="#">FAQ</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 ChillBox Entertainment. All rights reserved.</p>
+</footer>
+
+<script>
+const API_KEY = "166830f0c57dfdbf8f9a4ebeb942d300";
+const HERO = document.getElementById("hero");
+let heroSeries = [], currentIndex = 0;
+let currentSeriesId = null;
+let currentSeason = 1;
+let currentEpisode = 1;
+
+/* STREAMING SERVERS */
+const SERVERS = [
+  { name: "Server 1 (VidSrc Pro)", getUrl: (id, s, e) => `https://vidsrc.pro/embed/tv/${id}/${s}/${e}` },
+  { name: "Server 2 (2Embed)", getUrl: (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+  { name: "Server 3 (SuperEmbed)", getUrl: (id, s, e) => `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+  { name: "Server 4 (VidSrc.me)", getUrl: (id, s, e) => `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}` },
+  { name: "Server 5 (MoviesAPI)", getUrl: (id, s, e) => `https://moviesapi.club/tv/${id}-${s}-${e}` }
+];
+
+/* FAMILY SAFE API BASE PARAMS: Adults and explicit Soap/Adult genres excluded */
+const SAFE_PARAMS = "include_adult=false&without_genres=10766";
+
+/* CATEGORIES WITH ADULT CONTENT FILTERING ENFORCED */
+const categories = [
+  { title: "🔥 Trending Hindi Web Series", url: `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&${SAFE_PARAMS}&with_original_language=hi&sort_by=popularity.desc` },
+  { title: "⭐ Top Rated Indian Shows", url: `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&${SAFE_PARAMS}&with_original_language=hi&sort_by=vote_average.desc&vote_count.gte=10` },
+  { title: "💥 Action & Crime Series", url: `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&${SAFE_PARAMS}&with_genres=10759,80&with_original_language=hi` },
+  { title: "🎭 Drama & Family Series", url: `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&${SAFE_PARAMS}&with_genres=18,10751&with_original_language=hi` },
+  { title: "🌐 Hindi Dubbed International Series", url: `https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&${SAFE_PARAMS}&language=hi-IN` }
+];
+
+/* CLIENT-SIDE SAFETY FILTER FOR ADULT KEYWORDS & METADATA */
+function filterSafeSeries(seriesList) {
+  const adultKeywords = ["erotic", "18+", "nsfw", "uncensored", "adult", "sex"];
+  return seriesList.filter(series => {
+    if (series.adult) return false;
+    const name = (series.name || "").toLowerCase();
+    const overview = (series.overview || "").toLowerCase();
+    return !adultKeywords.some(kw => name.includes(kw) || overview.includes(kw));
+  });
+}
+
+/* HERO SLIDER */
+async function loadHeroSeries() {
+  const res = await fetch(categories[0].url);
+  const data = await res.json();
+  const safeResults = filterSafeSeries(data.results);
+  heroSeries = safeResults.slice(0, 10);
+  updateHero();
+}
+
+function updateHero() {
+  const series = heroSeries[currentIndex];
+  if(!series) return;
+  HERO.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${series.backdrop_path})`;
+  document.getElementById("heroTitle").innerText = series.name;
+  document.getElementById("heroLang").innerText = "Audio: Hindi | Original Language";
+  document.getElementById("heroRank").innerText = `🔥 Trending Rank: #${currentIndex + 1}`;
+  document.getElementById("heroDesc").innerText = series.overview ? series.overview.slice(0, 180) + "..." : "No description available.";
+  document.getElementById("playBtn").onclick = () => openSeriesModal(series.id);
+}
+
+document.getElementById("prevBtn").addEventListener("click", () => {
+  currentIndex = (currentIndex - 1 + heroSeries.length) % heroSeries.length;
+  updateHero();
+});
+document.getElementById("nextBtn").addEventListener("click", () => {
+  currentIndex = (currentIndex + 1) % heroSeries.length;
+  updateHero();
+});
+
+setInterval(() => {
+  if (heroSeries.length) {
+    currentIndex = (currentIndex + 1) % heroSeries.length;
+    updateHero();
+  }
+}, 6000);
+
+loadHeroSeries();
+
+/* CATEGORY SLIDERS */
+async function createSliders() {
+  const container = document.getElementById("slidersContainer");
+  for (let cat of categories) {
+    const res = await fetch(cat.url);
+    const data = await res.json();
+    const safeResults = filterSafeSeries(data.results);
+    const seriesList = safeResults.filter(s => s.poster_path).slice(0, 15);
+
+    const section = document.createElement("div");
+    section.className = "slider-section";
+    const sliderId = cat.title.replace(/[^a-zA-Z]/g, '') + "Slider";
+    section.innerHTML = `
+      <h2 class="slider-title">${cat.title}</h2>
+      <div class="movie-slider" id="${sliderId}"></div>
+      <div class="slider-arrow slider-left" onclick="scrollSlider('${sliderId}', -300)">&#10094;</div>
+      <div class="slider-arrow slider-right" onclick="scrollSlider('${sliderId}', 300)">&#10095;</div>`;
+    container.appendChild(section);
+
+    const slider = document.getElementById(sliderId);
+    seriesList.forEach(series => {
+      const card = document.createElement("div");
+      card.className = "movie-card";
+      card.innerHTML = `
+        <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+        <div class="movie-overlay">
+          <h3>${series.name}</h3>
+          <p>Rating: ⭐ ${series.vote_average ? series.vote_average.toFixed(1) : 'N/A'}/10</p>
+          <p>Air Date: ${series.first_air_date || 'N/A'}</p>
+        </div>`;
+      card.onclick = () => openSeriesModal(series.id);
+      slider.appendChild(card);
+    });
+  }
+}
+
+function scrollSlider(id, val) {
+  document.getElementById(id).scrollBy({ left: val, behavior: 'smooth' });
+}
+createSliders();
+
+/* SEARCH WITH ADULT FILTER */
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+searchInput.addEventListener("input", async function() {
+  const query = this.value.trim();
+  if (query.length < 2) {
+    searchResults.style.display = "none";
+    return;
+  }
+  const res = await fetch(`https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(query)}&api_key=${API_KEY}&${SAFE_PARAMS}`);
+  const data = await res.json();
+  const safeResults = filterSafeSeries(data.results);
+
+  searchResults.innerHTML = safeResults.slice(0, 6).map(series => `
+    <div onclick="openSeriesModal(${series.id});searchResults.style.display='none'">
+      <img src="${series.poster_path ? `https://image.tmdb.org/t/p/w200${series.poster_path}` : 'https://via.placeholder.com/40x60'}">
+      <span>${series.name}</span>
+    </div>
+  `).join("");
+  searchResults.style.display = "block";
+});
+
+/* MODAL, SEASONS & EPISODES SYSTEM */
+async function openSeriesModal(seriesId) {
+  currentSeriesId = seriesId;
+  const modal = document.getElementById("seriesModal");
+  const modalContent = document.getElementById("modalContent");
+  modal.classList.add("active");
+  modalContent.innerHTML = "<h2 style='text-align:center; padding: 40px;'>Loading Web Series Details...</h2>";
+
+  const res = await fetch(`https://api.themoviedb.org/3/tv/${seriesId}?api_key=${API_KEY}&language=hi-IN`);
+  const series = await res.json();
+
+  const validSeasons = (series.seasons || []).filter(s => s.season_number > 0);
+  currentSeason = validSeasons.length > 0 ? validSeasons[0].season_number : 1;
+  currentEpisode = 1;
+
+  modalContent.innerHTML = `
+    <div class="modal-header-info">
+      <img class="poster" src="${series.poster_path ? 'https://image.tmdb.org/t/p/w300' + series.poster_path : 'https://via.placeholder.com/220x330'}">
+      <div class="modal-details">
+        <h1>${series.name}</h1>
+        <p><strong>First Air Date:</strong> ${series.first_air_date || 'N/A'} | ⭐ ${series.vote_average ? series.vote_average.toFixed(1) : 'N/A'}/10</p>
+        <p><strong>Total Seasons:</strong> ${series.number_of_seasons || 1} | <strong>Total Episodes:</strong> ${series.number_of_episodes || 'N/A'}</p>
+        <p><strong>Genres:</strong> ${series.genres ? series.genres.map(g => g.name).join(", ") : 'N/A'}</p>
+        <p>${series.overview || 'No overview available.'}</p>
+      </div>
+    </div>
+
+    <div class="player-container">
+      <div class="player-controls">
+        <label><strong>Select Server:</strong></label>
+        <select id="serverSelect" class="server-select">
+          ${SERVERS.map((s, idx) => `<option value="${idx}">${s.name}</option>`).join("")}
+        </select>
+        <button class="switch-server-btn" onclick="toggleNextServer()">🔄 Next Server</button>
+      </div>
+      <iframe id="seriesFrame" src="" allowfullscreen></iframe>
+    </div>
+
+    <div class="episodes-section">
+      <div class="season-bar">
+        <h2>Episodes</h2>
+        <div>
+          <label><strong>Season: </strong></label>
+          <select id="seasonSelect" class="season-dropdown">
+            ${validSeasons.map(s => `<option value="${s.season_number}">${s.name} (${s.episode_count} Episodes)</option>`).join("")}
+          </select>
+        </div>
+      </div>
+      <div class="episode-grid" id="episodeGrid">
+        <p>Loading episodes...</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("serverSelect").addEventListener("change", () => {
+    updatePlayerSource();
+  });
+
+  const seasonSelect = document.getElementById("seasonSelect");
+  if (seasonSelect) {
+    seasonSelect.addEventListener("change", (e) => {
+      currentSeason = parseInt(e.target.value);
+      currentEpisode = 1;
+      loadEpisodes(seriesId, currentSeason);
+    });
+  }
+
+  loadEpisodes(seriesId, currentSeason);
+}
+
+/* FETCH EPISODES FOR SELECTED SEASON */
+async function loadEpisodes(seriesId, seasonNum) {
+  const episodeGrid = document.getElementById("episodeGrid");
+  episodeGrid.innerHTML = "<p>Loading episodes...</p>";
+
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/tv/${seriesId}/season/${seasonNum}?api_key=${API_KEY}&language=hi-IN`);
+    const seasonData = await res.json();
+
+    if (!seasonData.episodes || seasonData.episodes.length === 0) {
+      episodeGrid.innerHTML = "<p>No episodes found for this season.</p>";
+      return;
+    }
+
+    episodeGrid.innerHTML = seasonData.episodes.map(ep => `
+      <div class="episode-card ${ep.episode_number === currentEpisode ? 'active-ep' : ''}" onclick="playEpisode(${seasonNum}, ${ep.episode_number}, this)">
+        <img src="${ep.still_path ? 'https://image.tmdb.org/t/p/w200' + ep.still_path : 'https://via.placeholder.com/90x60'}" alt="Ep ${ep.episode_number}">
+        <div class="episode-info">
+          <span>EP ${ep.episode_number}</span>
+          <h4>${ep.name || `Episode ${ep.episode_number}`}</h4>
+        </div>
+      </div>
+    `).join("");
+
+    updatePlayerSource();
+
+  } catch (err) {
+    episodeGrid.innerHTML = "<p>Failed to load episodes.</p>";
+  }
+}
+
+/* PLAY SPECIFIC EPISODE */
+function playEpisode(seasonNum, episodeNum, cardElement) {
+  currentSeason = seasonNum;
+  currentEpisode = episodeNum;
+
+  const cards = document.querySelectorAll(".episode-card");
+  cards.forEach(c => c.classList.remove("active-ep"));
+  if (cardElement) cardElement.classList.add("active-ep");
+
+  updatePlayerSource();
+}
+
+function updatePlayerSource() {
+  const serverIndex = parseInt(document.getElementById("serverSelect").value);
+  const server = SERVERS[serverIndex] || SERVERS[0];
+  const iframe = document.getElementById("seriesFrame");
+
+  iframe.src = server.getUrl(currentSeriesId, currentSeason, currentEpisode);
+}
+
+function toggleNextServer() {
+  const serverSelect = document.getElementById("serverSelect");
+  let nextIndex = (parseInt(serverSelect.value) + 1) % SERVERS.length;
+  serverSelect.value = nextIndex;
+  updatePlayerSource();
+}
+
+function closeModal() {
+  document.getElementById("seriesModal").classList.remove("active");
+  const frame = document.getElementById("seriesFrame");
+  if (frame) frame.src = "";
+}
+
+/* MOBILE NAV */
+const menuToggle = document.getElementById("menuToggle");
+const navbar = document.querySelector("nav.navbar");
+menuToggle.addEventListener("click", () => {
+  navbar.classList.toggle("show");
+});
+</script>
+
+</body>
+</html>
