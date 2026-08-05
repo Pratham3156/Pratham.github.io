@@ -464,11 +464,7 @@ let currentEpisode = 1;
 
 /* STREAMING SERVERS */
 const SERVERS = [
-  { name: "Server 1 (VidSrc Pro)", getUrl: (id, s, e) => `https://vidsrc.pro/embed/tv/${id}/${s}/${e}` },
-  { name: "Server 2 (2Embed)", getUrl: (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
-  { name: "Server 3 (SuperEmbed)", getUrl: (id, s, e) => `https://multiembed.mov/directstream.php?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
-  { name: "Server 4 (VidSrc.me)", getUrl: (id, s, e) => `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}` },
-  { name: "Server 5 (MoviesAPI)", getUrl: (id, s, e) => `https://moviesapi.club/tv/${id}-${s}-${e}` }
+  { name: "Server", getUrl: (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
 ];
 
 /* FAMILY SAFE API BASE PARAMS: Adults and explicit Soap/Adult genres excluded */
